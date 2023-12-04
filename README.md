@@ -1,4 +1,4 @@
-# Tiny NixOS config: WSL2 dev + cloud VPS + Sops-nix secrets
+# Tiny NixOS config: WSL2 dev + cloud VPS
 
 WIP
 
