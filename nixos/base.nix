@@ -4,11 +4,15 @@
   username,
   hostname,
   pkgs,
+  inputs,     # for nix.registry / nix.nixPath
   ...
 }: {
+  time.timeZone = "Europe/Berlin";
+
   networking.hostName = "${hostname}";
 
   systemd.tmpfiles.rules = [
+    "d /home/${username}/.config 0755 ${username} users"
     "d /home/${username}/.config/lvim 0755 ${username} users"
   ];
 
@@ -44,31 +48,34 @@
 
   system.stateVersion = "23.05";
 
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = true;
-    autoPrune.enable = true;
-  };
+  # docker config
+  virtualisation.docker.enable = true;
+  virtualisation.docker.enableOnBoot = true;
+  virtualisation.docker.autoPrune.enable = true;
+  
+  # nix general config
+  nix.settings.trusted-users = [username];
+  # FIXME: use your access tokens from secrets.json here to be able to clone private repos on GitHub and GitLab
+  # nix.settings.access-tokens = [
+  #   "github.com=${secrets.github_token}"
+  #   "gitlab.com=OAuth2:${secrets.gitlab_token}"
+  # ];
+  nix.settings.accept-flake-config = true;
+  nix.settings.auto-optimise-store = true;
+  
+  # flake related
+  nix.package = pkgs.nixFlakes;
+  nix.extraOptions = ''experimental-features = nix-command flakes'';
 
-  nix = {
-    settings = {
-      trusted-users = [username];
-      # FIXME: use your access tokens from secrets.json here to be able to clone private repos on GitHub and GitLab
-      # access-tokens = [
-      #   "github.com=${secrets.github_token}"
-      #   "gitlab.com=OAuth2:${secrets.gitlab_token}"
-      # ];
-
-      accept-flake-config = true;
-      auto-optimise-store = true;
-    };
-
-    package = pkgs.nixFlakes;
-    extraOptions = ''experimental-features = nix-command flakes'';
-
-    gc = {
-      automatic = true;
-      options = "--delete-older-than 7d";
-    };
-  };
+  # garbage collector
+  nix.gc.automatic = true;
+  nix.gc.options = "--delete-older-than 7d";
+  
+  # a more predictable nix-shell (make nix-shell use the same nixppkgs as the system confg flake)
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
+  nix.nixPath = [
+    "nixpkgs=${inputs.nixpkgs.outPath}"
+    "nixos-config=/etc/nixos/configuration.nix"
+    "/nix/var/nix/profiles/per-user/root/channels"
+  ];
 }
