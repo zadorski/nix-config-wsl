@@ -82,6 +82,7 @@
           nixos-wsl.nixosModules.wsl
           ./nixos/base.nix
           ./nixos/wsl-specific.nix
+          ./nixos/dev-specific.nix
         ];
       };
 
@@ -92,6 +93,7 @@
           disko.nixosModules.disko
           ./nixos/base.nix
           ./nixos/vps-specific.nix
+          ./nixos/dev-specific.nix
         ];
       };
     };

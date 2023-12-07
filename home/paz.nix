@@ -220,7 +220,6 @@ in {
         refresh = "source ${config.home.homeDirectory}/.zshrc";
         show_path = "echo $PATH | tr ':' '\n'";
 
-        # FIXME: add more git aliases here if you want them
         gapa = "git add --patch";
         grpa = "git reset --patch";
         gst = "git status";
@@ -229,12 +228,13 @@ in {
         gph = "git push -u origin HEAD";
         gco = "git checkout";
         gcob = "git checkout -b";
-        gcm = "git checkout master";
+        gcm = "git checkout main";
         gcd = "git checkout develop";
 
         pbcopy = "/mnt/c/Windows/System32/clip.exe";
         pbpaste = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -command 'Get-Clipboard'";
         explorer = "/mnt/c/Windows/explorer.exe";
+        code = "/mnt/c/Users/PAZ/AppData/Local/Programs/Microsoft VS Code/code.exe";
       };
 
       envExtra = ''
