@@ -234,7 +234,7 @@ in {
         pbcopy = "/mnt/c/Windows/System32/clip.exe";
         pbpaste = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -command 'Get-Clipboard'";
         explorer = "/mnt/c/Windows/explorer.exe";
-        code = "/mnt/c/Users/PAZ/AppData/Local/Programs/Microsoft VS Code/code.exe";
+        code = "/mnt/c/Users/PAZ/AppData/Local/Programs/VSCode/code.exe";
       };
 
       envExtra = ''

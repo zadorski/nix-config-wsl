@@ -5,19 +5,19 @@ on:
   pull_request:
 
 jobs:
-  build-nixos-wsl:
+  build-dev-laptop-wsl:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - run: ssh-keygen -t rsa -N '' -f ./id_rsa && git add id_rsa.pub
-      - run: nix build .#nixosConfigurations.nixos-wsl.config.system.build.toplevel
-  build-cloud-vps:
+      - run: nix build .#nixosConfigurations.dev-laptop-wsl.config.system.build.toplevel
+  build-gate-cloud-vps:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - run: ssh-keygen -t rsa -N '' -f ./id_rsa && git add id_rsa.pub
-      - run: nix build .#nixosConfigurations.cloud-vps.config.system.build.toplevel
+      - run: nix build .#nixosConfigurations.gate-cloud-vps.config.system.build.toplevel

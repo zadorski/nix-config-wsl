@@ -75,8 +75,8 @@
     in {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
       
-      nixosConfigurations.nixos-wsl = mkNixosConfiguration {
-        hostname = "nixos-wsl";
+      nixosConfigurations.dev-laptop-wsl = mkNixosConfiguration {
+        hostname = "dev-laptop-wsl";    # development
         username = "paz";
         modules = [
           nixos-wsl.nixosModules.wsl
@@ -86,14 +86,22 @@
         ];
       };
 
-      nixosConfigurations.cloud-vps = mkNixosConfiguration {
-        hostname = "cloud-vps";
+      nixosConfigurations.gate-cloud-vps = mkNixosConfiguration {
+        hostname = "gate-cloud-vps";    # services
         username = "paz";
         modules = [
           disko.nixosModules.disko
           ./nixos/base.nix
           ./nixos/vps-specific.nix
           ./nixos/dev-specific.nix
+        ];
+      };
+
+      nixosConfigurations.media-desktop-vm = mkNixosConfiguration {
+        hostname = "media-desktop-vm";    # proxmox
+        username = "paz";
+        modules = [
+          ./nixos/base.nix
         ];
       };
     };
