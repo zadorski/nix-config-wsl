@@ -7,17 +7,17 @@
         modules = [
           nixos-wsl.nixosModules.default
           {
-            wsl.defaultUser = "paz";
+            wsl.defaultUser = "paz";                            # be sure to update username
             nix.settings.experimental-features = [ "nix-command" "flakes" ];
-            system.stateVersion = "24.05";
+            system.stateVersion = "24.05";                      # important: keep the value set upon installation
             wsl.enable = true;
           }
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;          # it allows the home-manager setup to activate properly inside a `nixos-rebuild build-vm` (helping to avoid `nix-env` like the plague, per https://discourse.nixos.org/t/need-configuration-feedback-and-tips-and-question-about-managing-shell-scripts/17232/3)
-            home-manager.users.paz = import ./home.nix;
-            #home-manager.extraSpecialArgs = inputs;      # why?
+            home-manager.useUserPackages = true;                # it allows the home-manager setup to activate properly inside a `nixos-rebuild build-vm` (helping to avoid `nix-env` like the plague, per https://discourse.nixos.org/t/need-configuration-feedback-and-tips-and-question-about-managing-shell-scripts/17232/3)
+            home-manager.users.paz = import ./home.nix;         # be sure to update username
+            #home-manager.extraSpecialArgs = inputs;            # why?
           }
         ];       
       };

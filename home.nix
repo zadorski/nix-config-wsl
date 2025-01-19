@@ -1,7 +1,7 @@
 { config, pkgs, ... }: 
 
 {
-  home.username = "paz";
+  home.username = "paz";                                        # be sure to update username
   #home.homeDirectory = lib.mkForce "/home/paz/";
   
   home.packages = with pkgs;[
@@ -13,11 +13,11 @@
 
   programs.git = {
     enable = true;
-    userName = "";  # FIXME
-    userEmail = ""; # FIXME
+    userName = "";                                              # FIXME: git name
+    userEmail = "";                                             # FIXME: git email
   };
 
-  home.stateVersion = "24.05";
+  home.stateVersion = "24.05";                                  # important: keep the value set upon installation
 
   programs.home-manager.enable = true;
 }
