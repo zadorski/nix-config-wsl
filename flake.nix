@@ -13,7 +13,7 @@
   #inputs.nix-index-database.url = "github:nix-community/nix-index-database";
   #inputs.nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = {
+  outputs = inputs@{
     nixpkgs,
     nixoswsl,
     home-manager,
@@ -22,11 +22,13 @@
     ...
   }: let
     username = "paz";
+    system = "x86_64-linux";
     systemname = "crodax";
     stateVersion = "24.05"; # both system and home (do not change)
   in {
     nixosConfigurations.${systemname} = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
+      inherit system;
+      #specialArgs = {inherit inputs;};
       modules = [
         nixoswsl.nixosModules.wsl
         vscode-server.nixosModules.default
@@ -41,6 +43,7 @@
             #  nix-index-database.hmModules.nix-index
             #];
             home-manager.users.${username} = {
+              #inherit inputs;
               home.username = username;
               home.homeDirectory = "/home/${username}";
               home.sessionVariables.EDITOR = "micro";    
