@@ -119,8 +119,8 @@
                     side-by-side = true;
                     navigate = true;
                   };
-                  userEmail = ""; #FIXME
-                  userName = "";  #FIXME
+                  userEmail = "678169+zadorski@users.noreply.github.com";
+                  userName = "zadorski";
                   extraConfig = {
                     push = {
                       default = "current";
