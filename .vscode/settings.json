@@ -1,7 +1,12 @@
 {
+  // nix
   "files.associations": {
     "*.nix": "nix"
   },
   "nixEnvSelector.suggestion": false,
-  "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix"
+  "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
+  
+  // file explorer
+  "workbench.tree.indent": 20, // 16px = 1 rem
+  "workbench.tree.renderIndentGuides": "always" // "onHover" by default
 }
