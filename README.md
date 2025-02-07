@@ -1,3 +1,11 @@
+# NixOS-WSL flake with sane modular configuration
+
+## Inspiration 
+https://github.com/petertriho/nix-config
+- for those helpers and conditionals blended into modules without comprehensive lib hard to dive into
+- one-liner `inherits (config) user homePath` pulling vars from different places
+
+
 im confused why this isnt pushed onto people more. all the headaches i have seem to be solved by just using snowfall lib
 ref:: https://www.youtube.com/watch?v=ARjAsEJ9WVY
 

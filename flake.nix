@@ -1,20 +1,26 @@
 {
-  description = "WSL flake + vscode remote + fish";
+  description = "NixOS-WSL flake with sane modular configuration";
 
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
-  inputs.nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-
-  inputs.home-manager.url = "github:nix-community/home-manager/release-24.11";
-  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
+  # supported systems
+  
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.05";
+  
   inputs.nixos-wsl.url = "github:nix-community/nixos-wsl";
   inputs.nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
-
+  
+  inputs.home-manager.url = "github:nix-community/home-manager";
+  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
+  
+  # services and programs
+  
   inputs.sops-nix.url = "github:mic92/sops-nix";
   inputs.sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-
+  
   inputs.vscode-server.url = "github:nix-community/nixos-vscode-server";
   inputs.vscode-server.inputs.nixpkgs.follows = "nixpkgs";
+
+  #inputs.neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
   inputs.catppuccin.url = "github:catppuccin/nix";
 
@@ -26,72 +32,41 @@
 
   #inputs.nur.url = "github:nix-community/nur";
 
-  outputs = {
-    self,
-    nixpkgs,
-    nixpkgs-unstable,
-    nixos-wsl,
-    home-manager,
-    ...
-  } @inputs: let
+  # ref:: https://github.com/petertriho/nix-config
+  #inputs.nix-darwin.url = "github:LnL7/nix-darwin";
+  #inputs.nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, nixos-wsl, nix-darwin, home-manager, ... }: 
+
+  let
     inherit (self) outputs;
-    username = "paz";
     system = "x86_64-linux";
-    systemname = "crodax";
     
-    # ref:: https://github.com/kylejamesross/flake
-    #unstable = import nixpkgs-unstable {
-    #  inherit system;
-    #  config.allowUnfree = true;
-    #};
-    #specialArgs = { inherit nixpkgs inputs username unstable; };
-    
-    specialArgs = { inherit inputs outputs username systemname; };
-
-    # ref:: https://github.com/Berberer/wsl-nixos-config
-    nixpkgsConfig = import nixpkgs {
+    # ref:: https://github.com/petertriho/nix-config
+    mkHostConfig = system: {
       inherit system;
-      config = {
-        allowUnfree = true;
-        allowUnfreePredicate = _: true;
-      };
-      overlays = [
-        (_final: prev: {
-          unstable = import nixpkgs-unstable {
-            inherit (prev) system;
-            inherit (prev) config;
-          };
-        })
-      ];
+      specialArgs = { inherit inputs outputs; };
+    };        
+  in 
+  
+  {
+    overlays = import ./overlays { inherit inputs; };
+    systemModules = import ./modules/system;
+    homeManagerModules = import ./modules/home-manager;
+
+    options = {
+      user = "paz";    
     };
-  in {
-    formatter.${system} = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
 
-    #homeConfigurations.${username}@${systemname} = home-manager.lib.homeManagerConfiguration {           # switch user configs without root (standalone home-manager)
-    #  pkgs = nixpkgsConfig;
-    #  extraSpecialArgs = { inherit inputs outputs; };
-    #  modules = [
-    #    ./users/admin
-    #  ];
-    #};
-
-    nixosConfigurations.${systemname} = nixpkgs.lib.nixosSystem {
-      pkgs = nixpkgsConfig;
-      #specialArgs = { inherit inputs outputs; };
-      inherit specialArgs;
-      modules = [
-        nixos-wsl.nixosModules.wsl
-        ./hosts/wsl
-        home-manager.nixosModules.home-manager                                                            # use home-manager as system module (entire config via single switch)
-        { 
-          home-manager.extraSpecialArgs = specialArgs; 
-          #home-manager.sharedModules = [
-          #  inputs.sops-nix.homeManagerModules.sops
-          #];
+    nixosConfigurations = {
+      crodax = nixpkgs.lib.nixosSystem (
+        mkHostConfig "x86_64-linux"
+        // {
+          modules = [ ./systems/nixos/wsl.nix ];
         }
-        ./users/admin
-      ];
+      );
     };
 
+    #formatter.${system} = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;    
   };
 }
