@@ -1,1 +1,0 @@
-{ helpers = import ./helpers.nix; }
