@@ -48,7 +48,7 @@ nixpkgs.lib.nixosSystem rec { # ref:: https://github.com/nmasur/dotfiles
 
       # dev toolchain
       toolchain.nix.enable = true;
-      toolchain.misc-tooling.enable = false;
+      toolchain.diffoscope.enable = false;
       toolchain.kubernetes.enable = false;
       toolchain.infrastructure-as-code.enable = false;
       toolchain.rust.enable = false;
