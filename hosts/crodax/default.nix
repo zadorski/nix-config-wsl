@@ -1,34 +1,28 @@
-{
-  inputs,
-  globals,
-  overlays,
-}:
+{ inputs, globals, overlays, ... }:
 
-let
-  system = "x86_64-linux";
-in
-inputs.nixpkgs.lib.nixosSystem {
-  inherit system;
+with inputs;
+
+nixpkgs.lib.nixosSystem rec { # ref:: https://github.com/nmasur/dotfiles
+
+  system = "x86_64-linux"; # keys are mutually visible in definitions within this record (thanks to rec)
 
   modules = [
     ../../modules/common
-    (
-      globals
-      // rec {
-        homePath = "/home/${globals.user}";
-      }
-    )
-    inputs.wsl.nixosModules.wsl
-    inputs.nix-ld.nixosModules.nix-ld
-    inputs.home-manager.nixosModules.home-manager
+    ../../modules/wsl # FIXME: move wsl-specific code into module?
+    
+    globals
+    # overrule gitname and gitemail for work
+    #(
+    #  globals
+    #  // rec {
+    #    homePath = "/home/${globals.user}";
+    #  }
+    #)
+    
+    wsl.nixosModules.wsl
+    nix-ld.nixosModules.nix-ld
+    home-manager.nixosModules.home-manager
     {
-      # FIXME: why?
-      # replace config with our directory, as it's sourced on every launch
-      system.activationScripts.configDir.text = ''
-        rm -rf /etc/nixos
-        ln --symbolic --no-dereference --force /home/zab/system /etc/nixos
-      '';
-
       networking.hostName = "crodax"; # FIXME: pull dir name
 
       theme = {
@@ -40,11 +34,13 @@ inputs.nixpkgs.lib.nixosSystem {
       wsl = {
         enable = true;
         defaultUser = globals.user;
-        docker-desktop.enable = true;
-        wslConf.network.generateResolveConf = true; # turn off if it breaks vpn
-        interop.includePath = false; # including windows PATH will slow down other systems, filesystem cross talk
+        #docker.enable = true; # native Docker support
+        #docker-desktop.enable = true; # integration with docker desktop (needs to be installed)
+        wslConf.automount.root = "/mnt";
+        wslConf.network.generateResolveConf = true; # disable because it breaks tailscale ref:: https://github.com/kgadberry/dotfiles/blob/main/hosts/cerberus/default.nix
+        interop.includePath = false; # including windows PATH will slow down other systems, filesystem cross talk ref:: 
       };
-      
+
       programs.nix-ld.dev.enable = true; # for vscode server remote to work
 
       # programs
@@ -59,7 +55,7 @@ inputs.nixpkgs.lib.nixosSystem {
       toolchain.dotnet.enable = false;
 
       # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-      system.stateVersion = "24.05"; # pin state version #FIXME: move
+      system.stateVersion = "24.05"; # pin state version
     }
   ];
 }

@@ -12,7 +12,7 @@
             forwardAgent = true;
             identitiesOnly = true;
             identityFile = [
-              "~/.ssh/id_maco"
+              "/home/${config.user}/.ssh/id_maco" # explicit path in favor of nix determinism + consider using mkHomeDir
             ];
           };
         };

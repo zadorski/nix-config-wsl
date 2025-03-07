@@ -7,7 +7,7 @@
     nix-direnv.enable = true;
     config = {
       whitelist = {
-        prefix = [ config.dotfilesPath ];
+        prefix = [ config.dotsPath ];
       };
       # disable environment variable diff dump
       # nix environment variables are just too noisy

@@ -20,7 +20,7 @@
   config = {
     home-manager.users.root.programs.git = {
       enable = true;
-      extraConfig.safe.directory = config.dotfilesPath;
+      extraConfig.safe.directory = config.dotsPath;
     };
 
     home-manager.users.${config.user} = {
@@ -35,7 +35,7 @@
             branch = "false";
           };
           safe = {
-            directory = config.dotfilesPath;
+            directory = config.dotsPath;
           };
           pull = {
             ff = "only";
