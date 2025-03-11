@@ -107,7 +107,7 @@
 
       # allow specified unfree packages (identified elsewhere)
       # retrieves package object based on string name
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) config.unfreePackages;
+      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) config.unfreePackages; # cfg.allowList; ref:: https://github.com/willbush/system/blob/main/modules/unfree.nix
 
       # pin a state version to prevent warnings
       home-manager.users.${config.user}.home.stateVersion = stateVersion;

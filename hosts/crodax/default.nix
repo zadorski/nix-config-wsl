@@ -19,9 +19,10 @@ nixpkgs.lib.nixosSystem rec { # ref:: https://github.com/nmasur/dotfiles
     #  }
     #)
     
-    wsl.nixosModules.wsl
+    nixos-wsl.nixosModules.wsl
     nix-ld.nixosModules.nix-ld
     home-manager.nixosModules.home-manager
+    
     {
       networking.hostName = "crodax"; # FIXME: pull dir name
 
@@ -30,15 +31,21 @@ nixpkgs.lib.nixosSystem rec { # ref:: https://github.com/nmasur/dotfiles
         dark = true;
       };
 
-      # wsl specific
+      #modules.wsl = {
+      #  enable = true;
+      #  defaultUser = globals.user;        
+      #};
+
       wsl = {
         enable = true;
         defaultUser = globals.user;
-        #docker.enable = true; # native Docker support
+        startMenuLaunchers = true;
+        usbip.enable = true;
         #docker-desktop.enable = true; # integration with docker desktop (needs to be installed)
         wslConf.automount.root = "/mnt";
+        wslConf.network.generateHosts = false;
         wslConf.network.generateResolveConf = true; # disable because it breaks tailscale ref:: https://github.com/kgadberry/dotfiles/blob/main/hosts/cerberus/default.nix
-        interop.includePath = false; # including windows PATH will slow down other systems, filesystem cross talk ref:: 
+        interop.includePath = false; # including windows PATH will slow down other systems, filesystem cross talk ref:: https://github.com/nmasur/dotfiles/blob/master/hosts/hydra/default.nix                        
       };
 
       programs.nix-ld.dev.enable = true; # for vscode server remote to work

@@ -2,9 +2,12 @@
   description = "Declarative Dimension of WSL";
 
   outputs =
-    inputs@{ self, nixpkgs, ... }: # inputs are external dependencies, whereas outputs become public API
+    inputs@{ self, nixpkgs, home-manager, ... }: # inputs are external dependencies, whereas outputs become public API
 
-    let
+    let      
+      #inherit (self) outputs; # ref:: https://github.com/guilherme-romanholo/nixdots/blob/main/flake.nix
+      #lib = nixpkgs.lib // home-manager.lib; # define lib to use in flake
+
       globals = # common values for flake modules
         let
           handle = "zadorski";
@@ -34,8 +37,7 @@
 
       withPkgs = # forAllSystems (system: let pkgs = import nixpkgs { inherit system overlays; }; in ...);
         callback: # ref:: https://github.com/LarsGKodehode/nix.system
-        withSystem (
-          system:
+        withSystem (system:
           callback (
             import nixpkgs {
               inherit system overlays; # added overlays here ref:: https://github.com/nmasur/dotfiles (compare w/https://github.com/librephoenix/nixos-config)
@@ -45,10 +47,8 @@
         );
 
     in
-    rec {
-      # ref:: https://github.com/guilherme-romanholo/nixdots/blob/main/flake.nix
-      #inherit (self) outputs;
-      #lib = nixpkgs.lib // home-manager.lib; # define lib to use in flake
+    rec {      
+      #inherit lib; # ref:: https://github.com/guilherme-romanholo/nixdots/blob/main/flake.nix
 
       nixosConfigurations = {
         ${globals.host} = import ./hosts/${globals.host} { inherit inputs globals overlays; }; # nixos-rebuild switch --flake .#crodax
@@ -79,8 +79,8 @@
 
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # manage linux systems
 
-  inputs.wsl.url = "github:nix-community/NixOS-WSL"; # manage wsl systems
-  inputs.wsl.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nixos-wsl.url = "github:nix-community/NixOS-WSL"; # manage wsl systems
+  inputs.nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.home-manager.url = "github:nix-community/home-manager/master"; # manage home dirs
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
