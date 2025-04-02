@@ -1,0 +1,13 @@
+keys:
+  - users:
+    - &paz age1xzaj0jkleltpww8fq8e9yk3rk35j4jsrm448kvz3xv55zrlq7g4scvuw64
+  - hosts:
+    - &crodax age1tgkt3lw0enhr5lt82d3uhtsa8gwpkc66eecj2chrj8jp3z2zlf7st84jv7
+    - &crobex age1tgkt3lw0enhr5lt82d3uhtsa8gwpkc66eecj2chrj8jp3z2zlf7st84jv7
+creation_rules:
+  - path_regex: .(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *paz
+      - *crodax
+      - *crobex

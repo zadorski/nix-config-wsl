@@ -1,0 +1,13 @@
+[manager]
+border_symbol = "│"
+border_style = { fg = "#121212" } # black
+
+[status]
+sep_left = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+
+[mode]
+# default bg
+normal_main = { fg = "#161616", bg = "#4c90a8" } # blue
+select_main = { fg = "#161616", bg = "#d95f5f" } # red
+unset_main = { fg = "#161616", bg = "#cc8b00" }  # yellow
