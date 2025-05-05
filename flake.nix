@@ -13,11 +13,11 @@
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";      
       specialArgs = inputs // rec {
-        handle = "zadorski";
         hostname = "crodax";
         username = "paz";
-        useremail = "678169+${handle}@users.noreply.github.com";
-
+        useremail = "678169+${userhandle}@users.noreply.github.com";
+        userhandle = "zadorski";
+        
         pkgs-stable = import nixpkgs-stable {
           system = system;
           config.allowUnfree = true;

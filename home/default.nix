@@ -1,4 +1,4 @@
-{ pkgs, username, useremail, ...}: {
+{ pkgs, username, useremail, userhandle, ...}: {
   imports = [
     ./shells
     ./zellij
@@ -31,8 +31,23 @@
   programs = {
     git = {
       enable = true;
-      userName = "${username}";
-      userEmail = "${useremail}";
+      userName = userhandle;
+      userEmail = useremail;
+    };
+
+    ssh = {
+      enable = true;
+      matchBlocks = {
+        "git" = {
+          host = "github.com";
+          user = "git";
+          forwardAgent = true;
+          identitiesOnly = true;
+          identityFile = [
+            "~/.ssh/id_maco"
+          ];
+        };
+      };
     };
 
     # eza = {
