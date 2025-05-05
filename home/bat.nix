@@ -4,7 +4,7 @@
     enable = true;
     config = {
       pager = "less -FR";
-      style = "changes,header";
+      #style = "changes,header";
       theme = "dracula"; #theme = "catppuccin-mocha";
     };
     # bat cache --build
