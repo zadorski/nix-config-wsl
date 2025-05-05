@@ -97,10 +97,7 @@ $env.config = {
     }
   }
 
-  filesize: {
-    metric: true
-    format: "auto"
-  }
+  filesize: {}
 
   cursor_shape: {
     emacs: line
