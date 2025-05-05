@@ -116,19 +116,15 @@ $env.config = {
   }
 
   edit_mode: vi
-  footer_mode: "25"
+  footer_mode: 25
   float_precision: 2
   bracketed_paste: true
 
   hooks: {
-    pre_prompt: { || null }
-    pre_execution: { || null }
+    pre_prompt: []
+    pre_execution: []
     env_change: {
-      PWD: { |before, after| null }
-    }
-    display_output: {
-      if: { || false }
-      timeout_ms: 0
+      PWD: []
     }
   }
 
