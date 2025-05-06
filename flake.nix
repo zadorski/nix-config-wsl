@@ -13,10 +13,10 @@
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";      
       specialArgs = inputs // rec {
-        hostname = "crodax";
-        username = "paz";
-        useremail = "678169+${userhandle}@users.noreply.github.com";
-        userhandle = "zadorski";
+        #hostName = "nixos";
+        userName = "nixos";
+        gitEmail = "678169+${gitHandle}@users.noreply.github.com";
+        gitHandle = "zadorski";
         
         pkgs-stable = import nixpkgs-stable {
           system = system;
@@ -26,7 +26,7 @@
 
       modules = [
         nixos-wsl.nixosModules.wsl {
-          wsl.defaultUser = "${specialArgs.username}";
+          wsl.defaultUser = "${specialArgs.userName}";
         }
 
         ./system
@@ -36,7 +36,7 @@
             useGlobalPkgs = true;
             useUserPackages = true;
             extraSpecialArgs = specialArgs;
-            users."${specialArgs.username}" = import ./home;
+            users."${specialArgs.userName}" = import ./home;
           };
         }
 
@@ -53,11 +53,11 @@
             pkgs.wget
           ];
 
-          networking.hostName = "${specialArgs.hostname}";
+          #networking.hostName = "${specialArgs.hostName}";
 
           wsl = {
             enable = true;
-            defaultUser = "${specialArgs.username}";
+            defaultUser = "${specialArgs.userName}";
             extraBin = with pkgs; [
               { src = "${coreutils}/bin/cat"; }
               { src = "${coreutils}/bin/date"; }

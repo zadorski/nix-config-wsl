@@ -1,4 +1,4 @@
-{ pkgs, username, useremail, userhandle, ...}: {
+{ pkgs, userName, gitEmail, gitHandle, ...}: {
   imports = [
     ./shells
     ./zellij
@@ -11,8 +11,8 @@
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home = {
-    username = username;
-    homeDirectory = "/home/${username}";
+    username = userName;
+    homeDirectory = "/home/${userName}";
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
@@ -31,8 +31,8 @@
   programs = {
     git = {
       enable = true;
-      userName = userhandle;
-      userEmail = useremail;
+      userName = gitHandle;
+      userEmail = gitEmail;
     };
 
     ssh = {
