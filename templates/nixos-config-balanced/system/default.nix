@@ -2,22 +2,14 @@
 
 {
   imports = [
-    ./wsl.nix
-    ./vscode-server.nix
     ./nix.nix
     ./users.nix
     ./ssh.nix
     ./shells.nix
     ./fonts.nix
     #./python.nix
-    ./docker.nix    
+    ./docker.nix
   ];
-
-  system = {
-    stateVersion = "24.05";
-  };
-
-  #networking.hostName = "${specialArgs.hostName}";
   
   environment.systemPackages = with pkgs; [ # $ nix search wget
     # helix # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.

@@ -1,125 +1,47 @@
 {
   description = "WSL NixOS Flake";
 
-  outputs = inputs @ { 
-    self,
-    nixpkgs,
-    nixpkgs-stable,
-    nixos-wsl,
-    home-manager,
-    vscode-server,
-    ...
-  }: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem rec {
-      system = "x86_64-linux";      
-      specialArgs = inputs // rec {
+  outputs = inputs: with inputs; with nixpkgs.lib;  # check duration of `nix flake check` without both `with` statements
+  {
+    nixosConfigurations.nixos = nixosSystem rec {   # evaluate via `nixos-rebuild switch .#nixos`
+      modules = [ ./system ];                       # imports `nixos-wsl.nixosModules.wsl` and single host config
+      system = "x86_64-linux";
+        
+      specialArgs = inputs // rec {                 # pass named inputs to modules + shared const values 
         #hostName = "nixos";
         userName = "nixos";
         gitEmail = "678169+${gitHandle}@users.noreply.github.com";
         gitHandle = "zadorski";
-        
+
         pkgs-stable = import nixpkgs-stable {
-          system = system;
+          inherit system;
           config.allowUnfree = true;
         };
       };
-
-      modules = [
-        nixos-wsl.nixosModules.wsl {
-          wsl.defaultUser = "${specialArgs.userName}";
-        }
-
-        ./system
-
-        home-manager.nixosModules.home-manager {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            extraSpecialArgs = specialArgs;
-            users."${specialArgs.userName}" = import ./home;
-          };
-        }
-
-        vscode-server.nixosModules.default
-        ({ pkgs, ... }: {
-          system = {
-            stateVersion = "24.05";
-          };
-
-          # see https://github.com/nix-community/NixOS-WSL/issues/294
-          programs.nix-ld.enable = true;
-          services.vscode-server.enable = true;
-          environment.systemPackages = [
-            pkgs.wget
-          ];
-
-          #networking.hostName = "${specialArgs.hostName}";
-
-          wsl = {
-            enable = true;
-            defaultUser = "${specialArgs.userName}";
-            extraBin = with pkgs; [
-              { src = "${coreutils}/bin/cat"; }
-              { src = "${coreutils}/bin/date"; }
-              { src = "${coreutils}/bin/dirname"; }
-              { src = "${findutils}/bin/find"; }
-              { src = "${coreutils}/bin/id"; }
-              { src = "${coreutils}/bin/mkdir"; }
-              { src = "${coreutils}/bin/mv"; }
-              { src = "${coreutils}/bin/readlink"; }
-              { src = "${coreutils}/bin/rm"; }
-              { src = "${coreutils}/bin/sleep"; }
-              { src = "${coreutils}/bin/uname"; }
-              { src = "${coreutils}/bin/wc"; }
-              { src = "${gnutar}/bin/tar"; }
-              { src = "${gzip}/bin/gzip"; }
-            ];
-          };
-        })
-      ];
     };
   };
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "nixpkgs/nixos-24.11";
-    
+    nixpkgs-stable.url = "nixpkgs/nixos-24.11";    
     # follows https://github.com/nix-community/NixOS-WSL/issues/294
-    nixos-wsl = {
-      url = "github:nix-community/NixOS-WSL";
-      inputs.nixpkgs.follows = "nixpkgs"; 
-    };
-    
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    
-    vscode-server.url = "github:nix-community/nixos-vscode-server";
-    
+    nixos-wsl.url = "github:nix-community/NixOS-WSL";
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";     
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    vscode-server.url = "github:nix-community/nixos-vscode-server";    
     # useful nushell scripts, such as auto_completion
-    nushell-scripts = {
-      url = "github:nushell/nu_scripts";
-      flake = false;
-    };
-
+    nushell-scripts.url = "github:nushell/nu_scripts";
+    nushell-scripts.flake = false;
     # color scheme
-    catppuccin-btop = {
-      url = "github:catppuccin/btop";
-      flake = false;
-    };
-    catppuccin-bat = {
-      url = "github:catppuccin/bat";
-      flake = false;
-    };
-    catppuccin-starship = {
-      url = "github:catppuccin/starship";
-      flake = false;
-    };
+    catppuccin-btop.url = "github:catppuccin/btop";
+    catppuccin-btop.flake = false;
+    catppuccin-bat.url = "github:catppuccin/bat";
+    catppuccin-bat.flake = false;
+    catppuccin-starship.url = "github:catppuccin/starship";
+    catppuccin-starship.flake = false;
   };
 
   # the nix config here affects the flake itself only, not the system configuration
-  nixConfig = {
-    experimental-features = ["nix-command" "flakes"];
-  };
+  nixConfig.experimental-features = ["nix-command" "flakes"];
 }
