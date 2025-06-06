@@ -35,9 +35,14 @@ This file tracks improvements for streamlining the repository into a minimal, ea
   - Wrap the module in `lib.mkIf config.wsl.enable` so it activates only inside WSL.
   - Avoid running the server on non‑WSL machines.
 
+- [ ] **Bootstrap the Nix package manager on WSL**
+  - Document the recommended installation command from [nix.dev](https://nix.dev) for WSL.
+  - Ensure the `nix.package` option is set so a consistent version is used.
+
 ## Guiding Principles
 
 - Aim for a minimal, declarative configuration suitable for company onboarding.
 - Prefer explicit references and avoid `with` to keep code easy to follow.
 - Keep optional tools separate so the base setup stays lean.
 - Document how to add corporate certificates and extras clearly.
+- Refer to [nix.dev](https://nix.dev) and the Nix language reference for best practices.
