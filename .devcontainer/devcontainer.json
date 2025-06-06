@@ -1,0 +1,8 @@
+{
+    "name": "nix-flake-dev",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "settings": {},
+    "postCreateCommand": "nix flake check"
+}
