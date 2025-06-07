@@ -50,9 +50,16 @@
     '';
   };
 
-  # mainly for flatpak (bindfs resolves all symlink, allowing all fonts to be accessed at 
-  # `/usr/share/fonts`, without letting /nix into the sandbox)
-  # see https://github.com/NixOS/nixpkgs/issues/119433#issuecomment-1326957279
+  ###################################################################################
+  #
+  #  Copy from https://github.com/NixOS/nixpkgs/issues/119433#issuecomment-1326957279
+  #  Mainly for flatpak
+  #    1. bindfs resolves all symlink,
+  #    2. allowing all fonts to be accessed at `/usr/share/fonts`
+  #    3. without letting /nix into the sandbox.
+  #
+  ###################################################################################
+
   system.fsPackages = [pkgs.bindfs];
   fileSystems = let
     mkRoSymBind = path: {
@@ -66,7 +73,7 @@
       pathsToLink = ["/share/fonts"];
     };
   in {
-    # create an FHS mount to support flatpak host icons/fonts
+    # Create an FHS mount to support flatpak host icons/fonts
     "/usr/share/icons" = mkRoSymBind (config.system.path + "/share/icons");
     "/usr/share/fonts" = mkRoSymBind (aggregatedFonts + "/share/fonts");
   };
