@@ -1,0 +1,68 @@
+# this manifest outlines the structure and purpose of AI-related files and directories
+# within this repository. It serves as a guide for both humans and AI agents
+# interacting with the project's AI-specific resources
+
+version: "1.0"
+
+# root guide for AI interaction, located in the project's root directory
+# this file should be the primary entry point for an AI agent
+root_guide: "AI_ROOT_GUIDE.md" # suggested new file at project root
+
+# definition of the .ai directory structure
+# all paths are relative to the .ai directory itself, unless specified as project root
+structure:
+  - path: "README.md"
+    description: "Overview of the .ai directory, its structure, and conventions."
+    purpose: "meta_documentation"
+
+  - path: "goals/"
+    description: "Directory for files defining high-level project goals and AI objectives."
+    purpose: "strategic_guidance"
+    contents:
+      - "project_overview.md" # Example file
+      - "current_objectives.md" # Example file
+
+  - path: "instructions/"
+    description: "Directory for specific rules, guidelines, coding standards, and style guides for AI."
+    purpose: "operational_rules"
+    contents:
+      - "coding_standards.md" # Example file
+      - "documentation_style.md" # Example file
+      - "persona_developer.md" # Example file for AI persona
+
+  - path: "knowledge_base/"
+    description: "Directory for domain-specific information, architecture overviews, glossaries, and other contextual data."
+    purpose: "contextual_information"
+    contents:
+      - "architecture.md" # Example file
+      - "glossary.md" # Example file
+
+  - path: "tasks/"
+    description: "Directory for managing tasks (e.g., features, bugs, improvements) for AI assistance."
+    purpose: "task_management"
+    sub_directories:
+      - path: "tasks/backlog/"
+        description: "Queue of pending tasks. Each task can be a .md file."
+      - path: "tasks/doine/"
+        description: "Tasks currently being worked on. Each task can be a .md file."
+      - path: "tasks/done/"
+        description: "Archive of completed tasks or references to them."
+
+  - path: "history/"
+    description: "Directory for logging important decisions, AI-generated change proposals, or evolution of AI-assisted work."
+    purpose: "record_keeping"
+    contents:
+      - "decision_log.md" # Example file
+
+  - path: "prompts/" # Optional
+    description: "Directory for storing reusable prompt templates for common AI tasks."
+    purpose: "tooling_and_efficiency"
+    contents:
+      - "generate_component_prompt.txt" # Example file
+
+# How to use these files with an AI:
+# 1. Start by directing the AI to the `AI_ROOT_GUIDE.md` at the project root.
+# 2. For specific tasks, refer the AI to relevant files within the .ai directory,
+#    e.g., "Follow coding standards in .ai/instructions/coding_standards.md".
+# 3. This manifest can be used by wrapper scripts or tools to provide context to AI models.
+
