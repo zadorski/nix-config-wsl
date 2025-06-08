@@ -1,4 +1,5 @@
 { pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -6,9 +7,8 @@
     ./vscode-server.nix
     ./nix.nix
     ./users.nix
-    ./ssh.nix
     ./shells.nix
-    ./certificates.nix
+    ./ssh.nix
   ];
 
   system = {
@@ -17,12 +17,12 @@
 
   #networking.hostName = "${specialArgs.hostName}";
   
-  environment.systemPackages = with pkgs; [ # $ nix search wget
-    git
-    curl
+  environment.systemPackages = with pkgs; [
     wget
+    curl
+    git
+    vim
   ];
 
-  programs = {
-  };
+  programs = {};
 }

@@ -65,3 +65,8 @@ ref: https://discourse.nixos.org/t/need-configuration-feedback-and-tips-and-ques
 ### resholveScriptBin
 resholve can ~generally meet the need of doing this without having to inline it all (i.e., retain editor highlighting, ability to run the script outside of a Nix-managed system, etc.–at least if you aren’t building the script conditionally based on the Nix eval).
 ref: https://github.com/utdemir/dotfiles-nix/blob/main/scripts/default.nix
+
+## Improvement Plan
+See [PLAN.md](PLAN.md) for current tasks.
+For setup steps see [docs/ONBOARDING.md](docs/ONBOARDING.md).
+- login shell uses bash, interactive sessions start fish automatically

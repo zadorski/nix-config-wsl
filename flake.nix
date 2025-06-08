@@ -21,10 +21,10 @@
     nixpkgs.url = "nixpkgs/nixos-unstable";
     # follows https://github.com/nix-community/NixOS-WSL/issues/294
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";     
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    vscode-server.url = "github:nix-community/nixos-vscode-server";    
+    vscode-server.url = "github:nix-community/nixos-vscode-server";
   };
 
   # the nix config here affects the flake itself only, not the system configuration
