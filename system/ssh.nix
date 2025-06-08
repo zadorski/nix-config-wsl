@@ -1,7 +1,6 @@
 { pkgs, ... }:
-
 {
-  # enable the OpenSSH daemon.
+  # enable the openssh daemon.
   services.openssh = {
     enable = true;
     settings = {
@@ -9,10 +8,10 @@
       PermitRootLogin = "no";
       PasswordAuthentication = false;
     };
-    openFirewall = true; 
+    openFirewall = true;
   };
 
-  # helpful for `ssh -vT git@github.com` to validate key chain 
+  # helpful for `ssh -vT git@github.com` to validate key chain
   programs.ssh.knownHosts = {
     github = {
       hostNames = ["github.com"];
