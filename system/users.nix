@@ -1,4 +1,4 @@
-{ home-manager, specialArgs, userName, ... }: # nixos-wsl
+{ pkgs, home-manager, specialArgs, userName, ... }: # nixos-wsl
 
 {  
   imports = [ 
@@ -13,6 +13,7 @@
     hashedPassword = "$6$11niI8PHfcNgMejh$0NdIXjJ0zvRLyLpoZvViN3KvLAGZ3.VlZYlDVPo8hX9CV./Etphn335g8m7uaR/J1OpOYaLsfL5.rYDlwCa6h/";
     home = "/home/${userName}";
     isNormalUser = true;
+    shell = pkgs.bashInteractive;
     extraGroups = [
       userName
       "users"

@@ -1,11 +1,6 @@
 { pkgs, userName, gitEmail, gitHandle, ...}: {
   imports = [
     ./shells
-    ./zellij
-
-    ./bat.nix
-    ./btop.nix
-    ./starship.nix
   ];
 
   # Home Manager needs a bit of information about you and the
@@ -49,55 +44,7 @@
         };
       };
     };
-
-    # eza = {
-    #   enable = true;
-    #   enableAliases = true; # do not enable aliases in nushell!
-    #   git = true;
-    #   # icons = true;
-    # };
-
-    # A command-line fuzzy finder
-    fzf = {
-      enable = true;
-      enableBashIntegration = true;
-      # https://github.com/catppuccin/fzf
-      # catppuccin-mocha
-      colors = {
-        "bg+" = "#313244"; 
-        "bg" = "#1e1e2e";
-        "spinner" = "#f5e0dc";
-        "hl" = "#f38ba8";
-        "fg" = "#cdd6f4";
-        "header" = "#f38ba8";
-        "info" = "#cba6f7";
-        "pointer" = "#f5e0dc";
-        "marker" = "#f5e0dc";
-        "fg+" = "#cdd6f4";
-        "prompt" = "#cba6f7";
-        "hl+" = "#f38ba8";
-      };
-    };
-
-    # A smarter cd command
-    zoxide = {
-      enable = true;
-      enableBashIntegration = true;
-      enableNushellIntegration = true;
-    };
   };
 
-  home.packages = with pkgs; [
-    # shell
-    neofetch
-    starship
-    krabby
-
-    # qmk
-    ffmpeg-full
-
-    # custom scripts
-    # check home/shells/bin/
-    (pkgs.buildEnv { name = "custom-scripts"; paths = [ ./shells ]; })
-  ];
+  home.packages = with pkgs; [ ];
 }

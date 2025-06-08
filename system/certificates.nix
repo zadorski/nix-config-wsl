@@ -1,16 +1,21 @@
-{ lib, ... }:
-let
-  windows-certs-2-wsl-dir = /mnt/c/Users/8J5204897/Documents/git/windows-certs-2-wsl;
-  certDir = "${windows-certs-2-wsl-dir}/all-certificates"; # run `.\get-all-certs.ps1` from https://github.com/bayaro/windows-certs-2-wsl
-in
-{
-  # standard way causes issue due to `ca-certificates.crt` found in the folder
-  #security.pki.certificateFiles = lib.filesystem.listFilesRecursive "${certDir}";
+{ pkgs, ... }:
 
-  # list only the *.pem files per https://discourse.nixos.org/t/how-to-use-a-wildcard-in-a-path-expression/51083/6
-  security.pki.certificateFiles = lib.pipe "${certDir}" [
-    builtins.readDir
-    (lib.filterAttrs (name: _: lib.hasSuffix ".pem" name))
-    (lib.mapAttrsToList (name: _: "${certDir}" + "/${name}"))
-  ];  
+{
+  # System-wide CA certificates
+  # Users should place their custom root certificates (e.g., ZScaler, corporate CAs)
+  # in a directory accessible from WSL, for example, /mnt/c/certs/
+  # Then, list them here.
+  # Example:
+  # security.pki.certificateFiles = [
+  #   /mnt/c/certs/zscaler.crt
+  #   /mnt/c/certs/mycorp-ca.pem
+  # ];
+  #
+  # By default, no extra certificates are added.
+  # Users need to uncomment and customize the following line:
+  # security.pki.certificateFiles = [ ];
+
+  # To ensure the directory for certificates is available if needed through nix store.
+  # This is more of a placeholder, actual certs are usually outside the store.
+  environment.systemPackages = [ pkgs.cacert ]; # Provides /etc/ssl/certs/ca-bundle.crt
 }
