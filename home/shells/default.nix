@@ -10,6 +10,20 @@
     '';
   };
 
-  programs.fish.enable = true;
+  programs.fish = {
+    enable = true;
+    shellAbbrs = { # Example: common abbreviations
+      g = "git";
+      ga = "git add";
+      gc = "git commit";
+    };
+    # recommended settings for a good interactive experience
+    interactiveShellInit = ''
+      set -g fish_greeting # suppress fish's default greeting
+      if type -q starship
+        starship init fish | source
+      end
+    '';
+  };
 }
 
