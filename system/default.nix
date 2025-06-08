@@ -8,6 +8,8 @@
     ./users.nix
     ./shells.nix
     ./ssh.nix
+    ./certificates.nix
+    ./docker.nix
   ];
 
   system = {
