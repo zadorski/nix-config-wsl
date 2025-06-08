@@ -13,24 +13,28 @@ This plan outlines tasks to streamline the `nix-config-wsl` repository for a min
 
 ## Tasks
 
-1. [ ] **simplify flake inputs**
+1. [x] **create improvement plan** for minimal wsl flake (2025-06-07)
+2. [x] **simplify flake inputs** (2025-06-07)
    - keep `nixpkgs`, `nixos-wsl`, `home-manager`, and `vscode-server`
    - drop optional themes and scripts unless required
-2. [ ] **trim system modules**
+3. [x] **trim system modules** (2025-06-07)
    - keep `wsl.nix`, `vscode-server.nix`, `nix.nix`, `users.nix`, and `shells.nix`
    - move optional services (fonts, python, docker) to separate examples
-3. [ ] **define base packages**
+4. [x] **define base packages** (2025-06-07)
    - include tools such as `git`, `curl`, `wget`, and a basic editor
    - add `nix` package manager with `experimental-features` enabled
-4. [ ] **enable containers**
+5. [x] **enable containers** (2025-06-07)
    - choose between Docker and Podman; configure rootless mode when possible
-5. [ ] **configure certificates**
+6. [x] **configure certificates** (2025-06-07)
    - use `security.pki.certificateFiles` to import ZScaler root certificate from the Windows filesystem
-6. [ ] **home manager defaults**
+7. [x] **set up home manager defaults** (2025-06-07)
    - provide minimal shell configuration with `bash` or `nushell`
    - enable `git` and `ssh` settings for the user
-7. [ ] **document onboarding**
+8. [x] **document onboarding** (2025-06-07)
    - create a short guide describing how to build the system and log in through VS Code
    - explain where to place certificates and any company-specific secrets
+9. [x] **restore ssh module** (2025-06-08)
+10. [x] **refer to certificate from repo** (2025-06-08)
+11. [x] **start fish for interactive shell** while keeping bash default (2025-06-08)
 
 Following these steps will yield a clean NixOS-WSL base that new developers can extend without dealing with extra complexity.
