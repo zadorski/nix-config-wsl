@@ -1,0 +1,264 @@
+# ******************************************************************************
+# *                            NixOS config .gitignore                         *
+# ******************************************************************************
+
+# ******************************************************************************
+# *                              NixOS-specific files                          *
+# ******************************************************************************
+
+# Nix build results and symlinks
+result
+result-*
+.result
+
+# Nix evaluation cache and temporary files
+.nix-gc-roots
+.nix-defexpr
+.nix-channels
+.nix-profile
+
+# direnv integration files (contains shell environment cache)
+.direnv/
+.envrc.cache
+
+# Hardware configuration backups
+hardware-configuration.nix.bak
+hardware-configuration.nix.old
+hardware-configuration.nix.orig
+
+# Nix store garbage collection roots
+gcroots/
+
+# Nix flake evaluation cache
+.nix-eval-cache
+
+# ******************************************************************************
+# *                                 Sensitive data                             *
+# ******************************************************************************
+
+# Corporate certificates (prevent accidental commit of sensitive certs)
+certs/zscaler.pem
+certs/*.pem
+certs/*.crt
+certs/*.key
+certs/*.p12
+certs/*.pfx
+
+# SSH keys and secrets
+*.key
+*.pem
+id_rsa
+id_ed25519
+*.pub
+secrets/
+.secrets/
+
+# SOPS encrypted files (keep encrypted.yaml but ignore decrypted versions)
+**/decrypted.*
+**/secrets.yaml
+**/secrets.json
+
+# Environment files with secrets
+.env
+.env.local
+.env.*.local
+
+# ******************************************************************************
+# *                          Development environment                           *
+# ******************************************************************************
+
+# Editor temporary and backup files
+*~
+*.swp
+*.swo
+*.tmp
+.#*
+\#*#
+*.orig
+*.rej
+
+# Vim
+.vimrc.local
+.viminfo
+*.un~
+Session.vim
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+.org-id-locations
+*_archive
+*_flymake.*
+/eshell/history
+/eshell/lastdir
+/elpa/
+*.rel
+
+# VSCode
+.vscode/
+*.code-workspace
+.history/
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ******************************************************************************
+# *                             Operating system                               *
+# ******************************************************************************
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ******************************************************************************
+# *                                WSL-specific                                *
+# ******************************************************************************
+
+# WSL temporary files and caches
+.wslconfig
+.wsl/
+wsl.conf.bak
+
+# Windows path integration cache
+.windows-paths
+
+# ******************************************************************************
+# *                           Build and cache directories                     *
+# ******************************************************************************
+
+# General build artifacts
+build/
+dist/
+target/
+*.log
+*.out
+
+# Package manager caches
+node_modules/
+.npm/
+.yarn/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ******************************************************************************
+# *                            Temporary and backup files                      *
+# ******************************************************************************
+
+# General temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+*.save
+*~
+
+# Archive files (usually not needed in config repos)
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.rar
+*.7z
+
+# ******************************************************************************
+# *                        Virtual machine and container                       *
+# ******************************************************************************
+
+# QEMU/KVM disk images
+*.qcow*
+*.img
+*.iso
+*.vmdk
+*.vdi
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# ******************************************************************************
+# *                          Documentation build artifacts                     *
+# ******************************************************************************
+
+# Generated documentation
+docs/_build/
+docs/.doctrees/
+site/
+_site/
+
+# ******************************************************************************
+# *                        Exceptions (files to keep tracked)                  *
+# ******************************************************************************
+
+# Keep certificate directory structure and documentation
+!certs/
+!certs/README.md
+
+# Keep important configuration templates
+!*.nix.example
+!*.nix.template
+
+# Keep documentation
+!*.md
+!docs/
+
+# Keep flake files
+!flake.nix
+!flake.lock
