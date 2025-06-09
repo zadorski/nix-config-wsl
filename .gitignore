@@ -6,12 +6,12 @@
 # *                              NixOS-specific files                          *
 # ******************************************************************************
 
-# Nix build results and symlinks
+# nix build results and symlinks
 result
 result-*
 .result
 
-# Nix evaluation cache and temporary files
+# nix evaluation cache and temporary files
 .nix-gc-roots
 .nix-defexpr
 .nix-channels
@@ -21,30 +21,29 @@ result-*
 .direnv/
 .envrc.cache
 
-# Hardware configuration backups
+# hardware configuration backups
 hardware-configuration.nix.bak
 hardware-configuration.nix.old
 hardware-configuration.nix.orig
 
-# Nix store garbage collection roots
+# nix store garbage collection roots
 gcroots/
 
-# Nix flake evaluation cache
+# nix flake evaluation cache
 .nix-eval-cache
 
 # ******************************************************************************
 # *                                 Sensitive data                             *
 # ******************************************************************************
 
-# Corporate certificates (prevent accidental commit of sensitive certs)
-certs/zscaler.pem
+# corporate certificates (prevent accidental commit of sensitive certs)
 certs/*.pem
 certs/*.crt
 certs/*.key
 certs/*.p12
 certs/*.pfx
 
-# SSH keys and secrets
+# ssh keys and secrets
 *.key
 *.pem
 id_rsa
@@ -53,12 +52,12 @@ id_ed25519
 secrets/
 .secrets/
 
-# SOPS encrypted files (keep encrypted.yaml but ignore decrypted versions)
+# sops encrypted files (keep encrypted.yaml but ignore decrypted versions)
 **/decrypted.*
 **/secrets.yaml
 **/secrets.json
 
-# Environment files with secrets
+# environment files with secrets
 .env
 .env.local
 .env.*.local
@@ -67,7 +66,7 @@ secrets/
 # *                          Development environment                           *
 # ******************************************************************************
 
-# Editor temporary and backup files
+# editor temporary and backup files
 *~
 *.swp
 *.swo
@@ -77,14 +76,14 @@ secrets/
 *.orig
 *.rej
 
-# Vim
+# vim
 .vimrc.local
 .viminfo
 *.un~
 Session.vim
 .netrwhist
 
-# Emacs
+# emacs
 *~
 \#*\#
 /.emacs.desktop
@@ -101,18 +100,18 @@ tramp
 /elpa/
 *.rel
 
-# VSCode
+# vscode
 .vscode/
 *.code-workspace
 .history/
 
-# JetBrains IDEs
+# jetbrains IDEs
 .idea/
 *.iml
 *.ipr
 *.iws
 
-# Sublime Text
+# sublime text
 *.sublime-project
 *.sublime-workspace
 
@@ -120,7 +119,7 @@ tramp
 # *                             Operating system                               *
 # ******************************************************************************
 
-# macOS
+# macos
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -139,7 +138,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Windows
+# windows
 Thumbs.db
 Thumbs.db:encryptable
 ehthumbs.db
@@ -154,7 +153,7 @@ $RECYCLE.BIN/
 *.msp
 *.lnk
 
-# Linux
+# linux
 *~
 .fuse_hidden*
 .directory
@@ -165,26 +164,26 @@ $RECYCLE.BIN/
 # *                                WSL-specific                                *
 # ******************************************************************************
 
-# WSL temporary files and caches
+# wsl temporary files and caches
 .wslconfig
 .wsl/
 wsl.conf.bak
 
-# Windows path integration cache
+# windows path integration cache
 .windows-paths
 
 # ******************************************************************************
 # *                           Build and cache directories                     *
 # ******************************************************************************
 
-# General build artifacts
+# general build artifacts
 build/
 dist/
 target/
 *.log
 *.out
 
-# Package manager caches
+# package manager caches
 node_modules/
 .npm/
 .yarn/
@@ -200,7 +199,7 @@ pip-delete-this-directory.txt
 # *                            Temporary and backup files                      *
 # ******************************************************************************
 
-# General temporary files
+# general temporary files
 *.tmp
 *.temp
 *.bak
@@ -210,7 +209,7 @@ pip-delete-this-directory.txt
 *.save
 *~
 
-# Archive files (usually not needed in config repos)
+# archive files (usually not needed in config repos)
 *.tar
 *.tar.gz
 *.tgz
@@ -222,14 +221,14 @@ pip-delete-this-directory.txt
 # *                        Virtual machine and container                       *
 # ******************************************************************************
 
-# QEMU/KVM disk images
+# qemu/kvm disk images
 *.qcow*
 *.img
 *.iso
 *.vmdk
 *.vdi
 
-# Docker
+# docker
 .dockerignore
 docker-compose.override.yml
 
@@ -237,7 +236,7 @@ docker-compose.override.yml
 # *                          Documentation build artifacts                     *
 # ******************************************************************************
 
-# Generated documentation
+# generated documentation
 docs/_build/
 docs/.doctrees/
 site/
