@@ -29,6 +29,10 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # devenv for project-specific development environments
+    devenv.url = "github:cachix/devenv";
+    devenv.inputs.nixpkgs.follows = "nixpkgs";
+
     # vscode remote server support for WSL development
     vscode-server.url = "github:nix-community/nixos-vscode-server";
   };

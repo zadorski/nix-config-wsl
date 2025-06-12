@@ -3,45 +3,54 @@
 {
   # import user-level configuration modules
   imports = [
-    ./shells.nix  # bash and fish shell configuration
+    ./shells.nix      # bash and fish shell configuration
+    ./devenv.nix      # development environment and tooling
+    ./development.nix # toolchain
   ];
 
   # basic home-manager configuration
   home = {
     username = userName;
     homeDirectory = "/home/${userName}";
-    stateVersion = "24.05";  # home-manager release version
+    stateVersion = "24.05";  # home-manager release for backwards compatibility
   };
 
   # enable home-manager to manage itself
   programs.home-manager.enable = true;
 
   programs = {
-    # Git configuration for version control
     git = {
       enable = true;
-      userName = gitHandle;   # your Git username
-      userEmail = gitEmail;   # your Git email address
+      userName = gitHandle;
+      userEmail = gitEmail;
     };
 
     ssh = {
       enable = true;
-      # basic SSH configuration for Git and remote access
-      # add your SSH keys to ~/.ssh/ and configure as needed
       matchBlocks = {
         "github.com" = {
           host = "github.com";
           user = "git";
           forwardAgent = true;
           identitiesOnly = true;
-          # uncomment and adjust the identity file path as needed
-          # identityFile = [ "~/.ssh/id_ed25519" ];
+          identityFile = [ "~/.ssh/id_maco" ];
+        };
+        "ssh.dev.azure.com" = {
+          host = "ssh.dev.azure.com";
+          user = "git";
+          forwardAgent = true;
+          identitiesOnly = true;
+          identityFile = [ "~/.ssh/id_rsa" ];
+        };
+        "* !ssh.dev.azure.com" = {
+          identityFile = "~/.ssh/id_maco";
+          identitiesOnly = true;
         };
       };
     };
   };
 
-  # user-specific packages (keep minimal - use project-specific tools when possible)
+  # user-specific packages (keep minimal: use project-specific tools when possible)
   home.packages = with pkgs; [
     starship  # modern, fast, and customizable prompt for any shell
   ];

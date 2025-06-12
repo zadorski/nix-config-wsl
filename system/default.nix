@@ -14,7 +14,7 @@
   ];
 
   system = {
-    stateVersion = "24.05"; # system initial release, no need to update (for backwards compatibility)
+    stateVersion = "24.05"; # system release for backwards compatibility
   };
 
   # system essentials available to all users
@@ -23,9 +23,5 @@
     curl
     git
     vim
-    micro # simple text editor
   ];
-
-  # system-wide program configurations
-  programs = {};
 }
