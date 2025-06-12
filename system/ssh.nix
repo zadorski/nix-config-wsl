@@ -1,6 +1,7 @@
 { pkgs, ... }:
+
 {
-  # enable the openssh daemon.
+  # enable the openssh daemon
   services.openssh = {
     enable = true;
     settings = {

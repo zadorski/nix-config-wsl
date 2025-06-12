@@ -21,7 +21,7 @@
       "docker"
       "adbusers"
     ];
-    openssh.authorizedKeys.keys = []; # TODO: add your public key here
+    openssh.authorizedKeys.keys = []; #TODO: add your public key here
   };
 
   #TODO: add conditional to enable this only on WSL

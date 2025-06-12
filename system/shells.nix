@@ -1,12 +1,13 @@
 { pkgs, ... }:
 
 {
-  # add user's shell into /etc/shells
+  # make shells available system-wide (adds them to /etc/shells)
   environment.shells = with pkgs; [
-    bash
-    fish
+    bash  # POSIX-compliant shell, stable and reliable
+    fish  # user-friendly interactive shell with good defaults
   ];
 
-  # set user's default shell system-wide
-  users.defaultUserShell = pkgs.bash; # wsl recommends bash or dash for login shell
+  # set bash as the default login shell (recommended for WSL compatibility)
+  # fish is configured as interactive shell in home-manager for better UX
+  users.defaultUserShell = pkgs.bash;
 }

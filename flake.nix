@@ -1,29 +1,35 @@
 {
-  description = "WSL NixOS Flake";
+  description = "WSL development environment";
 
-  outputs = inputs: with inputs; with nixpkgs.lib;  # check duration of `nix flake check` without both `with` statements
+  outputs = inputs: with inputs; with nixpkgs.lib;
   {
-    nixosConfigurations.nixos = nixosSystem rec {   # evaluate via `nixos-rebuild switch .#nixos`
-      modules = [ ./system ];                       # imports `nixos-wsl.nixosModules.wsl` and single host config
-      system = "x86_64-linux";
-        
-      specialArgs = inputs // rec {                 # pass named inputs to modules + shared const values 
-        #hostName = "nixos";
-        userName = "nixos";
-        gitEmail = "678169+${gitHandle}@users.noreply.github.com";
-        gitHandle = "zadorski";
+    # build with: nixos-rebuild switch --flake .#nixos
+    nixosConfigurations.nixos = nixosSystem rec {
+      modules = [ ./system ];  # load system configuration modules
+      system = "x86_64-linux"; # WSL architecture
 
+      # shared configuration values passed to all modules
+      specialArgs = inputs // rec {
+        userName = "nixos";  # change this to your preferred username
+        gitEmail = "678169+${gitHandle}@users.noreply.github.com";
+        gitHandle = "zadorski";  # change this to your GitHub username
       };
     };
   };
 
   inputs = {
+    # safe to use unstable for latest features
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    # follows https://github.com/nix-community/NixOS-WSL/issues/294
+
+    # essential for WSL functionality
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+
+    # home-manager for user-level configuration
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # vscode remote server support for WSL development
     vscode-server.url = "github:nix-community/nixos-vscode-server";
   };
 
