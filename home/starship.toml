@@ -32,8 +32,8 @@ subtext0 = "#a6adc8"    # contrast ratio 6.8:1 on #1e1e2e (AAA compliant)
 
 # core prompt behavior: optimized for WSL performance
 command_timeout = "1000"# 1000ms timeout to prevent hanging in WSL
-add_newline = false     # single-line prompt for terminal efficiency
-scan_timeout = 30       # quick directory scanning
+add_newline = "false"   # single-line prompt for terminal efficiency
+scan_timeout = "30"     # quick directory scanning
 
 # prompt format: accessibility-optimized with clear information hierarchy
 # left side: essential, frequently-needed information
