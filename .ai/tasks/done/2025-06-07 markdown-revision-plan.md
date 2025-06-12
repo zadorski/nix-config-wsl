@@ -29,8 +29,8 @@ Current documentation deficiencies result in:
 | `docs/podman.md` | podman.md | **Insufficient** | Only external references, no actual implementation guidance | Expand with practical examples |
 | `docs/vps.md` | vps.md | **Insufficient** | Single reference link, no context or instructions | Expand or remove |
 | `docs/vpn.md` | vpn.md | **Sufficient** | Focused examples, clear code snippets | Minor improvements only |
-| `.ai/rules/coding_standards.md` | coding_standards.md | **Insufficient** | Completely empty file | Create comprehensive standards |
-| `.ai/knowledge_base/glossary.md` | glossary.md | **Insufficient** | Completely empty file | Create NixOS/WSL glossary |
+| `.ai/rules/coding-standards.md` | coding-standards.md | **Insufficient** | Completely empty file | Create comprehensive standards |
+| `.ai/knowledge-base/glossary.md` | glossary.md | **Insufficient** | Completely empty file | Create NixOS/WSL glossary |
 | Task files | Various | **Sufficient** | Good structure and content | Maintain current quality |
 
 ## Content Gap Identification
@@ -78,15 +78,15 @@ Current documentation deficiencies result in:
 - **Priority**: High
 - **Estimated Effort**: 2-3 hours
 
-#### 2. Populate .ai/rules/coding_standards.md
-- **Location**: `.ai/rules/coding_standards.md`
+#### 2. Populate .ai/rules/coding-standards.md
+- **Location**: `.ai/rules/coding-standards.md`
 - **Target Audience**: AI agents and human developers
 - **Content**: Nix language standards, module patterns, formatting rules
 - **Priority**: High
 - **Estimated Effort**: 4-5 hours
 
-#### 3. Create .ai/knowledge_base/architecture.md
-- **Location**: `.ai/knowledge_base/architecture.md`
+#### 3. Create .ai/knowledge-base/architecture.md
+- **Location**: `.ai/knowledge-base/architecture.md`
 - **Target Audience**: AI agents (primary)
 - **Content**: System architecture, module relationships, flake structure
 - **Priority**: High
@@ -101,8 +101,8 @@ Current documentation deficiencies result in:
 
 ### Medium Priority (Important for Comprehensive Coverage)
 
-#### 5. Create .ai/knowledge_base/troubleshooting.md
-- **Location**: `.ai/knowledge_base/troubleshooting.md`
+#### 5. Create .ai/knowledge-base/troubleshooting.md
+- **Location**: `.ai/knowledge-base/troubleshooting.md`
 - **Target Audience**: AI agents and human developers
 - **Content**: Common issues, debugging procedures, solution patterns
 - **Priority**: Medium
@@ -115,8 +115,8 @@ Current documentation deficiencies result in:
 - **Priority**: Medium
 - **Estimated Effort**: 2-3 hours
 
-#### 7. Create .ai/knowledge_base/security.md
-- **Location**: `.ai/knowledge_base/security.md`
+#### 7. Create .ai/knowledge-base/security.md
+- **Location**: `.ai/knowledge-base/security.md`
 - **Target Audience**: AI agents and human developers
 - **Content**: Certificate management, secrets handling, WSL security
 - **Priority**: Medium
@@ -124,8 +124,8 @@ Current documentation deficiencies result in:
 
 ### Low Priority (Nice to Have)
 
-#### 8. Populate .ai/knowledge_base/glossary.md
-- **Location**: `.ai/knowledge_base/glossary.md`
+#### 8. Populate .ai/knowledge-base/glossary.md
+- **Location**: `.ai/knowledge-base/glossary.md`
 - **Target Audience**: AI agents and human developers
 - **Content**: NixOS, WSL, and project-specific terminology
 - **Priority**: Low
@@ -147,7 +147,7 @@ Current documentation deficiencies result in:
    - Navigation to detailed resources
    - Success criteria: AI agents can quickly understand repository purpose
 
-2. **Populate coding_standards.md**
+2. **Populate coding-standards.md**
    - Nix language formatting rules
    - Module organization patterns
    - Configuration best practices

@@ -37,8 +37,8 @@ This repository provides a **modular NixOS-WSL flake configuration** for Windows
 ### 2. AI Resources Navigation
 - **Start here**: This file (AI_ROOT_GUIDE.md)
 - **AI Directory**: `.ai/` - All AI-specific resources
-- **Coding Standards**: `.ai/rules/coding_standards.md`
-- **Architecture Details**: `.ai/knowledge_base/architecture.md`
+- **Coding Standards**: `.ai/rules/coding-standards.md`
+- **Architecture Details**: `.ai/knowledge-base/architecture.md`
 - **Current Tasks**: `.ai/tasks/doing/`
 - **Agent Instructions**: `AGENTS.md`
 
@@ -94,7 +94,7 @@ nix build .#nixosConfigurations.nixos.config.system.build.toplevel
 ## AI Agent Guidelines
 
 ### Code Quality Requirements
-1. **Follow** `.ai/rules/coding_standards.md` for all Nix code
+1. **Follow** `.ai/rules/coding-standards.md` for all Nix code
 2. **Test** changes with `nix fmt` and `nix flake check`
 3. **Document** significant changes in commit messages
 4. **Maintain** modular structure - avoid monolithic configurations
@@ -114,8 +114,8 @@ nix build .#nixosConfigurations.nixos.config.system.build.toplevel
 ## Next Steps
 
 1. **Read**: `AGENTS.md` for detailed agent instructions
-2. **Study**: `.ai/knowledge_base/architecture.md` for deep architecture understanding
-3. **Follow**: `.ai/rules/coding_standards.md` for code quality
+2. **Study**: `.ai/knowledge-base/architecture.md` for deep architecture understanding
+3. **Follow**: `.ai/rules/coding-standards.md` for code quality
 4. **Check**: `.ai/tasks/doing/` for current work items
 
 ## Support Resources

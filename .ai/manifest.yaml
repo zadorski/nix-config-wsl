@@ -26,16 +26,17 @@ structure:
     description: "Directory for specific rules, guidelines, coding standards, and style guides for AI."
     purpose: "operational_rules"
     contents:
-      - "coding_standards.md" # Comprehensive Nix coding standards
+      - "coding-standards.md" # Comprehensive Nix coding standards
       - "markdown-files-inventory.md" # Repository markdown file analysis
       - "documentation_style.md" # Future: Documentation style guide
       - "persona_developer.md" # Future: AI persona definition
 
-  - path: "knowledge_base/"
+  - path: "knowledge-base/"
     description: "Directory for domain-specific information, architecture overviews, glossaries, and other contextual data."
     purpose: "contextual_information"
     contents:
       - "architecture.md" # NixOS-WSL system architecture documentation
+      - "augment-code-user-guidelines.md" # Comprehensive Augment Code integration guidelines
       - "glossary.md" # NixOS and WSL terminology (placeholder)
       - "troubleshooting.md" # Future: Common issues and solutions
       - "security.md" # Future: Security guidelines and best practices
@@ -66,6 +67,6 @@ structure:
 # How to use these files with an AI:
 # 1. Start by directing the AI to the `AI_ROOT_GUIDE.md` at the project root.
 # 2. For specific tasks, refer the AI to relevant files within the .ai directory,
-#    e.g., "Follow coding standards in .ai/rules/coding_standards.md".
+#    e.g., "Follow coding standards in .ai/rules/coding-standards.md".
 # 3. This manifest can be used by wrapper scripts or tools to provide context to AI models.
 

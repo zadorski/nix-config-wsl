@@ -18,8 +18,8 @@ These instructions apply to the entire repository and complement the information
 ## Key Resources in the `.ai` Directory
 All detailed instructions, knowledge bases, and task lists are located within the `.ai/` directory. Please refer to its `README.md` and `manifest.yaml` for a full map.
 - **Goals:** See `.ai/goals/` for current objectives
-- **Instructions:** Adhere to guidelines in `.ai/rules/` (e.g., `coding_standards.md`)
-- **Knowledge Base:** Consult `.ai/knowledge_base/` for project-specific context
+- **Instructions:** Adhere to guidelines in `.ai/rules/` (e.g., `coding-standards.md`)
+- **Knowledge Base:** Consult `.ai/knowledge-base/` for project-specific context
 - **Tasks:** Current work items are in `.ai/tasks/`
 
 ## General Interaction Principles
@@ -49,7 +49,7 @@ If a change only touches Markdown files or code comments, running `nix fmt` and 
 ## NixOS-Specific Guidelines
 
 ### Nix Language and Module Standards
-- **Follow** `.ai/rules/coding_standards.md` for all Nix code formatting and style
+- **Follow** `.ai/rules/coding-standards.md` for all Nix code formatting and style
 - **Use** proper Nix language constructs (attribute sets, functions, imports)
 - **Maintain** modular structure - avoid monolithic configurations
 - **Validate** all Nix expressions with `nix flake check` before submission
