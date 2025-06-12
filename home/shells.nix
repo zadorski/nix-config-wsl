@@ -63,9 +63,10 @@
         test -f ~/.ssh/id_ed25519 && set -a ssh_keys ~/.ssh/id_ed25519
 
         if test (count $ssh_keys) -gt 0
-          keychain --quiet --agents ssh $ssh_keys
-          if test -f ~/.keychain/(hostname)-sh
-            source ~/.keychain/(hostname)-sh
+          # use --noask to defer passphrase prompts until key is actually used
+          keychain --quiet --noask --agents ssh $ssh_keys
+          if test -f ~/.keychain/(hostname)-fish
+            source ~/.keychain/(hostname)-fish
           end
         end
       end
