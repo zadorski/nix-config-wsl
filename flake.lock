@@ -28,6 +28,86 @@
         "type": "github"
       }
     },
+    "catppuccin-bat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1734996624,
+        "narHash": "sha256-6fWoCH90IGumAMc4buLRWL0N61op+AuMNN9CAR9/OdI=",
+        "owner": "catppuccin",
+        "repo": "bat",
+        "rev": "699f60fc8ec434574ca7451b444b880430319941",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "bat",
+        "type": "github"
+      }
+    },
+    "catppuccin-btop": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1727050041,
+        "narHash": "sha256-mEGZwScVPWGu+Vbtddc/sJ+mNdD2kKienGZVUcTSl+c=",
+        "owner": "catppuccin",
+        "repo": "btop",
+        "rev": "f437574b600f1c6d932627050b15ff5153b58fa3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "btop",
+        "type": "github"
+      }
+    },
+    "catppuccin-fzf": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1746328978,
+        "narHash": "sha256-lLuUI5BUHFDt49UH3K1Mz+zGUVrS0QytTFGdty4Mxek=",
+        "owner": "catppuccin",
+        "repo": "fzf",
+        "rev": "fd3ab96c134abeca7721f16ad251bc2e9defa493",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "fzf",
+        "type": "github"
+      }
+    },
+    "catppuccin-lazygit": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1745275813,
+        "narHash": "sha256-4eJEOEfwLBc4EoQ32TpuhXS3QDvQ8FtT7EgpotEKV7o=",
+        "owner": "catppuccin",
+        "repo": "lazygit",
+        "rev": "c24895902ec2a3cb62b4557f6ecd8e0afeed95d5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "lazygit",
+        "type": "github"
+      }
+    },
+    "catppuccin-starship": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1733541952,
+        "narHash": "sha256-1w0TJdQP5lb9jCrCmhPlSexf0PkAlcz8GBDEsRjPRns=",
+        "owner": "catppuccin",
+        "repo": "starship",
+        "rev": "e99ba6b210c0739af2a18094024ca0bdf4bb3225",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "starship",
+        "type": "github"
+      }
+    },
     "devenv": {
       "inputs": {
         "cachix": "cachix",
@@ -324,6 +404,11 @@
     },
     "root": {
       "inputs": {
+        "catppuccin-bat": "catppuccin-bat",
+        "catppuccin-btop": "catppuccin-btop",
+        "catppuccin-fzf": "catppuccin-fzf",
+        "catppuccin-lazygit": "catppuccin-lazygit",
+        "catppuccin-starship": "catppuccin-starship",
         "devenv": "devenv",
         "home-manager": "home-manager",
         "nixos-wsl": "nixos-wsl",

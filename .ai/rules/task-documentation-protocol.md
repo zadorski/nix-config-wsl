@@ -6,8 +6,8 @@ Preserve this protocol in your memory and implement it consistently across all p
 
 ### 1. File Creation Requirements
 - **Location**: `.ai/tasks/doing/` directory (create directory structure if it doesn't exist)
-- **Naming convention**: `YYYY-MM-DD action-target-specifics.md`
-- **Use current date and descriptive action verbs**: implement, fix, refactor, analyze, debug, enhance, etc.
+- **Naming convention**: `YYYY-MM-DD action-target-specifics.md` with current date.
+- **Use descriptive action verbs**: implement, fix, refactor, analyze, debug, enhance, etc.
 - **Examples**: 
   - `2025-01-15 implement-user-authentication.md`
   - `2025-01-15 fix-database-connection-pooling.md`

@@ -35,6 +35,12 @@
       if type -q starship
         starship init fish | source
       end
+
+      # initialize fzf for enhanced file and command searching
+      # fzf provides fuzzy finding with catppuccin dark theme integration
+      if type -q fzf
+        fzf --fish | source
+      end
     '';
   };
 }

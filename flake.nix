@@ -35,6 +35,18 @@
 
     # vscode remote server support for WSL development
     vscode-server.url = "github:nix-community/nixos-vscode-server";
+
+    # catppuccin themes for dark mode compatibility
+    catppuccin-starship.url = "github:catppuccin/starship";
+    catppuccin-starship.flake = false;
+    catppuccin-lazygit.url = "github:catppuccin/lazygit";
+    catppuccin-lazygit.flake = false;
+    catppuccin-bat.url = "github:catppuccin/bat";
+    catppuccin-bat.flake = false;
+    catppuccin-fzf.url = "github:catppuccin/fzf";
+    catppuccin-fzf.flake = false;    
+    catppuccin-btop.url = "github:catppuccin/btop";
+    catppuccin-btop.flake = false;    
   };
 
   # the nix config here affects the flake itself only, not the system configuration
