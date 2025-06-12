@@ -1,7 +1,9 @@
-{ pkgs, userName, gitEmail, gitHandle, ... }: {
+{ pkgs, userName, gitEmail, gitHandle, ... }: 
+
+{
   # import user-level configuration modules
   imports = [
-    ./shells  # bash and fish shell configuration
+    ./shells.nix  # bash and fish shell configuration
   ];
 
   # basic home-manager configuration
