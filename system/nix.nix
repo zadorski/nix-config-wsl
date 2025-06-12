@@ -18,6 +18,10 @@
 
     # enable modern Nix features (required for flakes)
     experimental-features = [ "nix-command" "flakes" ];
+
+    # configure SSL certificate handling for Nix operations
+    # ensures that Nix can download packages through corporate proxies
+    ssl-cert-file = lib.mkDefault "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   # set your time zone - change this to your local timezone

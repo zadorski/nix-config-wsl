@@ -42,5 +42,12 @@
   };
 
   # user-specific packages (keep minimal - use project-specific tools when possible)
-  home.packages = with pkgs; [ ];
+  home.packages = with pkgs; [
+    starship  # modern, fast, and customizable prompt for any shell
+  ];
+
+  # XDG configuration files
+  xdg.configFile."starship.toml" = {
+    source = ./starship.toml;
+  };
 }

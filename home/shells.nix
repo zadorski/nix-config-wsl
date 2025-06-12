@@ -29,7 +29,9 @@
     interactiveShellInit = ''
       set -g fish_greeting  # disable fish's default greeting message
 
-      # enable starship prompt if available (install separately if desired)
+      # initialize Starship prompt for enhanced development experience
+      # Starship provides Git status, language versions, and command feedback
+      # Configuration is managed in ~/.config/starship.toml via home-manager
       if type -q starship
         starship init fish | source
       end
