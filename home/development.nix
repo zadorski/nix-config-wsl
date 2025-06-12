@@ -63,8 +63,8 @@
       # better merge conflict resolution
       merge.conflictstyle = "diff3";
       # use delta as the default pager
-      core.pager = lib.mkForce "delta"; # force, otherwise conflicting definition
-      interactive.diffFilter = "delta --color-only";
+      #core.pager = lib.mkDefault "delta"; # already set in programs.git.delta.enable
+      #interactive.diffFilter = "delta --color-only"; # already set in programs.git.delta.enable
       # better branch tracking
       push.default = "simple";
       pull.rebase = true;
