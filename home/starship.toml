@@ -241,8 +241,13 @@ disabled = true  # disabled by default, enable if using AWS
 
 # environment variables: useful for development
 [env_var.VIRTUAL_ENV]
-format = "([$env_value]($style) )"
-style = "bright-black"
+format = "(venv:[$env_value]($style) )"
+style = "bright-yellow"
+
+# environment variables: development context
+[env_var.DEVENV_PROFILE]
+format = "(devenv:[$env_value]($style) )"
+style = "bright-blue"
 
 # custom WSL-specific optimizations
 [custom.wsl_distro]
@@ -251,14 +256,3 @@ when = '[ -n "$WSL_DISTRO_NAME" ]'
 format = "[$output]($style) "
 style = "bold dimmed white"
 disabled = true  # disabled by default, enable if you want to show WSL distro name
-
-# additional useful development tools
-
-# show environment variables for development context
-[env_var.DEVENV_PROFILE]
-format = "(devenv:[$env_value]($style) )"
-style = "bright-blue"
-
-[env_var.VIRTUAL_ENV]
-format = "(venv:[$env_value]($style) )"
-style = "bright-yellow"
