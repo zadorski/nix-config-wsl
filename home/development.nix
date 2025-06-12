@@ -10,15 +10,17 @@
     lazygit           # terminal UI for git
     btop              # modern system monitor with themes
     fzf               # fuzzy finder for files and commands
+    keychain          # SSH key management for seamless authentication
 
     # file and text processing
     tree              # directory tree visualization
     tokei             # code statistics
-    
+    fd                # better find for fzf integration
+
     # network and API tools
     curl              # HTTP client
     wget              # file downloader
-    
+
     # container and cloud tools (commonly used)
     docker-compose    # multi-container Docker applications
     
@@ -230,25 +232,41 @@
   # enhanced shell aliases for development
   programs.fish = {
     shellAliases = {
-      # enhanced file operations
-      ls = "eza --icons --git";
-      ll = "eza -l --icons --git";
-      la = "eza -la --icons --git";
-      tree = "eza --tree --icons";
-      
-      # better cat
+      # enhanced file operations with development-optimized table view
+      # basic listing with icons and git status
+      ls = "eza --icons --git --group-directories-first";
+
+      # detailed table view optimized for development workflows
+      # shows permissions, size, modified time, git status in clean columns
+      ll = "eza --long --icons --git --group-directories-first --time-style=relative --no-permissions";
+
+      # comprehensive listing including hidden files
+      # table format with all development-relevant information
+      la = "eza --long --all --icons --git --group-directories-first --time-style=relative --header";
+
+      # development-focused detailed view with full information
+      # includes permissions for troubleshooting, size for optimization
+      lld = "eza --long --icons --git --group-directories-first --time-style=long-iso --header --extended";
+
+      # tree view with git integration for project structure overview
+      tree = "eza --tree --icons --git --level=3";
+
+      # comprehensive tree view for deep project analysis
+      treed = "eza --tree --icons --git --long --level=4 --time-style=relative";
+
+      # better cat with syntax highlighting
       cat = "bat";
-      
+
       # development shortcuts
       dev = "cd ~/dev";
       projects = "cd ~/projects";
-      
+
       # docker shortcuts
       dc = "docker-compose";
       dcu = "docker-compose up";
       dcd = "docker-compose down";
       dcb = "docker-compose build";
-      
+
       # git shortcuts (in addition to abbreviations)
       gst = "git status";
       gco = "git checkout";
@@ -256,7 +274,7 @@
       gp = "git push";
       gl = "git pull";
       gf = "git fetch";
-      
+
       # nix shortcuts
       nix-search = "nix search nixpkgs";
       nix-shell-p = "nix-shell -p";
@@ -275,9 +293,14 @@
   # bash aliases for compatibility
   programs.bash = {
     shellAliases = {
-      ls = "eza --icons --git";
-      ll = "eza -l --icons --git";
-      la = "eza -la --icons --git";
+      # enhanced file operations matching fish configuration
+      ls = "eza --icons --git --group-directories-first";
+      ll = "eza --long --icons --git --group-directories-first --time-style=relative --no-permissions";
+      la = "eza --long --all --icons --git --group-directories-first --time-style=relative --header";
+      lld = "eza --long --icons --git --group-directories-first --time-style=long-iso --header --extended";
+      tree = "eza --tree --icons --git --level=3";
+
+      # enhanced tools
       cat = "bat";
       gst = "git status";
     };
