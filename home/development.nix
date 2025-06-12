@@ -63,7 +63,7 @@
       # better merge conflict resolution
       merge.conflictstyle = "diff3";
       # use delta as the default pager
-      core.pager = "delta";
+      core.pager = lib.mkForce "delta"; # force, otherwise conflicting definition
       interactive.diffFilter = "delta --color-only";
       # better branch tracking
       push.default = "simple";
