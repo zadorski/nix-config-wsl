@@ -1,11 +1,11 @@
 { lib, config, pkgs, ... }:
 
 let
-  cfg = config.programs.windows-integration;
-  windowsLib = cfg._internal.windowsLib;
+  cfg = config.programs.windows-wsl-manager;
+  envPathFallback = cfg._internal.envPathFallback;
   windowsPaths = cfg._internal.paths;
   
-  powershellPaths = windowsLib.getPowerShellPaths windowsPaths;
+  powershellPaths = envPathFallback.getPowerShellPaths windowsPaths;
   
   # PowerShell profile with Starship integration and development tools
   powershellProfile = ''
@@ -174,13 +174,13 @@ in
 
     # create backup scripts and ensure directories
     home.packages = lib.mkIf cfg.fileManagement.backupOriginals [
-      (windowsLib.createBackup powershellPaths.currentUser)
-      (windowsLib.createBackup powershellPaths.currentUserISE)
-      (windowsLib.ensureDirectory (builtins.dirOf powershellPaths.currentUser))
+      (envPathFallback.createBackup powershellPaths.currentUser)
+      (envPathFallback.createBackup powershellPaths.currentUserISE)
+      (envPathFallback.ensureDirectory (builtins.dirOf powershellPaths.currentUser))
     ];
 
     # validation warnings
-    warnings = lib.optional (!windowsLib.validateWindowsPath (builtins.dirOf powershellPaths.currentUser))
+    warnings = lib.optional (!envPathFallback.validateWindowsPath (builtins.dirOf powershellPaths.currentUser))
       "PowerShell profile directory not found at ${builtins.dirOf powershellPaths.currentUser}. PowerShell may not be installed.";
   };
 }

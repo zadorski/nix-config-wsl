@@ -1,8 +1,8 @@
 { lib, config, pkgs, ... }:
 
 let
-  cfg = config.programs.windows-integration;
-  windowsLib = cfg._internal.windowsLib;
+  cfg = config.programs.windows-wsl-manager;
+  envPathFallback = cfg._internal.envPathFallback;
   windowsPaths = cfg._internal.paths;
   fontConfig = cfg._internal.fonts or {
     family = "CaskaydiaCove Nerd Font, Cascadia Code, Cascadia Mono, Consolas, Courier New, monospace";
@@ -10,7 +10,7 @@ let
     terminalSize = 11;
   };
 
-  vscodePaths = windowsLib.getVSCodePaths windowsPaths;
+  vscodePaths = envPathFallback.getVSCodePaths windowsPaths;
   
   # VS Code settings with Catppuccin Mocha theme and WSL integration
   vscodeSettings = {
@@ -218,13 +218,13 @@ in
 
     # create backup scripts and ensure directories
     home.packages = lib.mkIf cfg.fileManagement.backupOriginals [
-      (windowsLib.createBackup vscodePaths.settings)
-      (windowsLib.createBackup vscodePaths.keybindings)
-      (windowsLib.ensureDirectory (builtins.dirOf vscodePaths.settings))
+      (envPathFallback.createBackup vscodePaths.settings)
+      (envPathFallback.createBackup vscodePaths.keybindings)
+      (envPathFallback.ensureDirectory (builtins.dirOf vscodePaths.settings))
     ];
 
     # validation warnings
-    warnings = lib.optional (!windowsLib.validateWindowsPath (builtins.dirOf vscodePaths.settings))
+    warnings = lib.optional (!envPathFallback.validateWindowsPath (builtins.dirOf vscodePaths.settings))
       "VS Code settings directory not found at ${builtins.dirOf vscodePaths.settings}. VS Code may not be installed.";
   };
 }

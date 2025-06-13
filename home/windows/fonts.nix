@@ -1,8 +1,8 @@
 { lib, config, pkgs, ... }:
 
 let
-  cfg = config.programs.windows-integration;
-  windowsLib = cfg._internal.windowsLib;
+  cfg = config.programs.windows-wsl-manager;
+  envPathFallback = cfg._internal.envPathFallback;
   windowsPaths = cfg._internal.paths;
   
   # font configuration with fallback chain
@@ -230,7 +230,7 @@ in
 {
   config = lib.mkIf (cfg.enable && cfg.fonts.enable) {
     # expose font configuration for other modules
-    programs.windows-integration._internal.fonts = {
+    programs.windows-wsl-manager._internal.fonts = {
       family = fontFamily;
       primaryFont = cfg.fonts.primaryFont;
       fallbackFonts = cfg.fonts.fallbackFonts;
@@ -317,7 +317,7 @@ in
 
     # validation warnings
     warnings = [
-      (lib.mkIf (!windowsLib.isWSLEnvironment)
+      (lib.mkIf (!envPathFallback.isWSLEnvironment)
         "Font management requires WSL environment for Windows font installation.")
       (lib.mkIf (cfg.fonts.autoInstall && !builtins.pathExists "/usr/bin/powershell.exe")
         "Automatic font installation requires PowerShell. Install PowerShell or disable autoInstall.")

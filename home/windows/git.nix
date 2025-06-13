@@ -1,11 +1,11 @@
 { lib, config, pkgs, gitEmail, gitHandle, ... }:
 
 let
-  cfg = config.programs.windows-integration;
-  windowsLib = cfg._internal.windowsLib;
+  cfg = config.programs.windows-wsl-manager;
+  envPathFallback = cfg._internal.envPathFallback;
   windowsPaths = cfg._internal.paths;
   
-  gitPaths = windowsLib.getGitPaths windowsPaths;
+  gitPaths = envPathFallback.getGitPaths windowsPaths;
   
   # Git configuration synchronized between WSL and Windows
   gitConfig = ''
@@ -258,8 +258,8 @@ in
 
     # create backup scripts and ensure directories
     home.packages = lib.mkIf cfg.fileManagement.backupOriginals [
-      (windowsLib.createBackup gitPaths.globalConfig)
-      (windowsLib.ensureDirectory (builtins.dirOf gitPaths.globalConfig))
+      (envPathFallback.createBackup gitPaths.globalConfig)
+      (envPathFallback.ensureDirectory (builtins.dirOf gitPaths.globalConfig))
       
       # script to validate git configuration
       (pkgs.writeShellScriptBin "validate-git-config" ''
@@ -290,7 +290,7 @@ in
     ];
 
     # validation warnings
-    warnings = lib.optional (!windowsLib.validateWindowsPath (builtins.dirOf gitPaths.globalConfig))
+    warnings = lib.optional (!envPathFallback.validateWindowsPath (builtins.dirOf gitPaths.globalConfig))
       "Git configuration directory not found at ${builtins.dirOf gitPaths.globalConfig}. Git may not be installed on Windows.";
   };
 }

@@ -16,9 +16,11 @@ The Windows integration system extends nix-config-wsl to manage Windows native a
 
 ### Core Components
 
-- **`default.nix`** - Main Windows integration module with configuration options
-- **`lib.nix`** - Helper functions for Windows path resolution and file management
-- **Application modules** - Individual configuration files for each Windows application
+- **`default.nix`** - main Windows integration module with configuration options
+- **`env-path-fallback.nix`** - helper functions for Windows path resolution with static fallback strategies
+- **`env-path.nix`** - enhanced library with dynamic Windows environment detection and runtime path resolution
+- **`env-vars.nix`** - dynamic Windows environment detection, validation, and shell integration
+- **Application modules** - individual configuration files for each Windows application
 
 ### Application Modules
 
@@ -76,7 +78,7 @@ Add to your flake configuration:
 
 ```nix
 # In your home-manager configuration
-programs.windows-integration = {
+programs.windows-wsl-manager = {
   enable = true;
   windowsUsername = "your-windows-username"; # optional, defaults to WSL username
   
@@ -129,8 +131,8 @@ programs.windows-integration = {
 After enabling Windows integration, use these commands to validate the setup:
 
 ```bash
-# validate overall Windows integration
-validate-windows-integration
+# validate overall Windows WSL manager
+validate-windows-wsl-manager
 
 # validate Windows environment detection
 validate-windows-environment
@@ -322,7 +324,7 @@ install-fonts --force
 
 ## Troubleshooting Checklist
 
-1. **WSL Environment**: Verify running in WSL with `validate-windows-integration`
+1. **WSL Environment**: Verify running in WSL with `validate-windows-wsl-manager`
 2. **Windows Applications**: Confirm target applications are installed
 3. **Permissions**: Check file and directory permissions with validation scripts
 4. **Path Resolution**: Test path resolution with different methods

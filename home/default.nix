@@ -64,7 +64,7 @@
   # Windows integration configuration (optional)
   # uncomment and configure to manage configuration for supported Windows apps
 
-  # programs.windows-integration = {
+  # programs.windows-wsl-manager = {
   #   enable = true;
   #   windowsUsername = userName; # optional, auto-detected from WSL username
   #

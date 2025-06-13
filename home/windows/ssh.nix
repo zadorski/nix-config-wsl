@@ -1,11 +1,11 @@
 { lib, config, pkgs, userName, ... }:
 
 let
-  cfg = config.programs.windows-integration;
-  windowsLib = cfg._internal.windowsLib;
+  cfg = config.programs.windows-wsl-manager;
+  envPathFallback = cfg._internal.envPathFallback;
   windowsPaths = cfg._internal.paths;
   
-  sshPaths = windowsLib.getSSHPaths windowsPaths;
+  sshPaths = envPathFallback.getSSHPaths windowsPaths;
   
   # SSH configuration for Windows with WSL key sharing
   sshConfig = ''
@@ -110,8 +110,8 @@ in
 
     # create backup scripts and ensure directories
     home.packages = lib.mkIf cfg.fileManagement.backupOriginals [
-      (windowsLib.createBackup sshPaths.config)
-      (windowsLib.ensureDirectory sshPaths.sshDir)
+      (envPathFallback.createBackup sshPaths.config)
+      (envPathFallback.ensureDirectory sshPaths.sshDir)
       
       # script to set proper SSH key permissions
       (pkgs.writeShellScriptBin "fix-ssh-permissions" ''
@@ -229,7 +229,7 @@ in
 
     # validation warnings
     warnings = [
-      (lib.mkIf (!windowsLib.validateWindowsPath sshPaths.sshDir)
+      (lib.mkIf (!envPathFallback.validateWindowsPath sshPaths.sshDir)
         "Windows SSH directory not accessible at ${sshPaths.sshDir}. SSH key sharing may not work properly.")
       (lib.mkIf (!builtins.pathExists "/home/${userName}/.ssh")
         "WSL SSH directory not found. Run 'ssh-keygen' to create SSH keys first.")

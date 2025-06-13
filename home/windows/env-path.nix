@@ -1,16 +1,16 @@
 { lib, pkgs }:
 
 let
-  # Enhanced Windows library with dynamic environment detection
-  # This library maintains Nix purity while enabling runtime Windows environment detection
-  
+  # enhanced Windows library with dynamic environment detection
+  # this library maintains Nix purity while enabling runtime Windows environment detection
+
   # detect if running in WSL environment
   isWSLEnvironment = builtins.pathExists "/proc/version" && 
     lib.hasInfix "microsoft" (lib.toLower (builtins.readFile "/proc/version"));
 
   # read dynamic Windows environment from activation-generated file
-  # Note: This function returns empty set during evaluation time
-  # Environment variables are loaded at runtime via shell integration
+  # note: this function returns empty set during evaluation time
+  # environment variables are loaded at runtime via shell integration
   readWindowsEnvironment = {};
 
   # get Windows username with dynamic detection and fallbacks
@@ -42,8 +42,8 @@ let
   # get Windows paths with dynamic detection and fallbacks
   getDynamicWindowsPaths = fallbackUsername:
     let
-      # During Nix evaluation, we use fallback paths
-      # At runtime, the environment detection will provide actual paths
+      # during Nix evaluation, we use fallback paths
+      # at runtime, the environment detection will provide actual paths
       dynamicUsername = getWindowsUsername fallbackUsername;
       
       # provide fallback paths for evaluation time

@@ -31,10 +31,10 @@ Extend the nix-config-wsl repository to manage Windows native application config
 ### Directory Structure Created
 ```
 home/windows/
-├── default.nix      # Main Windows integration module with font and dynamic path options
-├── lib.nix          # Helper functions for Windows path resolution and fonts
-├── dynamic-lib.nix  # Enhanced library with dynamic Windows environment detection
-├── environment.nix  # Dynamic Windows environment detection and validation
+├── default.nix              # Main Windows integration module with font and dynamic path options
+├── env-path-fallback.nix    # Helper functions for Windows path resolution and fonts
+├── env-path.nix             # Enhanced library with dynamic Windows environment detection
+├── env-vars.nix             # Dynamic Windows environment detection and validation
 ├── fonts.nix        # Comprehensive font management and installation
 ├── terminal.nix     # Windows Terminal configuration with standardized fonts
 ├── powershell.nix   # PowerShell profile management
@@ -111,7 +111,7 @@ home/windows/
 ### Validation and Troubleshooting System
 
 #### Validation Scripts
-- `validate-windows-integration`: Overall system validation (includes font status)
+- `validate-windows-wsl-manager`: Overall system validation (includes font status)
 - `validate-fonts`: Comprehensive font installation verification
 - `install-fonts`: Manual font installation and repair
 - `validate-git-config`: Git configuration verification
@@ -129,7 +129,7 @@ home/windows/
 
 ### Main Configuration Interface
 ```nix
-programs.windows-integration = {
+programs.windows-wsl-manager = {
   enable = true;
   windowsUsername = "username";  # optional, auto-detected
 
@@ -257,14 +257,14 @@ programs.windows-integration = {
 
 #### **Core Components Implemented:**
 
-##### **1. Environment Detection Module (`environment.nix`)**
+##### **1. Environment Detection Module (`env-vars.nix`)**
 - **Automatic Detection**: Runs during home-manager activation to discover Windows environment
 - **WSL Utilities Integration**: Uses `wslvar` and `wslpath` for reliable Windows environment access
 - **Environment File Generation**: Creates `~/.config/nix-windows-env` with detected variables
 - **Validation Tools**: Comprehensive validation and troubleshooting scripts
 - **Shell Integration**: Automatic loading of environment variables in bash and fish
 
-##### **2. Dynamic Library (`dynamic-lib.nix`)**
+##### **2. Dynamic Library (`env-path.nix`)**
 - **Enhanced Path Resolution**: Dynamic Windows path detection with multiple fallback strategies
 - **Username Detection**: Automatic Windows username discovery using `wslvar USERNAME`
 - **Path Validation**: Runtime validation of Windows paths and directories
@@ -288,7 +288,7 @@ programs.windows-integration = {
 - **`detect-windows-environment`** - Manual Windows environment detection
 - **`validate-windows-environment`** - Comprehensive environment validation
 - **`load-windows-environment`** - Manual environment variable loading
-- **Enhanced `validate-windows-integration`** - Includes dynamic environment status
+- **Enhanced `validate-windows-wsl-manager`** - Includes dynamic environment status
 
 ### Purity and Reproducibility Compliance
 
@@ -378,7 +378,7 @@ fonts = {
 - **Conditional Loading**: Uses `lib.mkIf` patterns for optional font management
 - **Backward Compatibility**: No impact on existing configurations when fonts disabled
 - **Modular Architecture**: Font configuration exposed to other modules via `_internal.fonts`
-- **Validation Integration**: Font validation added to existing `validate-windows-integration` script
+- **Validation Integration**: Font validation added to existing `validate-windows-wsl-manager` script
 
 ## Future Enhancements
 

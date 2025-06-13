@@ -1,8 +1,8 @@
 { lib, config, pkgs, ... }:
 
 let
-  cfg = config.programs.windows-integration;
-  windowsLib = cfg._internal.windowsLib;
+  cfg = config.programs.windows-wsl-manager;
+  envPathFallback = cfg._internal.envPathFallback;
   windowsPaths = cfg._internal.paths;
   fontConfig = cfg._internal.fonts or {
     family = "CaskaydiaCove Nerd Font, Cascadia Code, Cascadia Mono, Consolas, Courier New, monospace";
@@ -168,7 +168,7 @@ let
 
   terminalSettingsJson = builtins.toJSON terminalSettings;
   
-  terminalPath = windowsLib.getWindowsTerminalPath windowsPaths;
+  terminalPath = envPathFallback.getWindowsTerminalPath windowsPaths;
 
 in
 
@@ -184,12 +184,12 @@ in
 
     # create backup script for original settings
     home.packages = lib.mkIf cfg.fileManagement.backupOriginals [
-      (windowsLib.createBackup terminalPath)
-      (windowsLib.ensureDirectory (builtins.dirOf terminalPath))
+      (envPathFallback.createBackup terminalPath)
+      (envPathFallback.ensureDirectory (builtins.dirOf terminalPath))
     ];
 
     # validation warnings
-    warnings = lib.optional (!windowsLib.validateWindowsPath (builtins.dirOf terminalPath))
+    warnings = lib.optional (!envPathFallback.validateWindowsPath (builtins.dirOf terminalPath))
       "Windows Terminal directory not found at ${builtins.dirOf terminalPath}. Windows Terminal may not be installed.";
   };
 }

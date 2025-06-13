@@ -1,15 +1,15 @@
 { lib, config, pkgs, userName, ... }:
 
 let
-  cfg = config.programs.windows-integration;
-  windowsLib = import ./lib.nix { inherit lib pkgs; };
-  dynamicWindowsLib = import ./dynamic-lib.nix { inherit lib pkgs; };
+  cfg = config.programs.windows-wsl-manager;
+  envPathFallback = import ./env-path-fallback.nix { inherit lib pkgs; };
+  envPathResolver = import ./env-path.nix { inherit lib pkgs; };
 in
 
 {
   # import windows application configuration modules
   imports = [
-    ./environment.nix # dynamic windows environment detection
+    ./env-vars.nix    # dynamic windows environment detection
     ./fonts.nix       # font management and installation
     ./terminal.nix    # windows terminal configuration
     ./powershell.nix  # powershell profile management
@@ -19,7 +19,7 @@ in
   ];
 
   # configuration options for windows integration
-  options.programs.windows-integration = {
+  options.programs.windows-wsl-manager = {
     enable = lib.mkEnableOption "Windows native application configuration management";
     
     windowsUsername = lib.mkOption {
@@ -119,7 +119,7 @@ in
     # validate windows environment
     assertions = [
       {
-        assertion = windowsLib.isWSLEnvironment;
+        assertion = envPathFallback.isWSLEnvironment;
         message = "Windows integration requires WSL environment";
       }
       {
@@ -129,20 +129,20 @@ in
     ];
 
     # expose windows path utilities for other modules
-    programs.windows-integration._internal = {
-      inherit windowsLib;
-      inherit dynamicWindowsLib;
+    programs.windows-wsl-manager._internal = {
+      envPathFallback = envPathFallback;
+      envPathResolver = envPathResolver;
       paths = if cfg.pathResolution.method == "dynamic" then
-        dynamicWindowsLib.getDynamicWindowsPaths cfg.windowsUsername
+        envPathResolver.getDynamicWindowsPaths cfg.windowsUsername
       else
-        windowsLib.getWindowsPaths cfg.windowsUsername cfg.pathResolution;
+        envPathFallback.getWindowsPaths cfg.windowsUsername cfg.pathResolution;
     };
 
     # create validation script for windows integration
     home.packages = lib.mkIf cfg.enable [
-      (pkgs.writeShellScriptBin "validate-windows-integration" ''
-        echo "=== Windows Integration Validation ==="
-        echo "WSL Environment: ${if windowsLib.isWSLEnvironment then "✓" else "✗"}"
+      (pkgs.writeShellScriptBin "validate-windows-wsl-manager" ''
+        echo "=== Windows WSL Manager Validation ==="
+        echo "WSL Environment: ${if envPathFallback.isWSLEnvironment then "✓" else "✗"}"
         echo "Windows Username: ${cfg.windowsUsername}"
         echo "Path Resolution Method: ${cfg.pathResolution.method}"
 
@@ -184,7 +184,7 @@ in
     ];
 
     # warning for users about windows integration
-    warnings = lib.optional (cfg.enable && !windowsLib.isWSLEnvironment) 
+    warnings = lib.optional (cfg.enable && !envPathFallback.isWSLEnvironment)
       "Windows integration is enabled but WSL environment not detected. Some features may not work correctly.";
   };
 }
