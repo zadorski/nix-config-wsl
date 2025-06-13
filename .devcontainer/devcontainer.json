@@ -5,16 +5,38 @@
 		"--memory=2g"															                          // https://github.com/kenmuse/devcontainer-bicep/blob/main/.devcontainer/devcontainer.json
 	],
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+    // enable SSH agent forwarding for secure Git operations
+    "mounts": [
+        "source=${localEnv:SSH_AUTH_SOCK},target=/ssh-agent,type=bind,consistency=cached"
+    ],
+
     // upgradePackages before the rest of the features
 	"overrideFeatureInstallOrder": [
 		"ghcr.io/devcontainers/features/common-utils"
 	],
-    
+
     "onCreateCommand": "/usr/bin/bash ./.devcontainer/startup.sh > ~/startup.log",                   // https://github.com/devkimchi/devcontainers-dotnet/blob/main/.devcontainer/devcontainer.json
 
-	"containerEnv": { "NODE_EXTRA_CA_CERTS": "/etc/ssl/certs/ca-certificates.crt" },					      // https://github.com/microsoft/vscode/issues/187716#issuecomment-1634361855
+	"containerEnv": {
+        "NODE_EXTRA_CA_CERTS": "/etc/ssl/certs/ca-certificates.crt",                                 // https://github.com/microsoft/vscode/issues/187716#issuecomment-1634361855
+        "SSH_AUTH_SOCK": "/ssh-agent",                                                               // SSH agent forwarding
+        "GIT_USER_NAME": "${localEnv:GIT_USER_NAME:vscode}",                                        // Git user name from host environment
+        "GIT_USER_EMAIL": "${localEnv:GIT_USER_EMAIL:vscode@localhost}"                             // Git user email from host environment
+    },
 
-	"remoteUser": "vscode"
+	"remoteUser": "vscode",
+
+    // features for enhanced development experience
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": false,
+            "configureZshAsDefaultShell": false,
+            "username": "vscode",
+            "userUid": "1000",
+            "userGid": "1000"
+        }
+    }
 	// in case of repo WIP it will look like devcontainer manifest hadn't completed
     //"postCreateCommand": "nix flake check"
 }

@@ -1,6 +1,61 @@
 # NixOS-WSL flake with sane modular configuration
 
-## Inspiration 
+A modular NixOS configuration for WSL development environments with fish shell, dark mode theming, and secure SSH/Git integration.
+
+## Quick Start
+
+### For NixOS-WSL Systems
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/zadorski/nix-config-wsl.git
+   cd nix-config-wsl
+   ```
+
+2. **Build and switch to the configuration**:
+   ```bash
+   sudo nixos-rebuild switch --flake .#nixos
+   ```
+
+3. **Verify the setup**:
+   ```bash
+   nix flake check
+   ```
+
+### For VSCode Devcontainer Development
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/zadorski/nix-config-wsl.git
+   ```
+
+2. **Open in VSCode**:
+   - Open the repository in VSCode
+   - When prompted, click "Reopen in Container"
+   - Or use Command Palette: "Dev Containers: Reopen in Container"
+
+3. **Verify the setup**:
+   ```bash
+   # Run the test script
+   ./.devcontainer/test-setup.sh
+
+   # Check shell configuration
+   echo $SHELL  # Should show fish path
+
+   # Test SSH/Git (if configured)
+   ssh -T git@github.com
+   ```
+
+**Devcontainer Features**:
+- 🐟 Fish shell as default with development aliases
+- 🔐 Secure SSH agent forwarding (no keys in container)
+- 🛠️ Nix environment with flake support
+- ⚙️ Automatic Git configuration from host environment
+- 🎨 Catppuccin dark mode theming
+
+For detailed devcontainer setup, see [.devcontainer/README.md](.devcontainer/README.md).
+
+## Inspiration
 https://github.com/petertriho/nix-config
 - for those helpers and conditionals blended into modules without comprehensive lib hard to dive into
 - one-liner `inherits (config) user homePath` pulling vars from different places

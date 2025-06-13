@@ -71,6 +71,20 @@ Curated environment variables enhance productivity without bloating the shell:
 - `BROWSER=wslview` - Integrate with Windows browser
 - Development directories auto-created: `~/dev`, `~/projects`
 
+## Shell Configuration
+
+### Architecture
+- **System Default**: Bash (for scripts and system operations)
+- **User Default**: Fish (for interactive sessions)
+- **Integration**: System-level fish enablement ensures proper PATH and nix integration
+
+### Shell Behavior
+```bash
+echo $SHELL          # Shows fish path for interactive users
+/bin/bash script.sh  # Scripts can still use bash explicitly
+fish                 # Fish available with full nix integration
+```
+
 ## Troubleshooting
 
 ### Session Management Issues
