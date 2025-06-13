@@ -29,6 +29,45 @@ The Windows integration system extends nix-config-wsl to manage Windows native a
 - **`git.nix`** - Git configuration with cross-platform line ending and credential management
 - **`ssh.nix`** - SSH key sharing and configuration synchronization
 
+## Dynamic Windows Environment Detection
+
+The Windows integration system now includes advanced dynamic environment detection that automatically discovers Windows paths, usernames, and system configuration without hardcoded values.
+
+### How Dynamic Detection Works
+
+1. **Runtime Environment Detection**: Uses WSL utilities (`wslvar`, `wslpath`) to query Windows environment variables
+2. **Automatic Path Resolution**: Dynamically resolves Windows user directories, application data paths, and system directories
+3. **Graceful Fallbacks**: Falls back to standard paths when Windows environment is unavailable
+4. **Shell Integration**: Automatically loads detected environment variables in bash and fish shells
+
+### Environment Variables Detected
+
+- **`WIN_USERNAME`** - Windows username (from `wslvar USERNAME`)
+- **`WIN_USERPROFILE`** - Windows user home directory (from `wslvar USERPROFILE`)
+- **`WIN_APPDATA`** - Application data directory (from `wslvar APPDATA`)
+- **`WIN_LOCALAPPDATA`** - Local application data directory (from `wslvar LOCALAPPDATA`)
+- **`WIN_DRIVE_MOUNT`** - Windows C: drive mount point (auto-detected)
+- **`WIN_DOCUMENTS`** - Windows Documents folder
+- **`WIN_DESKTOP`** - Windows Desktop folder
+- **`WIN_DOWNLOADS`** - Windows Downloads folder
+
+### Dynamic Detection Commands
+
+```bash
+# detect Windows environment (runs automatically on home-manager activation)
+detect-windows-environment
+
+# validate detected environment
+validate-windows-environment
+
+# load environment variables in current shell
+load-windows-environment
+```
+
+### Environment File Location
+
+Dynamic environment variables are stored in `~/.config/nix-windows-env` and automatically loaded by shell initialization.
+
 ## Configuration
 
 ### Enabling Windows Integration
@@ -60,7 +99,7 @@ programs.windows-integration = {
   };
   
   pathResolution = {
-    method = "wslpath";  # "wslpath", "environment", or "manual"
+    method = "dynamic";  # "dynamic" (recommended), "wslpath", "environment", or "manual"
   };
   
   fileManagement = {
@@ -72,9 +111,10 @@ programs.windows-integration = {
 
 ### Path Resolution Methods
 
-1. **`wslpath` (recommended)** - Uses WSL's `wslpath` command for dynamic path conversion
-2. **`environment`** - Uses standard `/mnt/c/Users/username` paths
-3. **`manual`** - Allows custom path specification for non-standard setups
+1. **`dynamic` (recommended)** - Uses runtime Windows environment detection with WSL utilities
+2. **`wslpath`** - Uses WSL's `wslpath` command for dynamic path conversion
+3. **`environment`** - Uses standard `/mnt/c/Users/username` paths
+4. **`manual`** - Allows custom path specification for non-standard setups
 
 ### File Management Strategies
 
@@ -91,6 +131,12 @@ After enabling Windows integration, use these commands to validate the setup:
 ```bash
 # validate overall Windows integration
 validate-windows-integration
+
+# validate Windows environment detection
+validate-windows-environment
+
+# detect Windows environment manually
+detect-windows-environment
 
 # validate font installation
 validate-fonts

@@ -23,5 +23,6 @@
     curl
     git
     vim
+    wslu  # WSL utilities for Windows environment integration
   ];
 }

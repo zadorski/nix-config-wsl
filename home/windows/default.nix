@@ -3,11 +3,13 @@
 let
   cfg = config.programs.windows-integration;
   windowsLib = import ./lib.nix { inherit lib pkgs; };
+  dynamicWindowsLib = import ./dynamic-lib.nix { inherit lib pkgs; };
 in
 
 {
   # import windows application configuration modules
   imports = [
+    ./environment.nix # dynamic windows environment detection
     ./fonts.nix       # font management and installation
     ./terminal.nix    # windows terminal configuration
     ./powershell.nix  # powershell profile management
@@ -72,11 +74,11 @@ in
 
     pathResolution = {
       method = lib.mkOption {
-        type = lib.types.enum [ "wslpath" "environment" "manual" ];
-        default = "wslpath";
+        type = lib.types.enum [ "dynamic" "wslpath" "environment" "manual" ];
+        default = "dynamic";
         description = "Method for resolving Windows paths";
       };
-      
+
       manualPaths = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
         default = {};
@@ -129,7 +131,11 @@ in
     # expose windows path utilities for other modules
     programs.windows-integration._internal = {
       inherit windowsLib;
-      paths = windowsLib.getWindowsPaths cfg.windowsUsername cfg.pathResolution;
+      inherit dynamicWindowsLib;
+      paths = if cfg.pathResolution.method == "dynamic" then
+        dynamicWindowsLib.getDynamicWindowsPaths cfg.windowsUsername
+      else
+        windowsLib.getWindowsPaths cfg.windowsUsername cfg.pathResolution;
     };
 
     # create validation script for windows integration
@@ -139,7 +145,24 @@ in
         echo "WSL Environment: ${if windowsLib.isWSLEnvironment then "✓" else "✗"}"
         echo "Windows Username: ${cfg.windowsUsername}"
         echo "Path Resolution Method: ${cfg.pathResolution.method}"
-        
+
+        ${lib.optionalString (cfg.pathResolution.method == "dynamic") ''
+          echo ""
+          echo "=== Dynamic Environment Detection ==="
+          if [ -f "$HOME/.config/nix-windows-env" ]; then
+            echo "✓ Windows environment file exists"
+            source "$HOME/.config/nix-windows-env"
+            echo "Windows Username: $WIN_USERNAME"
+            echo "Windows User Profile: $WIN_USERPROFILE"
+            echo "Windows AppData: $WIN_APPDATA"
+            echo "Windows LocalAppData: $WIN_LOCALAPPDATA"
+            echo "Windows Drive Mount: $WIN_DRIVE_MOUNT"
+          else
+            echo "✗ Windows environment file not found"
+            echo "Run 'detect-windows-environment' to generate it"
+          fi
+        ''}
+
         ${lib.optionalString (cfg.pathResolution.method == "wslpath") ''
           if command -v wslpath >/dev/null 2>&1; then
             echo "wslpath command: ✓"

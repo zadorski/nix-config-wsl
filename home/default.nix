@@ -62,21 +62,22 @@
   };
 
   # Windows integration configuration (optional)
-  # Uncomment and configure to enable Windows native application management
+  # uncomment and configure to manage configuration for supported Windows apps
+
   # programs.windows-integration = {
   #   enable = true;
   #   windowsUsername = userName; # optional, auto-detected from WSL username
   #
   #   applications = {
-  #     terminal = true;     # Windows Terminal with Catppuccin Mocha theme
-  #     powershell = true;   # PowerShell profile with Starship integration
-  #     vscode = true;       # VS Code settings synchronization
-  #     git = true;          # Git configuration synchronization
-  #     ssh = true;          # SSH key sharing between WSL and Windows
+  #     terminal = true;     # windows terminal with catppuccin mocha theme
+  #     powershell = true;   # powershell profile with Starship integration
+  #     vscode = true;       # vscode settings synchronization
+  #     git = true;          # git configuration synchronization
+  #     ssh = true;          # ssh key sharing between WSL and Windows
   #   };
   #
   #   pathResolution = {
-  #     method = "wslpath";  # "wslpath" (recommended), "environment", or "manual"
+  #     method = "dynamic";  # "dynamic" (recommended), "wslpath", "environment", or "manual"
   #   };
   #
   #   fileManagement = {

@@ -31,15 +31,17 @@ Extend the nix-config-wsl repository to manage Windows native application config
 ### Directory Structure Created
 ```
 home/windows/
-├── default.nix      # Main Windows integration module with font options
+├── default.nix      # Main Windows integration module with font and dynamic path options
 ├── lib.nix          # Helper functions for Windows path resolution and fonts
+├── dynamic-lib.nix  # Enhanced library with dynamic Windows environment detection
+├── environment.nix  # Dynamic Windows environment detection and validation
 ├── fonts.nix        # Comprehensive font management and installation
 ├── terminal.nix     # Windows Terminal configuration with standardized fonts
 ├── powershell.nix   # PowerShell profile management
 ├── vscode.nix       # VS Code settings synchronization with font configuration
 ├── git.nix          # Git configuration synchronization
 ├── ssh.nix          # SSH key sharing
-└── README.md        # Documentation and troubleshooting with font section
+└── README.md        # Documentation and troubleshooting with dynamic environment section
 ```
 
 ### Key Technical Innovations
@@ -230,6 +232,78 @@ programs.windows-integration = {
 - **Runtime Performance**: No impact on WSL or Windows application performance
 - **Resource Usage**: Efficient use of system resources for file management
 
+## Dynamic Windows Environment Detection Implementation
+
+### Comprehensive Repository Analysis
+
+#### **Hardcoded Windows References Identified:**
+1. **Path Hardcoding**: `/mnt/c/Users/${windowsUsername}` patterns throughout Windows modules
+2. **Username Dependencies**: Manual `windowsUsername` parameter passing between modules
+3. **Environment Assumptions**: Hardcoded `/mnt/c` mount point and standard Windows directory structure
+4. **Limited Fallbacks**: Minimal fallback mechanisms for non-standard Windows setups
+
+#### **Integration Opportunities Discovered:**
+1. **Windows Environment Variables**: `USERPROFILE`, `APPDATA`, `LOCALAPPDATA`, `USERNAME`, `PROGRAMFILES`
+2. **WSL Utilities**: `wslpath`, `wslvar`, `wslu` package for enhanced WSL-Windows integration
+3. **Dynamic Detection Needs**: Windows drive mount points, usernames, directory structure variations
+
+### Dynamic Environment Detection Architecture
+
+#### **Implementation Strategy: Hybrid Approach**
+- **Nix Evaluation Purity**: Maintains deterministic builds with fallback paths during evaluation
+- **Runtime Detection**: Uses home-manager activation scripts for dynamic Windows environment discovery
+- **Shell Integration**: Automatic environment variable loading in bash and fish shells
+- **Graceful Degradation**: Works without Windows environment (WSL-only scenarios)
+
+#### **Core Components Implemented:**
+
+##### **1. Environment Detection Module (`environment.nix`)**
+- **Automatic Detection**: Runs during home-manager activation to discover Windows environment
+- **WSL Utilities Integration**: Uses `wslvar` and `wslpath` for reliable Windows environment access
+- **Environment File Generation**: Creates `~/.config/nix-windows-env` with detected variables
+- **Validation Tools**: Comprehensive validation and troubleshooting scripts
+- **Shell Integration**: Automatic loading of environment variables in bash and fish
+
+##### **2. Dynamic Library (`dynamic-lib.nix`)**
+- **Enhanced Path Resolution**: Dynamic Windows path detection with multiple fallback strategies
+- **Username Detection**: Automatic Windows username discovery using `wslvar USERNAME`
+- **Path Validation**: Runtime validation of Windows paths and directories
+- **Purity Preservation**: Maintains Nix evaluation purity while enabling runtime detection
+
+##### **3. Updated Windows Integration (`default.nix`)**
+- **Dynamic Path Resolution**: New "dynamic" method as recommended default
+- **Enhanced Validation**: Integrated Windows environment validation in system checks
+- **Backward Compatibility**: Maintains compatibility with existing path resolution methods
+
+#### **Environment Variables Detected:**
+- **`WIN_USERNAME`** - Windows username from `wslvar USERNAME`
+- **`WIN_USERPROFILE`** - Windows user home directory from `wslvar USERPROFILE`
+- **`WIN_APPDATA`** - Application data directory from `wslvar APPDATA`
+- **`WIN_LOCALAPPDATA`** - Local application data from `wslvar LOCALAPPDATA`
+- **`WIN_DRIVE_MOUNT`** - Auto-detected Windows C: drive mount point
+- **`WIN_DOCUMENTS`**, **`WIN_DESKTOP`**, **`WIN_DOWNLOADS`** - User directories
+- **`WIN_WINDOWS`**, **`WIN_PROGRAM_FILES`** - System directories
+
+#### **Validation and Troubleshooting Tools:**
+- **`detect-windows-environment`** - Manual Windows environment detection
+- **`validate-windows-environment`** - Comprehensive environment validation
+- **`load-windows-environment`** - Manual environment variable loading
+- **Enhanced `validate-windows-integration`** - Includes dynamic environment status
+
+### Purity and Reproducibility Compliance
+
+#### **Nix Evaluation Purity Maintained:**
+- **Deterministic Builds**: Uses fallback paths during Nix evaluation for reproducible builds
+- **No Impure Evaluation**: Runtime detection occurs during activation, not evaluation
+- **Cross-Environment Compatibility**: Configurations work without Windows environment
+- **Remote Build Support**: Maintains compatibility with `nix flake check` and remote builds
+
+#### **Runtime Detection Benefits:**
+- **Automatic Adaptation**: Configurations adapt to different Windows setups automatically
+- **No Hardcoded Paths**: Eliminates need for manual path configuration
+- **Portable Configurations**: Works across different Windows user accounts and WSL distributions
+- **Enhanced Reliability**: Reduces configuration failures due to path mismatches
+
 ## Font Management Research and Implementation
 
 ### Research Assessment
@@ -337,17 +411,19 @@ fonts = {
 
 ## Conclusion
 
-The Windows-WSL integration system with comprehensive font management successfully extends nix-config-wsl to manage Windows native applications while maintaining the repository's modular philosophy and design principles. The implementation provides:
+The Windows-WSL integration system with comprehensive font management and dynamic environment detection successfully extends nix-config-wsl to manage Windows native applications while maintaining the repository's modular philosophy and design principles. The implementation provides:
 
 - **Seamless Integration**: Windows applications are configured alongside WSL environment
-- **Dynamic Path Resolution**: No hardcoded paths, works across different Windows setups
+- **Dynamic Environment Detection**: Automatic Windows environment discovery with no hardcoded paths
+- **Intelligent Path Resolution**: Runtime detection of Windows paths, usernames, and system configuration
+- **Nix Purity Compliance**: Maintains deterministic builds while enabling runtime adaptation
 - **Reliable File Management**: Multiple strategies for cross-platform file handling
 - **Comprehensive Font Management**: Automated installation and configuration of CaskaydiaCove Nerd Font
 - **Typography Consistency**: Standardized font configuration across all Windows applications
 - **Robust Validation**: Extensive troubleshooting and validation tools for all components
 - **Consistent Theming**: Catppuccin Mocha theme with proper font rendering across all environments
 - **Security-First Design**: Proper permission and credential management with user-level font installation
-- **Excellent Documentation**: Complete setup and troubleshooting guides including font management
+- **Excellent Documentation**: Complete setup and troubleshooting guides including dynamic environment detection
 
 ### Font Management Achievements
 - **Zero-Admin Installation**: User-level font installation requiring no administrator privileges
@@ -357,4 +433,12 @@ The Windows-WSL integration system with comprehensive font management successful
 - **Fallback Resilience**: Robust fallback font chains ensuring functionality even with installation failures
 - **Comprehensive Validation**: Detailed font installation verification and troubleshooting tools
 
-The system is production-ready and provides a solid foundation for managing Windows native applications through Nix configuration management, with particular strength in ensuring consistent and reliable typography across the entire development environment.
+### Dynamic Environment Detection Achievements
+- **Automatic Windows Discovery**: Runtime detection of Windows environment without hardcoded paths
+- **WSL Utilities Integration**: Leverages `wslvar` and `wslpath` for reliable Windows environment access
+- **Nix Purity Preservation**: Maintains deterministic builds while enabling runtime adaptation
+- **Cross-Platform Portability**: Configurations work across different Windows setups and user accounts
+- **Graceful Degradation**: Functions correctly in WSL-only environments without Windows integration
+- **Comprehensive Validation**: Extensive environment detection validation and troubleshooting tools
+
+The system is production-ready and provides a solid foundation for managing Windows native applications through Nix configuration management, with particular strengths in dynamic environment adaptation, consistent typography, and cross-platform reliability.
