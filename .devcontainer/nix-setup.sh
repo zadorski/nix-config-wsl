@@ -9,8 +9,21 @@ if [ -f ~/.nix-profile/etc/profile.d/nix.sh ]; then
     echo "Nix environment loaded"
 else
     echo "Error: Nix environment not found"
+    echo "Attempting to install Nix..."
+    curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
+    source ~/.nix-profile/etc/profile.d/nix.sh || {
+        echo "Failed to install or source Nix"
+        exit 1
+    }
+fi
+
+# ensure Nix is working
+if ! command -v nix >/dev/null 2>&1; then
+    echo "Error: Nix command not found in PATH"
     exit 1
 fi
+
+echo "Nix version: $(nix --version)"
 
 # create minimal container-specific Nix configuration
 echo "Creating container Nix configuration..."
@@ -114,26 +127,48 @@ cat > ~/.config/home-manager/home.nix << 'EOF'
 }
 EOF
 
+# install essential packages directly with Nix first
+echo "Installing essential packages..."
+nix-env -iA nixpkgs.fish nixpkgs.starship nixpkgs.git || {
+    echo "Warning: Failed to install some packages, continuing..."
+}
+
 # install home-manager and apply configuration
 echo "Installing home-manager..."
-nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
-nix-channel --update
+nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager || {
+    echo "Warning: Failed to add home-manager channel"
+}
+
+nix-channel --update || {
+    echo "Warning: Failed to update channels"
+}
 
 echo "Installing home-manager package..."
-nix-shell '<home-manager>' -A install
+nix-shell '<home-manager>' -A install || {
+    echo "Warning: Failed to install home-manager, skipping home-manager configuration"
+    SKIP_HOME_MANAGER=1
+}
 
-echo "Applying home-manager configuration..."
-home-manager switch
+if [ "$SKIP_HOME_MANAGER" != "1" ]; then
+    echo "Applying home-manager configuration..."
+    home-manager switch || {
+        echo "Warning: Failed to apply home-manager configuration"
+    }
+fi
 
 # set fish as default shell
 echo "Setting fish as default shell..."
-FISH_PATH=$(which fish)
-if [ -n "$FISH_PATH" ]; then
-    echo "$FISH_PATH" | sudo tee -a /etc/shells
-    sudo chsh -s "$FISH_PATH" vscode
+FISH_PATH=$(which fish 2>/dev/null || echo "")
+if [ -n "$FISH_PATH" ] && [ -x "$FISH_PATH" ]; then
+    if ! grep -q "$FISH_PATH" /etc/shells; then
+        echo "$FISH_PATH" | sudo tee -a /etc/shells
+    fi
+    sudo chsh -s "$FISH_PATH" vscode || {
+        echo "Warning: Failed to change default shell to fish"
+    }
     echo "Default shell set to fish: $FISH_PATH"
 else
-    echo "Warning: fish not found in PATH"
+    echo "Warning: fish not found in PATH, keeping bash as default shell"
 fi
 
 # create SSH directory with proper permissions

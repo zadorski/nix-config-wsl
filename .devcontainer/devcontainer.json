@@ -1,22 +1,14 @@
 {
     "name": "nix-flake-dev",
     "build": { "dockerfile": "Dockerfile" },
-    "runArgs": [
-        "--memory=2g"
-    ],
+    "runArgs": ["--memory=2g"],
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-    "mounts": [
-        "source=${localEnv:SSH_AUTH_SOCK},target=/ssh-agent,type=bind,consistency=cached"
-    ],
-    "onCreateCommand": "/usr/bin/bash ./.devcontainer/nix-setup.sh",
-
+    "mounts": ["type=bind,source=${env:SSH_AUTH_SOCK},target=/ssh-agent,consistency=cached"],
     "containerEnv": {
-        "SSH_AUTH_SOCK": "/ssh-agent",
-        "GIT_USER_NAME": "${localEnv:GIT_USER_NAME:zadorski}",
-        "GIT_USER_EMAIL": "${localEnv:GIT_USER_EMAIL:678169+zadorski@users.noreply.github.com}"
+        "SSH_AUTH_SOCK": "/ssh-agent"
+        //"GIT_USER_NAME": "${localEnv:GIT_USER_NAME:zadorski}",
+        //"GIT_USER_EMAIL": "${localEnv:GIT_USER_EMAIL:678169+zadorski@users.noreply.github.com}"
     },
-
-    "remoteUser": "vscode",
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {
             "installZsh": false,
@@ -26,5 +18,7 @@
             "userGid": "1000"
         }
     },
-    "postCreateCommand": "fish -c 'echo \"Development environment ready!\" && nix --version'"
+    "remoteUser": "vscode",
+    "onCreateCommand": "/usr/bin/bash ./nix-setup.sh",
+    "postCreateCommand": "bash -c 'echo \"Development environment ready!\" && nix --version && echo \"To use fish shell: exec fish\"'"
 }

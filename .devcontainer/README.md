@@ -1,31 +1,65 @@
-# Development Container Configuration - Refactored
+# Development Container Configuration - DEPRECATED
 
-This directory contains a **simplified, Nix-centric** development container configuration that has been refactored to reduce complexity and improve maintainability.
+⚠️ **This development container configuration has been deprecated in favor of direct WSL development.**
 
-## Refactoring Overview
+## Migration Notice
 
-The configuration has been **significantly simplified** by:
-- **Eliminating redundant package installations** across multiple files
-- **Leveraging Nix home-manager** for declarative user configuration
-- **Consolidating scattered settings** into a cohesive Nix-based approach
-- **Removing complex manual setup scripts** in favor of Nix configuration
-- **Reusing existing host Nix patterns** for consistency
+After comprehensive analysis, we've determined that the devcontainer approach was adding unnecessary complexity and maintenance overhead. The existing NixOS WSL configuration already provides a sophisticated development environment.
 
-## Architecture
+**New Approach**: Direct WSL development with devenv for project-specific environments.
 
-### New Simplified Structure
-- **Minimal Dockerfile**: Ubuntu base + Nix + essential certificates only
-- **Nix Home-Manager**: Handles all user configuration, tools, and shell setup
-- **Single Setup Script**: `nix-setup.sh` replaces complex `startup.sh`
-- **Configuration Reuse**: Leverages existing host NixOS configuration patterns
+## Why We Migrated Away
 
-### Key Features
-- **Nix Package Management**: All development tools managed declaratively through Nix
-- **Home-Manager Integration**: User configuration managed with the same patterns as host
-- **Certificate Management**: Automatic Zscaler certificate integration
-- **SSH Agent Forwarding**: Secure Git operations using host SSH keys
-- **Fish Shell + Starship**: Modern shell with prompt, configured via Nix
-- **Git Integration**: Automatic configuration from environment variables
+### Problems with Devcontainer Approach
+- **Configuration Fragmentation**: Settings scattered across JSON, Dockerfile, and shell scripts
+- **Redundant Package Management**: Duplicate installations between host and container
+- **Complex Setup Scripts**: 155-line bash script with error-prone home-manager installation
+- **Maintenance Overhead**: Three separate configuration files requiring synchronization
+- **Performance Impact**: Container overhead and slower startup times
+- **Debugging Complexity**: Multiple layers making troubleshooting difficult
+
+### Benefits of Direct WSL Development
+- **Leverages Existing Investment**: Uses sophisticated NixOS WSL configuration
+- **Better Performance**: No container overhead
+- **Simplified Maintenance**: Single source of truth in Nix configuration
+- **Enhanced Integration**: Native VS Code + WSL experience
+- **Project Isolation**: devenv provides per-project environments without containers
+
+## Migration Path
+
+### Automatic Migration
+Run the migration script to automatically set up direct WSL development:
+
+```bash
+./migrate-to-wsl-dev.sh
+```
+
+This script will:
+1. Backup and remove devcontainer configuration
+2. Create `devenv.nix` for project-specific environments
+3. Set up `.envrc` for automatic environment loading
+4. Configure VS Code for optimal WSL integration
+5. Create development documentation
+
+### Manual Migration Steps
+If you prefer manual migration:
+
+1. **Remove devcontainer infrastructure:**
+   ```bash
+   rm -rf .devcontainer/
+   ```
+
+2. **Create project environment:**
+   ```bash
+   # Create devenv.nix (see template in migrate-to-wsl-dev.sh)
+   # Create .envrc with: use devenv
+   # Configure VS Code settings for WSL
+   ```
+
+3. **Enter development environment:**
+   ```bash
+   devenv shell
+   ```
 
 ## Files
 
