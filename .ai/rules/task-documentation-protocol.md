@@ -6,11 +6,13 @@ Preserve this protocol in your memory and implement it consistently across all p
 
 ### 1. File Creation Requirements
 - **Location**: `.ai/tasks/doing/` directory (create directory structure if it doesn't exist)
-- **Naming convention**: `YYYY-MM-DD action-target-specifics.md` with current date.
+- **Naming convention**: `YYYY-MM-DD action-target-specifics.md` with current date (not hardcoded)
+- **Date format**: Use the actual current date in `YYYY-MM-DD` format, followed by a space
+- **Task description format**: Use hyphen-delimited words after the date and space
 - **Use descriptive action verbs**: implement, fix, refactor, analyze, debug, enhance, etc.
 - **Examples**: 
-  - `2025-01-15 implement-user-authentication.md`
-  - `2025-01-15 fix-database-connection-pooling.md`
+  - `2023-07-21 implement-user-authentication.md`
+  - `2023-07-21 fix-database-connection-pooling.md`
 
 ### 2. Required File Structure
 Use this exact template:
