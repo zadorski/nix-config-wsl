@@ -21,6 +21,12 @@ result-*
 .direnv/
 .envrc.cache
 
+# devenv development environment artifacts
+.devenv/
+.devenv.*
+devenv.lock
+.devenv.flake.nix
+
 # hardware configuration backups
 hardware-configuration.nix.bak
 hardware-configuration.nix.old

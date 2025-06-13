@@ -41,6 +41,20 @@ in
 
     # Node.js certificate configuration
     NODE_EXTRA_CA_CERTS = systemCertBundle;
+
+    # additional certificate variables for development environments
+    # ensures devenv and other development tools can access certificates
+    DEVENV_SSL_CERT_FILE = systemCertBundle;
+
+    # language-specific package managers
+    PIP_CERT = systemCertBundle;                    # Python pip
+    CARGO_HTTP_CAINFO = systemCertBundle;           # Rust cargo
+    GOPATH_CERT_FILE = systemCertBundle;            # Go modules
+    JAVA_OPTS = "-Djavax.net.ssl.trustStore=${systemCertBundle}";  # Java applications
+
+    # development tools
+    GIT_SSL_CAINFO = systemCertBundle;              # Git operations
+    DOCKER_CERT_PATH = systemCertBundle;            # Docker operations
   };
 
   # system-level indication that certificate management is active

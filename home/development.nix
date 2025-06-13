@@ -71,6 +71,76 @@
       sync = "!git fetch origin && git rebase origin/main";
     };
     
+    # global gitignore configuration for development artifacts
+    ignores = [
+      # devenv and development environment artifacts
+      ".devenv/"
+      ".devenv.*"
+      "devenv.lock"
+      ".devenv.flake.nix"
+
+      # direnv artifacts
+      ".direnv/"
+      ".envrc.cache"
+
+      # nix build artifacts
+      "result"
+      "result-*"
+      ".result"
+      ".nix-gc-roots"
+      ".nix-profile"
+      ".nix-eval-cache"
+
+      # development caches and temporary files
+      ".cache/"
+      "node_modules/"
+      "__pycache__/"
+      ".pytest_cache/"
+      ".mypy_cache/"
+      ".tox/"
+      ".coverage"
+      ".nyc_output/"
+      "dist/"
+      "build/"
+      "target/"
+
+      # editor artifacts
+      ".vscode/settings.json"
+      ".vscode/launch.json"
+      ".vscode/tasks.json"
+      ".idea/"
+      "*.swp"
+      "*.swo"
+      "*~"
+
+      # temporary files
+      "*.tmp"
+      "*.temp"
+      ".backup/"
+      ".git-backup/"
+
+      # logs
+      "*.log"
+      "npm-debug.log*"
+      "yarn-debug.log*"
+      "yarn-error.log*"
+
+      # OS artifacts
+      ".DS_Store"
+      "Thumbs.db"
+
+      # language-specific artifacts
+      "*.pyc"
+      "*.pyo"
+      "*.pyd"
+      "*.class"
+      "*.o"
+      "*.a"
+      "*.so"
+      "*.exe"
+      "*.dll"
+    ];
+
     # enhanced git configuration
     extraConfig = {
       # better merge conflict resolution
@@ -86,6 +156,9 @@
       # better whitespace handling
       core.autocrlf = false;
       core.whitespace = "trailing-space,space-before-tab";
+
+      # automatically exclude devenv and development artifacts
+      core.excludesfile = "~/.config/git/ignore";
     };
   };
 
