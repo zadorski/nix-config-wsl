@@ -1,4 +1,4 @@
-{ pkgs, userName, gitEmail, gitHandle, ... }: 
+{ pkgs, userName, gitEmail, gitHandle, lib, config, ... }:
 
 {
   # import user-level configuration modules
@@ -6,6 +6,7 @@
     ./shells.nix      # bash and fish shell configuration
     ./devenv.nix      # development environment and tooling
     ./development.nix # toolchain
+    ./windows         # windows native application configurations (optional)
   ];
 
   # basic home-manager configuration
@@ -59,4 +60,38 @@
   xdg.configFile."starship.toml" = {
     source = ./starship.toml;
   };
+
+  # Windows integration configuration (optional)
+  # Uncomment and configure to enable Windows native application management
+  # programs.windows-integration = {
+  #   enable = true;
+  #   windowsUsername = userName; # optional, auto-detected from WSL username
+  #
+  #   applications = {
+  #     terminal = true;     # Windows Terminal with Catppuccin Mocha theme
+  #     powershell = true;   # PowerShell profile with Starship integration
+  #     vscode = true;       # VS Code settings synchronization
+  #     git = true;          # Git configuration synchronization
+  #     ssh = true;          # SSH key sharing between WSL and Windows
+  #   };
+  #
+  #   pathResolution = {
+  #     method = "wslpath";  # "wslpath" (recommended), "environment", or "manual"
+  #   };
+  #
+  #   fileManagement = {
+  #     strategy = "symlink";      # "symlink" (default), "copy", or "template"
+  #     backupOriginals = true;    # backup existing Windows configurations
+  #   };
+  #
+  #   fonts = {
+  #     enable = true;             # enable font management and installation
+  #     primaryFont = "CaskaydiaCove Nerd Font";  # primary font family
+  #     autoInstall = true;        # automatically install fonts if missing
+  #     sizes = {
+  #       terminal = 11;           # font size for terminal applications
+  #       editor = 14;             # font size for editor applications
+  #     };
+  #   };
+  # };
 }
