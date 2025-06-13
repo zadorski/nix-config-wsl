@@ -1,29 +1,65 @@
-# Devcontainer Configuration
+# Development Container Configuration - Refactored
 
-This devcontainer provides a Nix-based development environment with fish shell and secure SSH/Git integration.
+This directory contains a **simplified, Nix-centric** development container configuration that has been refactored to reduce complexity and improve maintainability.
 
-## Features
+## Refactoring Overview
 
-### Shell Configuration
-- **Fish Shell**: Modern shell with intelligent autocompletion and syntax highlighting
-- **Default Shell**: Fish is configured as the default login shell for the `vscode` user
-- **Nix Integration**: Full Nix environment with flake support
-- **Development Aliases**: Pre-configured git and development shortcuts
+The configuration has been **significantly simplified** by:
+- **Eliminating redundant package installations** across multiple files
+- **Leveraging Nix home-manager** for declarative user configuration
+- **Consolidating scattered settings** into a cohesive Nix-based approach
+- **Removing complex manual setup scripts** in favor of Nix configuration
+- **Reusing existing host Nix patterns** for consistency
 
-### SSH/Git Integration
-- **SSH Agent Forwarding**: Secure SSH key access without mounting keys directly
-- **Git Configuration**: Automatic setup with environment variables
-- **Security**: No SSH keys stored in container - uses host SSH agent
+## Architecture
+
+### New Simplified Structure
+- **Minimal Dockerfile**: Ubuntu base + Nix + essential certificates only
+- **Nix Home-Manager**: Handles all user configuration, tools, and shell setup
+- **Single Setup Script**: `nix-setup.sh` replaces complex `startup.sh`
+- **Configuration Reuse**: Leverages existing host NixOS configuration patterns
+
+### Key Features
+- **Nix Package Management**: All development tools managed declaratively through Nix
+- **Home-Manager Integration**: User configuration managed with the same patterns as host
+- **Certificate Management**: Automatic Zscaler certificate integration
+- **SSH Agent Forwarding**: Secure Git operations using host SSH keys
+- **Fish Shell + Starship**: Modern shell with prompt, configured via Nix
+- **Git Integration**: Automatic configuration from environment variables
+
+## Files
+
+- **`devcontainer.json`** - Simplified container configuration focusing on essentials
+- **`Dockerfile`** - Streamlined Ubuntu base with Nix and certificate setup
+- **`nix-setup.sh`** - **New**: Nix-based setup using home-manager (replaces complex startup.sh)
+- **`startup.sh`** - **Legacy**: Kept for compatibility, now minimal
+- **`zscaler-root-ca.crt`** - Corporate certificate for Zscaler environments
+
+## Benefits of Refactoring
+
+### Before (Complex Setup)
+- ❌ **Fragmented configuration** across multiple files
+- ❌ **Redundant package installations** in Dockerfile and startup.sh
+- ❌ **Manual shell configuration** with complex scripts
+- ❌ **Inconsistent certificate handling**
+- ❌ **Difficult to maintain** due to scattered settings
+
+### After (Nix-Centric Approach)
+- ✅ **Consolidated configuration** using Nix home-manager
+- ✅ **Single source of truth** for development tools
+- ✅ **Declarative setup** with reproducible results
+- ✅ **Consistent with host** NixOS configuration patterns
+- ✅ **Easy to maintain** and extend
 
 ## Setup Requirements
 
 ### Host Environment Variables
-Set these environment variables on your host system for automatic configuration:
+Set these environment variables for automatic configuration:
 
 ```bash
-# Git configuration (optional - defaults provided)
-export GIT_USER_NAME="Your Name"
-export GIT_USER_EMAIL="your.email@example.com"
+# Git configuration (uses project defaults if not set)
+export GIT_USER_NAME="zadorski"  # or your preferred name
+export GIT_USER_EMAIL="678169+zadorski@users.noreply.github.com"  # or your email
 ```
 
 ### SSH Agent Setup
@@ -66,26 +102,43 @@ ssh-add -l
 
 ## Usage
 
-### Starting the Container
-The devcontainer will automatically:
-1. Install fish shell via Nix
-2. Configure fish as default shell
-3. Set up SSH agent forwarding
-4. Configure Git with environment variables
-5. Create development aliases and shortcuts
+### Automatic Setup
+The container automatically configures itself when opened in VS Code:
+
+1. **Nix Installation**: Nix package manager with flakes support
+2. **Home-Manager Setup**: Declarative user configuration
+3. **Development Tools**: Fish shell, Starship prompt, Git, essential tools
+4. **SSH Integration**: Agent forwarding for secure Git operations
+5. **Certificate Setup**: Zscaler certificate integration
+
+### Manual Setup (if needed)
+If automatic setup fails, run manually:
+
+```bash
+# Run the Nix-based setup
+./.devcontainer/nix-setup.sh
+
+# Start fish shell
+exec fish
+```
 
 ### Verifying Setup
 
 ```bash
-# Check default shell
-echo $SHELL  # Should show fish path
+# Check Nix installation
+nix --version
+
+# Check home-manager
+home-manager --version
+
+# Check default shell (should be fish)
+echo $SHELL
 
 # Test SSH agent forwarding
 ssh-add -l  # Should list your SSH keys
 
 # Test Git configuration
-git config --global user.name
-git config --global user.email
+git config --list
 
 # Test Git SSH access
 ssh -T git@github.com
@@ -154,24 +207,68 @@ GIT_SSH_COMMAND="ssh -v" git ls-remote git@github.com:user/repo.git
 4. **Audit Access**: Monitor SSH key usage through host logs
 5. **Container Isolation**: Don't mount additional sensitive directories
 
-## Files Modified
+## Migration from Legacy Setup
 
-- `.devcontainer/devcontainer.json`: Container configuration with SSH forwarding
-- `.devcontainer/startup.sh`: Setup script for fish and SSH/Git configuration
-- `.devcontainer/Dockerfile`: Base container image (unchanged)
+### What Changed
+- **Removed**: Complex manual package installations and shell configurations
+- **Replaced**: Custom scripts with Nix home-manager configurations
+- **Simplified**: Certificate management using existing Nix patterns
+- **Maintained**: All essential functionality (Git, SSH, Fish shell, certificates)
+
+### Configuration Files
+
+| File | Status | Purpose |
+|------|--------|---------|
+| `devcontainer.json` | **Simplified** | Removed redundant features, focused on essentials |
+| `Dockerfile` | **Streamlined** | Ubuntu base + Nix + certificates only |
+| `nix-setup.sh` | **New** | Nix-based setup using home-manager |
+| `startup.sh` | **Legacy** | Minimal compatibility script |
 
 ## Environment Variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `GIT_USER_NAME` | `vscode` | Git user name |
-| `GIT_USER_EMAIL` | `vscode@localhost` | Git user email |
+| `GIT_USER_NAME` | `zadorski` | Git user name |
+| `GIT_USER_EMAIL` | `678169+zadorski@users.noreply.github.com` | Git user email |
 | `SSH_AUTH_SOCK` | `/ssh-agent` | SSH agent socket path |
 
-## Next Steps
+## Customization
 
-After container setup:
-1. Verify fish shell is working: `echo $SHELL`
-2. Test SSH access: `ssh -T git@github.com`
-3. Test Git operations: `git clone`, `git push`
-4. Customize fish configuration in `~/.config/fish/config.fish`
+### Adding Development Tools
+Edit the `home.packages` list in `nix-setup.sh`:
+
+```nix
+home.packages = with pkgs; [
+  fish
+  starship
+  git
+  curl
+  wget
+  # Add your tools here
+  nodejs
+  python3
+  docker
+];
+```
+
+### Modifying Shell Configuration
+Update the Fish configuration in `nix-setup.sh`:
+
+```nix
+programs.fish = {
+  enable = true;
+  shellInit = ''
+    # Add your custom fish configuration here
+    set -gx EDITOR nvim
+    abbr -a myalias 'my command'
+  '';
+};
+```
+
+## Future Improvements
+
+Consider these enhancements:
+- **Dedicated Nix Flake**: Create a flake specifically for container configuration
+- **Host Config Sync**: Automatic synchronization with host Nix configuration
+- **Devenv Integration**: Project-specific development environments
+- **Overlay Support**: Custom package overlays for specialized tools

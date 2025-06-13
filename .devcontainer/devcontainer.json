@@ -1,33 +1,22 @@
 {
     "name": "nix-flake-dev",
     "build": { "dockerfile": "Dockerfile" },
-	"runArgs": [
-		"--memory=2g"															                          // https://github.com/kenmuse/devcontainer-bicep/blob/main/.devcontainer/devcontainer.json
-	],
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-
-    // enable SSH agent forwarding for secure Git operations
+    "runArgs": [
+        "--memory=2g"
+    ],
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
     "mounts": [
         "source=${localEnv:SSH_AUTH_SOCK},target=/ssh-agent,type=bind,consistency=cached"
     ],
+    "onCreateCommand": "/usr/bin/bash ./.devcontainer/nix-setup.sh",
 
-    // upgradePackages before the rest of the features
-	"overrideFeatureInstallOrder": [
-		"ghcr.io/devcontainers/features/common-utils"
-	],
-
-    "onCreateCommand": "/usr/bin/bash ./.devcontainer/startup.sh > ~/startup.log",                   // https://github.com/devkimchi/devcontainers-dotnet/blob/main/.devcontainer/devcontainer.json
-
-	"containerEnv": {
-        "NODE_EXTRA_CA_CERTS": "/etc/ssl/certs/ca-certificates.crt",                                 // https://github.com/microsoft/vscode/issues/187716#issuecomment-1634361855
-        "SSH_AUTH_SOCK": "/ssh-agent",                                                               // SSH agent forwarding
-        "GIT_USER_NAME": "${localEnv:GIT_USER_NAME:vscode}",                                        // Git user name from host environment
-        "GIT_USER_EMAIL": "${localEnv:GIT_USER_EMAIL:vscode@localhost}"                             // Git user email from host environment
+    "containerEnv": {
+        "SSH_AUTH_SOCK": "/ssh-agent",
+        "GIT_USER_NAME": "${localEnv:GIT_USER_NAME:zadorski}",
+        "GIT_USER_EMAIL": "${localEnv:GIT_USER_EMAIL:678169+zadorski@users.noreply.github.com}"
     },
 
-	"remoteUser": "vscode",
-
-    // features for enhanced development experience
+    "remoteUser": "vscode",
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {
             "installZsh": false,
@@ -36,7 +25,6 @@
             "userUid": "1000",
             "userGid": "1000"
         }
-    }
-	// in case of repo WIP it will look like devcontainer manifest hadn't completed
-    //"postCreateCommand": "nix flake check"
+    },
+    "postCreateCommand": "fish -c 'echo \"Development environment ready!\" && nix --version'"
 }
