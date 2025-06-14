@@ -44,11 +44,26 @@
     catppuccin-bat.url = "github:catppuccin/bat";
     catppuccin-bat.flake = false;
     catppuccin-fzf.url = "github:catppuccin/fzf";
-    catppuccin-fzf.flake = false;    
+    catppuccin-fzf.flake = false;
     catppuccin-btop.url = "github:catppuccin/btop";
-    catppuccin-btop.flake = false;    
+    catppuccin-btop.flake = false;
   };
 
-  # the nix config here affects the flake itself only, not the system configuration
-  nixConfig.experimental-features = ["nix-command" "flakes"];
+  # nix configuration for flake operations - optimized for development workflow
+  nixConfig = {
+    # enable modern Nix features
+    experimental-features = ["nix-command" "flakes"];
+
+    # eliminate redundant warnings and prompts for development efficiency
+    warn-dirty = false;  # suppress git dirty tree warnings during development
+    accept-flake-config = true;  # automatically accept flake configuration without prompting
+
+    # performance optimizations
+    max-jobs = "auto";  # use all available CPU cores for builds
+    cores = 0;  # use all available CPU cores per job
+
+    # development-friendly settings
+    keep-outputs = true;  # keep build outputs for debugging
+    keep-derivations = true;  # keep derivations for development
+  };
 }

@@ -32,9 +32,9 @@
         "PAGER": "less",
         "TERM": "xterm-256color",
         "COLORTERM": "truecolor",
-        // nix configuration
+        // nix configuration - optimized for development workflow
         "NIXPKGS_ALLOW_UNFREE": "1",
-        "NIX_CONFIG": "experimental-features = nix-command flakes"
+        "NIX_CONFIG": "experimental-features = nix-command flakes warn-dirty = false accept-flake-config = true trusted-users = root @wheel"
     },
     // use devcontainer features for reliable base setup
     "features": {
@@ -48,13 +48,15 @@
     },
     // lifecycle commands for setup (can be enabled after basic functionality works)
     "onCreateCommand": {
-        "setupEnvironment": "bash -c 'echo \"🚀 Setting up Nix development environment...\" && ./.devcontainer/scripts/setup-environment.sh'"
+        "setupEnvironment": "bash -c 'echo \"🚀 Setting up Nix development environment...\" && ./.devcontainer/scripts/setup-environment.sh'",
+        "setupNixConfig": "bash -c 'echo \"🔧 Setting up optimized Nix configuration...\" && ./.devcontainer/scripts/setup-nix-config.sh'"
     },
     "postCreateCommand": {
         "validateEnvironment": "bash -c 'echo \"✅ Running post-setup validation...\" && ./.devcontainer/scripts/validate-environment.sh'"
     },
     "postStartCommand": {
-        "checkEnvironment": "bash -c 'echo \"🔄 Container started, checking environment...\" && ./.devcontainer/scripts/check-environment.sh'"
+        "checkEnvironment": "bash -c 'echo \"🔄 Container started, checking environment...\" && ./.devcontainer/scripts/check-environment.sh'",
+        "ensureNixConfig": "bash -c 'echo \"🔧 Ensuring Nix configuration is optimized...\" && ./.devcontainer/scripts/setup-nix-config.sh'"
     },
     // container settings
     "shutdownAction": "stopContainer",

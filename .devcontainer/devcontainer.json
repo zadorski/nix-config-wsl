@@ -14,13 +14,14 @@
     ],
     "forwardPorts": [],
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-
     // minimal environment setup for initial testing
     "containerEnv": {
         "GIT_USER_NAME": "${localEnv:GIT_USER_NAME:zadorski}",
-        "GIT_USER_EMAIL": "${localEnv:GIT_USER_EMAIL:678169+zadorski@users.noreply.github.com}"
+        "GIT_USER_EMAIL": "${localEnv:GIT_USER_EMAIL:678169+zadorski@users.noreply.github.com}",
+        // nix configuration - optimized for development workflow
+        "NIXPKGS_ALLOW_UNFREE": "1",
+        "NIX_CONFIG": "experimental-features = nix-command flakes warn-dirty = false accept-flake-config = true trusted-users = root @wheel"
     },
-
     // use devcontainer features for reliable base setup
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {
@@ -31,7 +32,6 @@
             "userGid": "1000"
         }
     },
-
     // minimal setup - lifecycle commands disabled for testing
     "remoteUser": "vscode"
 }

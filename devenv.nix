@@ -23,28 +23,28 @@
     nixfmt-classic        # nix code formatter
     nix-tree             # visualize nix dependencies
     nix-diff             # compare nix derivations
-    
+
     # development utilities
     git                  # version control
     gh                   # github CLI for repository management
     just                 # modern make alternative
     pre-commit           # git hooks for code quality
-    
+
     # shell and prompt
     fish                 # modern shell with good defaults
     starship             # cross-shell prompt
-    
+
     # file and text processing
     fd                   # fast find alternative
     ripgrep              # fast grep alternative
     jq                   # JSON processor
     yq                   # YAML processor
     tree                 # directory visualization
-    
+
     # network and debugging tools
     curl                 # HTTP client
     wget                 # file downloader
-    
+
     # WSL-specific utilities
     wslu                 # WSL utilities for Windows integration
   ];
@@ -98,22 +98,22 @@
       echo "🔄 Rebuilding NixOS configuration..."
       sudo nixos-rebuild switch --flake .#nixos
     '';
-    
+
     check.exec = ''
       echo "🔍 Checking flake configuration..."
-      nix flake check
+      nix flake check --no-warn-dirty
     '';
-    
+
     update.exec = ''
       echo "⬆️  Updating flake inputs..."
-      nix flake update
+      nix flake update --no-warn-dirty
     '';
-    
+
     format.exec = ''
       echo "🎨 Formatting Nix files..."
       find . -name "*.nix" -not -path "./templates/*" -exec nixfmt {} \;
     '';
-    
+
     # development workflow
     dev.exec = ''
       echo "🚀 Starting nix-config development environment..."
@@ -130,11 +130,11 @@
       echo "  • Use Ctrl+Shift+P -> 'Nix: Format File' to format"
       echo ""
     '';
-    
+
     test.exec = ''
       echo "🧪 Running configuration tests..."
       echo "Checking flake..."
-      nix flake check
+      nix flake check --no-warn-dirty
       echo "Building configuration (dry-run)..."
       nixos-rebuild dry-build --flake .#nixos
     '';
@@ -149,30 +149,30 @@
         enable = true;
         package = pkgs.nixfmt-classic;
       };
-      
+
       # general file checks
       check-yaml = {
         enable = true;
       };
-      
+
       check-json = {
         enable = true;
       };
-      
+
       check-toml = {
         enable = true;
       };
-      
+
       # prevent large files
       check-added-large-files = {
         enable = true;
       };
-      
+
       # trailing whitespace
       trailing-whitespace = {
         enable = true;
       };
-      
+
       # end of file newline
       end-of-file-fixer = {
         enable = true;
@@ -201,10 +201,10 @@
     echo ""
     echo "💡 VS Code users: The Nix language server is configured and ready!"
     echo ""
-    
+
     # ensure git is configured for safe directory
     git config --global --add safe.directory "$PROJECT_ROOT" 2>/dev/null || true
-    
+
     # display current git status if in a git repository
     if git rev-parse --git-dir > /dev/null 2>&1; then
       echo "📊 Git status:"
