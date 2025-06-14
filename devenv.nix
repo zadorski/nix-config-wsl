@@ -8,9 +8,15 @@
   cachix.enable = false;  # disable cachix integration to reduce cache files
 
   # configure devenv to use XDG-compliant cache locations
+  # leverages home-manager XDG configuration for consistency
   devenv = {
     # move devenv state to XDG cache directory
-    root = "${builtins.getEnv "XDG_CACHE_HOME"}/devenv/nix-config-wsl";
+    # uses fallback for environments where XDG_CACHE_HOME might not be set
+    root =
+      let cacheHome = builtins.getEnv "XDG_CACHE_HOME";
+      in if cacheHome != ""
+         then "${cacheHome}/devenv/nix-config-wsl"
+         else "/home/nixos/.cache/devenv/nix-config-wsl";
 
     # ensure clean repository by using external paths
     warnOnNewGeneration = false;  # reduce noise in repository
@@ -73,10 +79,23 @@
     GIT_EDITOR = "code --wait";
 
     # repository cleanliness: use XDG-compliant directories
-    DEVENV_ROOT = "${builtins.getEnv "XDG_CACHE_HOME"}/devenv/nix-config-wsl";
+    # consistent with devenv.root configuration above
+    DEVENV_ROOT =
+      let cacheHome = builtins.getEnv "XDG_CACHE_HOME";
+      in if cacheHome != ""
+         then "${cacheHome}/devenv/nix-config-wsl"
+         else "/home/nixos/.cache/devenv/nix-config-wsl";
 
     # ensure devenv uses external directories for state
     DIRENV_LOG_FORMAT = "";  # reduce direnv logging noise
+
+    # development environment XDG compliance
+    # these variables ensure tools respect XDG directories in devenv
+    DOCKER_CONFIG = "${builtins.getEnv "XDG_CONFIG_HOME"}/docker";
+    NPM_CONFIG_CACHE = "${builtins.getEnv "XDG_CACHE_HOME"}/npm";
+    CARGO_HOME = "${builtins.getEnv "XDG_DATA_HOME"}/cargo";
+    GOPATH = "${builtins.getEnv "XDG_DATA_HOME"}/go";
+    GOCACHE = "${builtins.getEnv "XDG_CACHE_HOME"}/go";
 
     # SSL certificate handling: inherit from system configuration
     # these variables are automatically set by system/certificates.nix

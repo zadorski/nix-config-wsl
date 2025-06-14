@@ -58,6 +58,7 @@ env_var_set() {
 
 echo "🔍 XDG Base Directory Specification Compliance Validation"
 echo "========================================================"
+echo "NixOS/home-manager XDG implementation validation"
 echo ""
 
 # check XDG environment variables
@@ -169,7 +170,7 @@ echo "-------------------------------"
 if command_exists git; then
     if file_exists "$XDG_CONFIG_HOME/git/config" || git config --global --list >/dev/null 2>&1; then
         test_pass "Git: Using XDG configuration"
-        
+
         # check for legacy files
         if file_exists "$HOME/.gitconfig"; then
             test_warn "Git: Legacy ~/.gitconfig exists (consider migrating)"
@@ -227,7 +228,7 @@ else
     test_info "Btop: Not installed"
 fi
 
-# htop - native XDG support  
+# htop - native XDG support
 if command_exists htop; then
     if file_exists "$XDG_CONFIG_HOME/htop/htoprc"; then
         test_pass "Htop: Using XDG configuration file"
@@ -292,7 +293,7 @@ fi
 # check for unexpected directories in home
 unexpected_dirs=(
     ".config"  # should exist
-    ".local"   # should exist  
+    ".local"   # should exist
     ".cache"   # should exist
     ".npm"
     ".cargo"
@@ -305,7 +306,7 @@ for dir in "${unexpected_dirs[@]}"; do
     if [[ "$dir" == ".config" ]] || [[ "$dir" == ".local" ]] || [[ "$dir" == ".cache" ]]; then
         continue  # these should exist
     fi
-    
+
     if dir_exists "$HOME/$dir"; then
         test_warn "Non-XDG directory found: ~/$dir (consider migration)"
     fi
@@ -348,6 +349,49 @@ if env_var_set NPM_CONFIG_USERCONFIG; then
     fi
 else
     test_info "NPM: NPM_CONFIG_USERCONFIG not set"
+fi
+
+# docker configuration
+if env_var_set DOCKER_CONFIG; then
+    if [[ "$DOCKER_CONFIG" == *"$XDG_CONFIG_HOME"* ]] || [[ "$DOCKER_CONFIG" == *".config"* ]]; then
+        test_pass "Docker: Using XDG configuration location"
+    else
+        test_warn "Docker: Configuration not in XDG location: $DOCKER_CONFIG"
+    fi
+else
+    test_info "Docker: DOCKER_CONFIG not set"
+fi
+
+# cargo/rust
+if env_var_set CARGO_HOME; then
+    if [[ "$CARGO_HOME" == *"$XDG_DATA_HOME"* ]] || [[ "$CARGO_HOME" == *".local/share"* ]]; then
+        test_pass "Cargo: Using XDG data location"
+    else
+        test_warn "Cargo: Not using XDG data location: $CARGO_HOME"
+    fi
+else
+    test_info "Cargo: CARGO_HOME not set"
+fi
+
+# go language
+if env_var_set GOPATH; then
+    if [[ "$GOPATH" == *"$XDG_DATA_HOME"* ]] || [[ "$GOPATH" == *".local/share"* ]]; then
+        test_pass "Go: Using XDG data location for GOPATH"
+    else
+        test_warn "Go: GOPATH not in XDG location: $GOPATH"
+    fi
+else
+    test_info "Go: GOPATH not set"
+fi
+
+if env_var_set GOCACHE; then
+    if [[ "$GOCACHE" == *"$XDG_CACHE_HOME"* ]] || [[ "$GOCACHE" == *".cache"* ]]; then
+        test_pass "Go: Using XDG cache location"
+    else
+        test_warn "Go: Cache not in XDG location: $GOCACHE"
+    fi
+else
+    test_info "Go: GOCACHE not set"
 fi
 
 echo ""

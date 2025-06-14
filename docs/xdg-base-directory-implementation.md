@@ -2,7 +2,15 @@
 
 ## Overview
 
-This document provides comprehensive guidance for implementing XDG Base Directory Specification compliance in the nix-config-wsl repository. It covers best practices, tool-specific configurations, and WSL2 considerations.
+This document provides comprehensive guidance for implementing XDG Base Directory Specification compliance in the nix-config-wsl repository using NixOS/home-manager best practices. It covers development workflow integration, containerization support, and WSL2 optimizations.
+
+## Revision Notes
+
+This implementation has been revised to follow NixOS community best practices:
+- **Home-Manager Integration**: Uses `xdg.enable = true` and built-in XDG support
+- **Development Workflows**: Enhanced Docker, devcontainer, and devenv integration
+- **Performance Optimization**: WSL2-specific optimizations for development environments
+- **Container Support**: Comprehensive devcontainer XDG compliance
 
 ## XDG Base Directory Specification Summary
 
@@ -11,7 +19,7 @@ The XDG Base Directory Specification defines standard locations for application 
 ### Primary Directories
 
 - **`XDG_CONFIG_HOME`** (`~/.config`): User-specific configuration files
-- **`XDG_DATA_HOME`** (`~/.local/share`): User-specific data files  
+- **`XDG_DATA_HOME`** (`~/.local/share`): User-specific data files
 - **`XDG_STATE_HOME`** (`~/.local/state`): User-specific state files
 - **`XDG_CACHE_HOME`** (`~/.cache`): User-specific non-essential cached data
 - **`XDG_RUNTIME_DIR`** (`/run/user/$UID`): User-specific runtime files
@@ -23,25 +31,39 @@ The XDG Base Directory Specification defines standard locations for application 
 
 ## Implementation Architecture
 
-### Core Module Structure
+### Core Module Structure (Revised)
 
 ```nix
-# home/xdg-base-directories.nix
+# home/xdg-base-directories.nix - NixOS Best Practices
 {
-  # Complete XDG environment variable setup
-  home.sessionVariables = {
-    XDG_CONFIG_HOME = "${config.home.homeDirectory}/.config";
-    XDG_DATA_HOME = "${config.home.homeDirectory}/.local/share";
-    XDG_STATE_HOME = "${config.home.homeDirectory}/.local/state";
-    XDG_CACHE_HOME = "${config.home.homeDirectory}/.cache";
-    # ... additional variables
+  # Enable home-manager's built-in XDG support
+  xdg = {
+    enable = true;  # Automatically sets XDG environment variables
+
+    # Explicit XDG directory configuration (optional)
+    configHome = "${config.home.homeDirectory}/.config";
+    dataHome = "${config.home.homeDirectory}/.local/share";
+    stateHome = "${config.home.homeDirectory}/.local/state";
+    cacheHome = "${config.home.homeDirectory}/.cache";
+
+    # Enable additional XDG features
+    userDirs.enable = true;    # XDG user directories
+    mimeApps.enable = true;    # MIME associations
   };
-  
-  # Directory structure creation
-  home.file = {
-    ".config/.keep".text = "";
-    ".local/share/.keep".text = "";
-    # ... other directories
+
+  # Development environment variables using config.xdg paths
+  home.sessionVariables = {
+    DEVENV_ROOT = "${config.xdg.cacheHome}/devenv";
+    DOCKER_CONFIG = "${config.xdg.configHome}/docker";
+    CARGO_HOME = "${config.xdg.dataHome}/cargo";
+    # ... other development tools
+  };
+
+  # Configuration files using xdg.configFile (preferred)
+  xdg.configFile = {
+    "docker/config.json".text = builtins.toJSON { /* config */ };
+    "npm/npmrc".text = "cache=${config.xdg.cacheHome}/npm";
+    # ... other configurations
   };
 }
 ```
@@ -64,7 +86,7 @@ programs.git = {
   enable = true;
   # Automatically uses:
   # - XDG_CONFIG_HOME/git/config
-  # - XDG_CONFIG_HOME/git/ignore  
+  # - XDG_CONFIG_HOME/git/ignore
   # - XDG_CONFIG_HOME/git/attributes
   # - XDG_CONFIG_HOME/git/credentials
 };
@@ -118,14 +140,14 @@ home.sessionVariables = {
   # Python
   PYTHONUSERBASE = "${config.home.homeDirectory}/.local";
   PYTHONPYCACHEPREFIX = "${config.home.homeDirectory}/.cache/python";
-  
+
   # Node.js/NPM
   NPM_CONFIG_USERCONFIG = "${config.home.homeDirectory}/.config/npm/npmrc";
   NPM_CONFIG_CACHE = "${config.home.homeDirectory}/.cache/npm";
-  
+
   # Rust/Cargo
   CARGO_HOME = "${config.home.homeDirectory}/.local/share/cargo";
-  
+
   # Go
   GOPATH = "${config.home.homeDirectory}/.local/share/go";
   GOCACHE = "${config.home.homeDirectory}/.cache/go";
@@ -242,7 +264,7 @@ ls -la ~ | grep -v "^d" | wc -l
 # Git configuration location
 git config --list --show-origin | grep config
 
-# Fish configuration location  
+# Fish configuration location
 fish -c 'echo $__fish_config_dir'
 
 # Starship configuration
@@ -262,7 +284,7 @@ starship config
 # Before
 DEVENV_ROOT = "/home/nixos/.cache/devenv/project";
 
-# After  
+# After
 DEVENV_ROOT = "${builtins.getEnv "XDG_CACHE_HOME"}/devenv/project";
 ```
 
