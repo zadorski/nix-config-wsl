@@ -1,0 +1,63 @@
+🔍 WSL SSL Certificate Environment Analysis
+==========================================
+
+1. Checking SSL Environment Variables in WSL...
+   ✅ SSL_CERT_FILE = /nix/store/sj7dmc12f7mgc61x61yscm9d535lpmr9-nss-cacert-3.108/etc/ssl/certs/ca-bundle.crt
+      📁 File exists (9074 lines)
+   ✅ REQUESTS_CA_BUNDLE = /nix/store/sj7dmc12f7mgc61x61yscm9d535lpmr9-nss-cacert-3.108/etc/ssl/certs/ca-bundle.crt
+      📁 File exists (9074 lines)
+   ✅ CURL_CA_BUNDLE = /nix/store/sj7dmc12f7mgc61x61yscm9d535lpmr9-nss-cacert-3.108/etc/ssl/certs/ca-bundle.crt
+      📁 File exists (9074 lines)
+   ✅ NODE_EXTRA_CA_CERTS = /nix/store/sj7dmc12f7mgc61x61yscm9d535lpmr9-nss-cacert-3.108/etc/ssl/certs/ca-bundle.crt
+      📁 File exists (9074 lines)
+   ✅ NIX_SSL_CERT_FILE = /nix/store/sj7dmc12f7mgc61x61yscm9d535lpmr9-nss-cacert-3.108/etc/ssl/certs/ca-bundle.crt
+      📁 File exists (9074 lines)
+   ❌ HTTPS_CA_BUNDLE = NOT SET
+   ❌ CA_BUNDLE = NOT SET
+
+2. Checking Windows Certificate Propagation...
+   ❌ Not found: /mnt/c/zscaler-root-ca.crt
+   ❌ Not found: /mnt/c/Program Files/Zscaler/ZSClient/cert.pem
+   ❌ Not found: /mnt/c/Program Files (x86)/Zscaler/ZSClient/cert.pem
+   ❌ Not found: /mnt/c/Users/nixos/AppData/Roaming/zscaler/cert.pem
+   ❌ Not found: /mnt/c/Users/nixos/AppData/Local/zscaler/cert.pem
+
+3. Checking WSL Certificate Locations...
+   ✅ File exists: /etc/ssl/certs/ca-certificates.crt (9138 lines)
+   ✅ File exists: /etc/ssl/certs/ca-bundle.crt (9138 lines)
+   ❌ Not found: /usr/local/share/ca-certificates/
+   ❌ Not found: /etc/ca-certificates.conf
+
+4. Testing SSL Connectivity from WSL...
+   Testing https://nixos.org...
+      ❌ curl: FAILED
+      ❌ wget: FAILED
+   Testing https://github.com...
+      ❌ curl: FAILED
+      ❌ wget: FAILED
+   Testing https://cache.nixos.org...
+      ❌ curl: FAILED
+      ❌ wget: FAILED
+
+5. Testing APT SSL Configuration...
+   ❌ APT cannot connect to repositories
+
+📋 WSL RECOMMENDATIONS:
+======================
+
+🔧 Missing Environment Variables in WSL:
+   - HTTPS_CA_BUNDLE
+   - CA_BUNDLE
+
+⚠️  No Windows certificate files accessible from WSL
+   1. Ensure certificate file exists on Windows
+   2. Check Windows drive mounting in WSL
+   3. Copy certificate to WSL filesystem
+
+🚀 Next Steps for WSL:
+1. Set environment variables in WSL
+2. Source the updated profile: source ~/.bashrc
+3. Test SSL connectivity again
+4. Proceed to container validation
+
+✅ WSL SSL Analysis Complete!

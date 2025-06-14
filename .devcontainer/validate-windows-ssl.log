@@ -1,0 +1,60 @@
+[33;1mWARNING: git command could not be found. Please create an alias or add it to your PATH.[0m
+🔍 Windows SSL Certificate Environment Analysis
+============================================================
+
+1. Checking SSL Environment Variables...
+   ❌ SSL_CERT_FILE = NOT SET
+   ❌ REQUESTS_CA_BUNDLE = NOT SET
+   ❌ CURL_CA_BUNDLE = NOT SET
+   ❌ NODE_EXTRA_CA_CERTS = NOT SET
+   ❌ NIX_SSL_CERT_FILE = NOT SET
+   ❌ HTTPS_CA_BUNDLE = NOT SET
+   ❌ CA_BUNDLE = NOT SET
+
+2. Checking Windows Certificate Store...
+   ✅ Found Zscaler certificates:
+      - E=support@zscaler.com, CN=Zscaler Root CA, OU=Zscaler Inc., O=Zscaler Inc., L=San Jose, S=California, C=US
+        Valid: 12/19/2014 01:27:55 to 05/06/2042 02:27:55
+      - E=support@zscaler.com, CN=Zscaler Inc. Root CA, OU=zscaler.net, O=Zscaler Inc., L=Sunnyvale, S=California, C=US
+        Valid: 01/15/2010 23:20:49 to 01/09/2036 23:20:49
+      - E=support@zscaler.com, CN=Zscaler Root CA, OU=Zscaler Inc., O=Zscaler Inc., L=San Jose, S=California, C=US
+        Valid: 06/24/2013 17:44:19 to 11/09/2040 16:44:19
+
+3. Checking Common Certificate Locations...
+   ❌ Not found: C:\Users\PAVZ748\AppData\Roaming\zscaler\cert.pem
+   ❌ Not found: C:\Users\PAVZ748\AppData\Local\zscaler\cert.pem
+   ❌ Not found: C:\Program Files\Zscaler\ZSClient\cert.pem
+   ❌ Not found: C:\Program Files (x86)\Zscaler\ZSClient\cert.pem
+   ❌ Not found: C:\Users\PAVZ748\.zscaler\cert.pem
+   ❌ Not found: C:\zscaler-root-ca.crt
+   ❌ Not found: C:\Users\PAVZ748\AppData\Local\Temp\zscaler-root-ca.crt
+
+4. Testing SSL Connectivity from Windows...
+   ✅ https://nixos.org - Status: 200
+   ✅ https://github.com - Status: 200
+   ✅ https://cache.nixos.org - Status: 200
+
+📋 RECOMMENDATIONS:
+==============================
+
+🔧 Missing Environment Variables to Set:
+   - SSL_CERT_FILE
+   - REQUESTS_CA_BUNDLE
+   - CURL_CA_BUNDLE
+   - NODE_EXTRA_CA_CERTS
+   - NIX_SSL_CERT_FILE
+   - HTTPS_CA_BUNDLE
+   - CA_BUNDLE
+
+⚠️ No certificate files found. You may need to:
+   1. Export Zscaler certificate from Windows certificate store
+   2. Contact IT for the corporate certificate bundle
+   3. Check Zscaler client installation
+
+🚀 Next Steps:
+1. Set the missing environment variables in Windows
+2. Restart VSCode and WSL after setting variables
+3. Run the WSL validation script
+4. Rebuild the devcontainer
+
+✅ Windows SSL Analysis Complete!

@@ -1,0 +1,83 @@
+🔍 Container SSL Certificate Environment Analysis
+==============================================
+
+1. Checking SSL Environment Variables in Container...
+   ❌ SSL_CERT_FILE = NOT SET
+   ❌ REQUESTS_CA_BUNDLE = NOT SET
+   ❌ CURL_CA_BUNDLE = NOT SET
+   ❌ NODE_EXTRA_CA_CERTS = NOT SET
+   ✅ NIX_SSL_CERT_FILE = /etc/ssl/certs/ca-certificates.crt
+      📁 File exists (3638 lines)
+      🔐 Contains 147 certificate(s)
+   ❌ HTTPS_CA_BUNDLE = NOT SET
+   ❌ CA_BUNDLE = NOT SET
+
+2. Checking Container Certificate Locations...
+   ✅ File exists: /etc/ssl/certs/ca-certificates.crt (3638 lines)
+      🔐 Contains 147 certificate(s)
+   ❌ Not found: /etc/ssl/certs/ca-bundle.crt
+   ✅ Directory exists: /usr/local/share/ca-certificates/ (1 certificates)
+   ✅ File exists: /etc/ca-certificates.conf (157 lines)
+   ✅ Directory exists: /usr/local/share/ca-certificates/corporate/ (0 certificates)
+   ✅ File exists: /etc/ssl/certs/zscaler-root-ca.pem (28 lines)
+      🔐 Contains 1 certificate(s)
+   ✅ File exists: /usr/local/share/ca-certificates/zscaler-root-ca.crt (28 lines)
+      🔐 Contains 1 certificate(s)
+
+3. Checking Certificate Installation...
+   ✅ update-ca-certificates command available
+   📋 Certificate bundle info:
+      System bundle contains 147 certificates
+
+4. Testing SSL Connectivity from Container...
+   Testing https://nixos.org...
+      ✅ curl: SUCCESS
+      ✅ wget: SUCCESS
+   Testing https://github.com...
+      ✅ curl: SUCCESS
+      ✅ wget: SUCCESS
+   Testing https://cache.nixos.org...
+      ✅ curl: SUCCESS
+      ✅ wget: SUCCESS
+   Testing https://channels.nixos.org...
+      ✅ curl: SUCCESS
+      ✅ wget: SUCCESS
+
+5. Testing APT SSL Configuration...
+   ❌ APT cannot connect to repositories
+
+6. Testing Nix Installation Requirements...
+   Testing Nix installer: https://nixos.org/nix/install
+      ✅ Nix installer accessible
+   Testing Nix installer: https://install.determinate.systems/nix
+      ✅ Nix installer accessible
+
+📋 CONTAINER RECOMMENDATIONS:
+============================
+
+🔧 Missing Environment Variables in Container:
+   - SSL_CERT_FILE
+   - REQUESTS_CA_BUNDLE
+   - CURL_CA_BUNDLE
+   - NODE_EXTRA_CA_CERTS
+   - HTTPS_CA_BUNDLE
+   - CA_BUNDLE
+
+💡 These should be set in devcontainer.json containerEnv section
+
+💡 Found working certificate file: /etc/ssl/certs/ca-certificates.crt
+
+🔧 Recommended Container Environment Variables:
+   SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+   REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+   CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+   NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
+   NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+
+🚀 Next Steps for Container:
+1. Update devcontainer.json with proper certificate mounting
+2. Update Dockerfile to install certificates properly
+3. Set environment variables in devcontainer.json
+4. Rebuild container and test again
+
+✅ Container SSL Analysis Complete!
