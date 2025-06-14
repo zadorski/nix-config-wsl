@@ -1,89 +1,106 @@
-# Development Container Configuration - DEPRECATED
+# Development Container Configuration - Fallback Solution
 
-⚠️ **This development container configuration has been deprecated in favor of direct WSL development.**
+🔄 **This development container serves as a reliable fallback when devenv fails (particularly due to SSH issues).**
 
-## Migration Notice
+## Purpose and Scope
 
-After comprehensive analysis, we've determined that the devcontainer approach was adding unnecessary complexity and maintenance overhead. The existing NixOS WSL configuration already provides a sophisticated development environment.
+This devcontainer configuration is designed as a **fallback solution** for situations where the preferred devenv approach encounters issues, particularly in corporate environments with complex certificate and SSH forwarding challenges.
 
-**New Approach**: Direct WSL development with devenv for project-specific environments.
+**Primary Approach**: Direct WSL development with devenv (see `devenv.nix`)
+**Fallback Approach**: This devcontainer configuration for maximum reliability
 
-## Why We Migrated Away
+## When to Use This Devcontainer
 
-### Problems with Devcontainer Approach
-- **Configuration Fragmentation**: Settings scattered across JSON, Dockerfile, and shell scripts
-- **Redundant Package Management**: Duplicate installations between host and container
-- **Complex Setup Scripts**: 155-line bash script with error-prone home-manager installation
-- **Maintenance Overhead**: Three separate configuration files requiring synchronization
-- **Performance Impact**: Container overhead and slower startup times
-- **Debugging Complexity**: Multiple layers making troubleshooting difficult
+### Use Devcontainer When:
+- **SSH Agent Forwarding Issues**: VS Code WSL SSH forwarding is problematic
+- **Corporate Certificate Challenges**: Complex proxy/certificate environments
+- **Environment Isolation Required**: Need complete separation from host system
+- **Devenv Setup Failures**: Nix or devenv installation issues on host
+- **Team Consistency**: Ensuring identical environments across team members
+- **CI/CD Integration**: Container-based development workflows
 
-### Benefits of Direct WSL Development
-- **Leverages Existing Investment**: Uses sophisticated NixOS WSL configuration
-- **Better Performance**: No container overhead
-- **Simplified Maintenance**: Single source of truth in Nix configuration
-- **Enhanced Integration**: Native VS Code + WSL experience
-- **Project Isolation**: devenv provides per-project environments without containers
+### Use Devenv When:
+- **Standard WSL Environment**: SSH and certificates work reliably
+- **Performance Critical**: Need native performance without container overhead
+- **Host Integration**: Want to leverage existing NixOS WSL configuration
+- **Quick Setup**: Need fast environment activation (5-15 seconds vs 2-5 minutes)
 
-## Migration Path
+## Key Improvements in This Version
 
-### Automatic Migration
-Run the migration script to automatically set up direct WSL development:
+### Enhanced Reliability
+- **Multi-stage Dockerfile**: Optimized build process with error handling
+- **Certificate Fallback**: Multiple approaches for corporate certificate handling
+- **Robust SSH Integration**: Native VS Code SSH forwarding with fallback options
+- **Comprehensive Validation**: Nix-based testing scripts for environment verification
 
-```bash
-./migrate-to-wsl-dev.sh
+### Corporate Environment Support
+- **Zscaler Certificate Handling**: Automatic detection and installation
+- **Windows-WSL Integration**: Leverages existing windows-wsl-manager patterns
+- **Environment Variable Promotion**: Comprehensive SSL certificate configuration
+- **Proxy-Friendly**: Designed for corporate proxy environments
+
+## Architecture Overview
+
+### Container Structure
+```
+Ubuntu 24.04 LTS
+├── Multi-stage Dockerfile (optimized build)
+├── Nix Package Manager (single-user mode)
+├── Fish Shell + Starship Prompt
+├── Certificate Management (multi-source)
+├── SSH Agent Forwarding (VS Code native)
+└── Development Tools (matching devenv.nix)
 ```
 
-This script will:
-1. Backup and remove devcontainer configuration
-2. Create `devenv.nix` for project-specific environments
-3. Set up `.envrc` for automatic environment loading
-4. Configure VS Code for optimal WSL integration
-5. Create development documentation
+### Script Architecture
+```
+.devcontainer/scripts/
+├── setup-environment.sh     # Main setup with home-manager
+├── install-certificates.sh  # Multi-source certificate handling
+├── validate-environment.sh  # Comprehensive Nix-based testing
+├── check-environment.sh     # Quick startup validation
+├── health-check.sh          # Docker health check
+└── troubleshoot.sh          # Diagnostic and automated fixes
+```
 
-### Manual Migration Steps
-If you prefer manual migration:
+### Integration with Repository Patterns
+- **Certificate Handling**: Mirrors `system/certificates.nix` patterns
+- **Development Tools**: Matches `devenv.nix` package selection
+- **Shell Configuration**: Consistent with repository fish/starship setup
+- **Windows Integration**: Leverages `home/windows/` module patterns
 
-1. **Remove devcontainer infrastructure:**
-   ```bash
-   rm -rf .devcontainer/
-   ```
+## Configuration Files
 
-2. **Create project environment:**
-   ```bash
-   # Create devenv.nix (see template in migrate-to-wsl-dev.sh)
-   # Create .envrc with: use devenv
-   # Configure VS Code settings for WSL
-   ```
-
-3. **Enter development environment:**
-   ```bash
-   devenv shell
-   ```
-
-## Files
-
-- **`devcontainer.json`** - Simplified container configuration focusing on essentials
-- **`Dockerfile`** - Streamlined Ubuntu base with Nix and certificate setup
-- **`nix-setup.sh`** - **New**: Nix-based setup using home-manager (replaces complex startup.sh)
-- **`startup.sh`** - **Legacy**: Kept for compatibility, now minimal
+### Core Configuration
+- **`devcontainer.json`** - Comprehensive container configuration with VS Code integration
+- **`Dockerfile`** - Multi-stage Ubuntu 24.04 with optimized Nix installation
 - **`zscaler-root-ca.crt`** - Corporate certificate for Zscaler environments
 
-## Benefits of Refactoring
+### Setup Scripts
+- **`scripts/setup-environment.sh`** - Main environment setup with home-manager
+- **`scripts/install-certificates.sh`** - Multi-source certificate detection and installation
+- **`scripts/validate-environment.sh`** - Comprehensive Nix-based environment testing
+- **`scripts/check-environment.sh`** - Quick startup environment validation
+- **`scripts/health-check.sh`** - Docker container health monitoring
+- **`scripts/troubleshoot.sh`** - Diagnostic tools and automated fixes
 
-### Before (Complex Setup)
-- ❌ **Fragmented configuration** across multiple files
-- ❌ **Redundant package installations** in Dockerfile and startup.sh
-- ❌ **Manual shell configuration** with complex scripts
-- ❌ **Inconsistent certificate handling**
-- ❌ **Difficult to maintain** due to scattered settings
+## Key Features
 
-### After (Nix-Centric Approach)
-- ✅ **Consolidated configuration** using Nix home-manager
-- ✅ **Single source of truth** for development tools
-- ✅ **Declarative setup** with reproducible results
-- ✅ **Consistent with host** NixOS configuration patterns
-- ✅ **Easy to maintain** and extend
+### Reliability Enhancements
+- ✅ **Multi-stage Dockerfile** with comprehensive error handling
+- ✅ **Certificate Fallback System** for corporate environments
+- ✅ **Robust SSH Integration** with VS Code native forwarding
+- ✅ **Comprehensive Validation** using Nix-based testing
+- ✅ **Health Monitoring** with Docker health checks
+- ✅ **Automated Troubleshooting** with diagnostic scripts
+
+### Corporate Environment Support
+- ✅ **Zscaler Certificate Handling** with automatic detection
+- ✅ **Windows-WSL Integration** using repository patterns
+- ✅ **Environment Variable Promotion** for SSL certificates
+- ✅ **Proxy-Friendly Configuration** for corporate networks
+- ✅ **Multiple Certificate Sources** with fallback detection
+- ✅ **Certificate Validation** with comprehensive testing
 
 ## Setup Requirements
 
@@ -136,21 +153,33 @@ ssh-add -l
 
 ## Usage
 
-### Automatic Setup
-The container automatically configures itself when opened in VS Code:
+### Automatic Setup Process
+The container automatically configures itself through a multi-phase setup:
 
-1. **Nix Installation**: Nix package manager with flakes support
-2. **Home-Manager Setup**: Declarative user configuration
-3. **Development Tools**: Fish shell, Starship prompt, Git, essential tools
-4. **SSH Integration**: Agent forwarding for secure Git operations
-5. **Certificate Setup**: Zscaler certificate integration
+1. **Container Creation**: Multi-stage Dockerfile builds optimized environment
+2. **Certificate Installation**: Detects and installs corporate certificates
+3. **Nix Environment Setup**: Installs Nix with flakes support
+4. **Home Manager Configuration**: Applies declarative user configuration
+5. **Development Tools**: Installs tools matching `devenv.nix` patterns
+6. **Shell Configuration**: Sets up Fish shell with Starship prompt
+7. **SSH Integration**: Configures SSH agent forwarding
+8. **Validation**: Runs comprehensive environment testing
 
-### Manual Setup (if needed)
-If automatic setup fails, run manually:
+### Manual Operations
+If you need to run setup manually or troubleshoot issues:
 
 ```bash
-# Run the Nix-based setup
-./.devcontainer/nix-setup.sh
+# Run full environment setup
+~/.devcontainer-scripts/setup-environment.sh
+
+# Validate environment
+~/.devcontainer-scripts/validate-environment.sh
+
+# Quick environment check
+~/.devcontainer-scripts/check-environment.sh
+
+# Comprehensive troubleshooting
+~/.devcontainer-scripts/troubleshoot.sh
 
 # Start fish shell
 exec fish
