@@ -5,9 +5,15 @@
     enable = true;
     enableCompletion = true;  # enable tab completion
 
+    # XDG-compliant history file location
+    historyFile = "$HOME/.local/state/bash/history";
+
     # automatically switch to fish for interactive sessions
     # this gives us bash compatibility for login while using fish for interaction
     initExtra = ''
+      # ensure XDG state directory exists for bash history
+      mkdir -p "$(dirname "$HISTFILE")"
+
       if [[ $- == *i* ]]; then
         exec ${pkgs.fish}/bin/fish
       fi
@@ -126,4 +132,3 @@
     '';
   };
 }
-

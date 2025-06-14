@@ -23,10 +23,10 @@
 
     # container and cloud tools (commonly used)
     docker-compose    # multi-container Docker applications
-    
+
     # build and task automation
     gnumake           # build automation
-    
+
     # language servers and development support
     nil               # Nix language server
     nixfmt-classic    # Nix code formatter
@@ -54,7 +54,7 @@
         line-numbers-zero-style = "#6c7086"; # catppuccin overlay1 for unchanged lines
       };
     };
-    
+
     # useful git aliases for development
     aliases = {
       st = "status";
@@ -70,7 +70,7 @@
       feature = "checkout -b";
       sync = "!git fetch origin && git rebase origin/main";
     };
-    
+
     # global gitignore configuration for development artifacts
     ignores = [
       # devenv and development environment artifacts
@@ -163,8 +163,8 @@
   };
 
   # bat configuration with catppuccin dark theme for syntax highlighting
+  # note: basic bat configuration is handled by XDG module
   programs.bat = {
-    enable = true;
     config = {
       pager = "less -FR";
       style = "changes,header,numbers";
@@ -186,8 +186,8 @@
   };
 
   # btop system monitor with catppuccin dark theme
+  # note: basic btop configuration is handled by XDG module
   programs.btop = {
-    enable = true;
     settings = {
       # catppuccin mocha theme for consistent dark mode experience
       color_theme = if catppuccin-btop != null then "catppuccin_mocha" else "Default";

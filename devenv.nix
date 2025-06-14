@@ -7,10 +7,10 @@
   # repository cleanliness: move devenv cache outside project directory
   cachix.enable = false;  # disable cachix integration to reduce cache files
 
-  # configure devenv to use system-wide cache locations
+  # configure devenv to use XDG-compliant cache locations
   devenv = {
-    # move devenv state outside the repository
-    root = "/home/nixos/.cache/devenv/nix-config-wsl";
+    # move devenv state to XDG cache directory
+    root = "${builtins.getEnv "XDG_CACHE_HOME"}/devenv/nix-config-wsl";
 
     # ensure clean repository by using external paths
     warnOnNewGeneration = false;  # reduce noise in repository
@@ -72,9 +72,8 @@
     # git configuration
     GIT_EDITOR = "code --wait";
 
-    # repository cleanliness: configure cache and temporary directories
-    DEVENV_ROOT = "/home/nixos/.cache/devenv/nix-config-wsl";
-    XDG_CACHE_HOME = "/home/nixos/.cache";
+    # repository cleanliness: use XDG-compliant directories
+    DEVENV_ROOT = "${builtins.getEnv "XDG_CACHE_HOME"}/devenv/nix-config-wsl";
 
     # ensure devenv uses external directories for state
     DIRENV_LOG_FORMAT = "";  # reduce direnv logging noise
@@ -132,6 +131,13 @@
       echo "🔐 Validating SSL configuration..."
       chmod +x scripts/validate-ssl-configuration.sh
       ./scripts/validate-ssl-configuration.sh
+    '';
+
+    # XDG Base Directory Specification compliance validation
+    validate-xdg.exec = ''
+      echo "📋 Validating XDG Base Directory Specification compliance..."
+      chmod +x scripts/validate-xdg-compliance.sh
+      ./scripts/validate-xdg-compliance.sh
     '';
 
     # comprehensive testing

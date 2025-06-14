@@ -3,10 +3,11 @@
 {
   # import user-level configuration modules
   imports = [
-    ./shells.nix      # bash and fish shell configuration
-    ./devenv.nix      # development environment and tooling
-    ./development.nix # toolchain
-    ./windows         # windows native application configurations (optional)
+    ./xdg-base-directories.nix  # XDG Base Directory Specification compliance
+    ./shells.nix                # bash and fish shell configuration
+    ./devenv.nix                # development environment and tooling
+    ./development.nix           # toolchain
+    ./windows                   # windows native application configurations (optional)
   ];
 
   # basic home-manager configuration

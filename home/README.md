@@ -1,3 +1,40 @@
+# Home Configuration
+
+User-level configuration managed by Home Manager for the WSL development environment with comprehensive XDG Base Directory Specification compliance and dark mode optimization.
+
+## XDG Base Directory Specification Compliance
+
+This configuration implements comprehensive XDG Base Directory Specification compliance for a clean, organized development environment.
+
+### XDG Directory Structure
+- **`~/.config/`** (XDG_CONFIG_HOME): Application configuration files
+- **`~/.local/share/`** (XDG_DATA_HOME): Application data files
+- **`~/.local/state/`** (XDG_STATE_HOME): Application state files
+- **`~/.cache/`** (XDG_CACHE_HOME): Application cache files
+- **`~/.local/bin/`**: User-specific executable files
+
+### XDG-Compliant Tools
+- **Git**: Native XDG support (config, ignore, attributes, credentials)
+- **Fish Shell**: Native XDG support for all configuration
+- **Starship**: Native XDG support for prompt configuration
+- **Btop/Htop**: Native XDG support for system monitoring
+- **Bat**: Native XDG support for syntax highlighting
+- **Direnv**: Native XDG support for environment management
+- **Bash**: Configured for XDG-compliant history storage
+
+### Benefits
+- **Clean Home Directory**: No configuration file clutter in $HOME
+- **Logical Organization**: Configurations, data, cache, and state properly separated
+- **Standard Compliance**: Follows modern Linux filesystem standards
+- **Easy Backup**: Clear separation of important vs. temporary data
+
+### Validation
+Use the XDG compliance validation script:
+```bash
+# From the repository root
+validate-xdg
+```
+
 ## Starship Prompt Accessibility
 
 The starship configuration (`home/starship.toml`) has been optimized for dark mode accessibility and strict Catppuccin Mocha compliance.
