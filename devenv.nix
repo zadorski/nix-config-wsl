@@ -2,7 +2,7 @@
 
 {
   # nix-config-wsl repository development environment
-  # optimized for editing NixOS configurations with full toolchain support
+  # production-ready, SSL-compliant development environment with streamlined tooling
 
   # repository cleanliness: move devenv cache outside project directory
   cachix.enable = false;  # disable cachix integration to reduce cache files
@@ -17,36 +17,42 @@
   };
 
   # essential packages for nix configuration development
+  # focus on tools that provide daily value and work reliably with SSL
   packages = with pkgs; [
-    # nix development tools
+    # core nix development tools (essential for daily work)
     nil                   # nix language server for VS Code
-    nixfmt-classic        # nix code formatter
-    nix-tree             # visualize nix dependencies
-    nix-diff             # compare nix derivations
+    nixfmt-classic        # nix code formatter (RFC-compliant)
+    nix-tree             # visualize nix dependencies (debugging)
 
-    # development utilities
+    # version control and collaboration (essential)
     git                  # version control
     gh                   # github CLI for repository management
-    just                 # modern make alternative
+
+    # modern shell environment (essential for user experience)
+    fish                 # modern shell with good defaults
+    starship             # cross-shell prompt (optimized configuration)
+
+    # file and text processing (essential for development)
+    fd                   # fast find alternative (better than find)
+    ripgrep              # fast grep alternative (better than grep)
+    jq                   # JSON processor (essential for modern development)
+    yq                   # YAML processor (essential for configuration files)
+    tree                 # directory visualization (debugging and exploration)
+
+    # network tools (essential, SSL-compliant)
+    curl                 # HTTP client (respects SSL_CERT_FILE)
+    wget                 # file downloader (respects SSL certificates)
+
+    # development automation (essential for workflow)
+    just                 # modern make alternative (simple task runner)
     pre-commit           # git hooks for code quality
 
-    # shell and prompt
-    fish                 # modern shell with good defaults
-    starship             # cross-shell prompt
-
-    # file and text processing
-    fd                   # fast find alternative
-    ripgrep              # fast grep alternative
-    jq                   # JSON processor
-    yq                   # YAML processor
-    tree                 # directory visualization
-
-    # network and debugging tools
-    curl                 # HTTP client
-    wget                 # file downloader
-
-    # WSL-specific utilities
+    # WSL-specific utilities (essential for WSL environment)
     wslu                 # WSL utilities for Windows integration
+
+    # SSL validation and troubleshooting
+    openssl              # SSL certificate inspection and validation
+    ca-certificates      # system certificate bundle
   ];
 
   # environment variables for nix development
@@ -73,22 +79,29 @@
     # ensure devenv uses external directories for state
     DIRENV_LOG_FORMAT = "";  # reduce direnv logging noise
 
-    # certificate handling: inherit from system configuration
-    # these will be automatically set by the system/certificates.nix module
-    # using the system certificate bundle that includes corporate certificates
-    SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
-    NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
-    CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
-    REQUESTS_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
-    NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
+    # SSL certificate handling: inherit from system configuration
+    # these variables are automatically set by system/certificates.nix
+    # and will use the system certificate bundle that includes corporate certificates
+    # note: using environment variable references to inherit from system
+    SSL_CERT_FILE = "\${SSL_CERT_FILE:-/etc/ssl/certs/ca-certificates.crt}";
+    NIX_SSL_CERT_FILE = "\${NIX_SSL_CERT_FILE:-/etc/ssl/certs/ca-certificates.crt}";
+    CURL_CA_BUNDLE = "\${CURL_CA_BUNDLE:-/etc/ssl/certs/ca-certificates.crt}";
 
-    # additional certificate variables for comprehensive coverage
-    PIP_CERT = "/etc/ssl/certs/ca-certificates.crt";
-    CARGO_HTTP_CAINFO = "/etc/ssl/certs/ca-certificates.crt";
-    GIT_SSL_CAINFO = "/etc/ssl/certs/ca-certificates.crt";
+    # language ecosystem SSL variables (inherit from system)
+    REQUESTS_CA_BUNDLE = "\${REQUESTS_CA_BUNDLE:-/etc/ssl/certs/ca-certificates.crt}";
+    PIP_CERT = "\${PIP_CERT:-/etc/ssl/certs/ca-certificates.crt}";
+    NODE_EXTRA_CA_CERTS = "\${NODE_EXTRA_CA_CERTS:-/etc/ssl/certs/ca-certificates.crt}";
+    NPM_CONFIG_CAFILE = "\${NPM_CONFIG_CAFILE:-/etc/ssl/certs/ca-certificates.crt}";
+    CARGO_HTTP_CAINFO = "\${CARGO_HTTP_CAINFO:-/etc/ssl/certs/ca-certificates.crt}";
+    GIT_SSL_CAINFO = "\${GIT_SSL_CAINFO:-/etc/ssl/certs/ca-certificates.crt}";
 
     # ensure devenv respects system certificates
-    DEVENV_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
+    DEVENV_SSL_CERT_FILE = "\${DEVENV_SSL_CERT_FILE:-/etc/ssl/certs/ca-certificates.crt}";
+
+    # development environment optimization
+    # reduce startup time and improve performance
+    STARSHIP_CONFIG = builtins.toString ./home/starship.toml;
+    STARSHIP_CACHE = "/home/nixos/.cache/starship";
   };
 
   # development scripts for common tasks
@@ -114,29 +127,54 @@
       find . -name "*.nix" -not -path "./templates/*" -exec nixfmt {} \;
     '';
 
-    # development workflow
-    dev.exec = ''
-      echo "🚀 Starting nix-config development environment..."
-      echo ""
-      echo "Available commands:"
-      echo "  • rebuild - Rebuild and switch NixOS configuration"
-      echo "  • check   - Validate flake configuration"
-      echo "  • update  - Update flake inputs"
-      echo "  • format  - Format Nix files"
-      echo "  • test    - Run configuration tests"
-      echo ""
-      echo "VS Code integration:"
-      echo "  • Nix language server (nil) is available"
-      echo "  • Use Ctrl+Shift+P -> 'Nix: Format File' to format"
-      echo ""
+    # SSL validation and troubleshooting
+    validate-ssl.exec = ''
+      echo "🔐 Validating SSL configuration..."
+      chmod +x scripts/validate-ssl-configuration.sh
+      ./scripts/validate-ssl-configuration.sh
     '';
 
+    # comprehensive testing
     test.exec = ''
-      echo "🧪 Running configuration tests..."
-      echo "Checking flake..."
+      echo "🧪 Running comprehensive tests..."
+      echo ""
+      echo "1. Checking flake configuration..."
       nix flake check --no-warn-dirty
-      echo "Building configuration (dry-run)..."
+      echo ""
+      echo "2. Validating SSL configuration..."
+      chmod +x scripts/validate-ssl-configuration.sh
+      ./scripts/validate-ssl-configuration.sh
+      echo ""
+      echo "3. Testing build (dry-run)..."
       nixos-rebuild dry-build --flake .#nixos
+    '';
+
+    # development workflow help
+    dev.exec = ''
+      echo "🚀 nix-config-wsl Development Environment"
+      echo "========================================"
+      echo ""
+      echo "Essential commands:"
+      echo "  • check        - Validate flake configuration"
+      echo "  • rebuild      - Rebuild and switch NixOS configuration"
+      echo "  • format       - Format Nix files with nixfmt"
+      echo "  • validate-ssl - Test SSL certificate configuration"
+      echo "  • test         - Run comprehensive tests"
+      echo "  • update       - Update flake inputs"
+      echo ""
+      echo "Development tools available:"
+      echo "  • nil          - Nix language server (VS Code integration)"
+      echo "  • nixfmt       - Nix code formatter"
+      echo "  • git + gh     - Version control and GitHub CLI"
+      echo "  • fish         - Modern shell with starship prompt"
+      echo ""
+      echo "SSL certificate status:"
+      if [ -f "/etc/nixos-certificates-info" ]; then
+        echo "  ✅ Corporate certificates configured"
+      else
+        echo "  ⚠️  No corporate certificates detected"
+      fi
+      echo ""
     '';
   };
 
@@ -183,23 +221,33 @@
   # shell initialization
   enterShell = ''
     echo ""
-    echo "🎉 Welcome to nix-config-wsl development environment!"
+    echo "🎉 nix-config-wsl development environment ready!"
     echo ""
     echo "📁 Project: NixOS WSL Configuration"
     echo "🏠 Location: $PROJECT_ROOT"
+
+    # SSL certificate status check
+    if [ -f "/etc/nixos-certificates-info" ]; then
+      echo "🔐 SSL: Corporate certificates configured"
+    else
+      echo "🔐 SSL: Using system defaults"
+    fi
+
+    # quick environment validation
+    if command -v nil >/dev/null 2>&1; then
+      echo "🛠️  Tools: Nix language server ready"
+    fi
+
+    if [ -n "${STARSHIP_CONFIG:-}" ] && [ -f "${STARSHIP_CONFIG}" ]; then
+      echo "✨ Prompt: Starship configured"
+    fi
+
     echo ""
-    echo "🛠️  Available tools:"
-    echo "  • nil (Nix language server) - for VS Code integration"
-    echo "  • nixfmt - for code formatting"
-    echo "  • nix flake commands - for configuration management"
-    echo "  • pre-commit hooks - for code quality"
-    echo ""
-    echo "🚀 Quick start:"
-    echo "  • Run 'dev' to see all available commands"
-    echo "  • Run 'check' to validate configuration"
-    echo "  • Run 'rebuild' to apply changes"
-    echo ""
-    echo "💡 VS Code users: The Nix language server is configured and ready!"
+    echo "🚀 Quick commands:"
+    echo "  • dev          - Show all available commands"
+    echo "  • check        - Validate configuration"
+    echo "  • validate-ssl - Test SSL setup"
+    echo "  • rebuild      - Apply changes"
     echo ""
 
     # ensure git is configured for safe directory

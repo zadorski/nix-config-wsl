@@ -4,7 +4,47 @@ This directory contains utility scripts for managing and validating the nix-conf
 
 ## Available Scripts
 
-### `validate-nix-workflow-optimizations.sh`
+### SSL Certificate Management
+
+#### `validate-ssl-configuration.sh`
+
+**Purpose**: Comprehensive SSL certificate validation script that tests SSL configuration across all development tools and package managers.
+
+**Usage**:
+```bash
+./scripts/validate-ssl-configuration.sh
+```
+
+**What it checks**:
+- Core SSL environment variables (SSL_CERT_FILE, NIX_SSL_CERT_FILE, CURL_CA_BUNDLE)
+- Language ecosystem SSL variables (Python, Node.js, Rust, Go, Java)
+- SSL connectivity to common development sites (GitHub, NixOS, PyPI, npm registry)
+- Package manager SSL functionality (npm, pip, cargo, go modules, git)
+
+**Exit codes**:
+- `0`: SSL configuration working correctly
+- `1`: SSL configuration partially working
+- `2`: SSL configuration not working
+
+#### `troubleshoot-ssl.sh`
+
+**Purpose**: Step-by-step SSL diagnosis and troubleshooting tool with detailed error reporting and fix recommendations.
+
+**Usage**:
+```bash
+./scripts/troubleshoot-ssl.sh
+```
+
+**Features**:
+- System certificate file validation
+- Environment variable analysis
+- Detailed SSL connectivity testing with error reporting
+- Corporate certificate detection
+- Specific fix recommendations and quick reference commands
+
+### Nix Workflow Validation
+
+#### `validate-nix-workflow-optimizations.sh`
 
 **Purpose**: Comprehensive validation of Nix workflow optimizations to ensure elimination of redundant warnings and confirmation prompts.
 

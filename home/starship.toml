@@ -1,86 +1,82 @@
 # starship configuration for NixOS-WSL development environment
-# optimized for fast rendering and development workflows with Catppuccin Mocha dark theme
+# streamlined, fast, and informative prompt design
+# optimized for WSL2 performance with essential information only
 
 # get editor completions based on the config schema
 "$schema" = "https://starship.rs/config-schema.json"
 
 # catppuccin mocha color palette for dark mode compatibility
-# strict compliance with official Catppuccin Mocha hex codes for accessibility
 palette = "catppuccin_mocha"
 
-# official catppuccin mocha color definitions for WCAG 2.1 compliance
-# all colors verified for minimum 4.5:1 contrast ratio on dark backgrounds
+# official catppuccin mocha color definitions
 [palettes.catppuccin_mocha]
-# accent colors - verified for high contrast on dark backgrounds
-red = "#f38ba8"         # contrast ratio 7.2:1 on #1e1e2e (AAA compliant)
-green = "#a6e3a1"       # contrast ratio 8.1:1 on #1e1e2e (AAA compliant)
-yellow = "#f9e2af"      # contrast ratio 9.3:1 on #1e1e2e (AAA compliant)
-blue = "#89b4fa"        # contrast ratio 6.8:1 on #1e1e2e (AAA compliant)
-pink = "#f5c2e7"        # contrast ratio 8.5:1 on #1e1e2e (AAA compliant)
-mauve = "#cba6f7"       # contrast ratio 7.9:1 on #1e1e2e (AAA compliant)
-teal = "#94e2d5"        # contrast ratio 8.7:1 on #1e1e2e (AAA compliant)
-sky = "#89dceb"         # contrast ratio 8.2:1 on #1e1e2e (AAA compliant)
-sapphire = "#74c7ec"    # contrast ratio 7.4:1 on #1e1e2e (AAA compliant)
-peach = "#fab387"       # contrast ratio 8.9:1 on #1e1e2e (AAA compliant)
-maroon = "#eba0ac"      # contrast ratio 7.6:1 on #1e1e2e (AAA compliant)
-lavender = "#b4befe"    # contrast ratio 8.8:1 on #1e1e2e (AAA compliant)
-
-# text colors - optimized for readability
-text = "#cdd6f4"        # contrast ratio 11.2:1 on #1e1e2e (AAA compliant)
-subtext1 = "#bac2de"    # contrast ratio 8.9:1 on #1e1e2e (AAA compliant)
-subtext0 = "#a6adc8"    # contrast ratio 6.8:1 on #1e1e2e (AAA compliant)
+# accent colors for high contrast on dark backgrounds
+red = "#f38ba8"         # errors, critical status
+green = "#a6e3a1"       # success, clean status
+yellow = "#f9e2af"      # warnings, duration
+blue = "#89b4fa"        # directories, nix shell
+pink = "#f5c2e7"        # special contexts
+mauve = "#cba6f7"       # git branches
+teal = "#94e2d5"        # secondary info
+sky = "#89dceb"         # language versions
+peach = "#fab387"       # package info
+text = "#cdd6f4"        # primary text
+subtext1 = "#bac2de"    # secondary text
 
 # core prompt behavior: optimized for WSL performance
-command_timeout = "1000"# 1000ms timeout to prevent hanging in WSL
-add_newline = "false"   # single-line prompt for terminal efficiency
-scan_timeout = "30"     # quick directory scanning
+command_timeout = 500   # 500ms timeout for fast response
+add_newline = false     # single-line prompt for efficiency
+scan_timeout = 30       # quick directory scanning
 
-# prompt format: accessibility-optimized with clear information hierarchy
-# left side: essential, frequently-needed information
+# prompt format: clean left-side layout with essential information
 format = """
+$os\
 $directory\
 $git_branch\
 $git_status\
-$status\
 $nix_shell\
-$env_var.DEVENV_PROFILE\
-$line_break\
 $character"""
 
-# right side: detailed but secondary information (timestamps, versions, environment details)
+# right-side format: language versions and secondary information
 right_format = """
 $nodejs\
 $python\
 $rust\
 $golang\
-$java\
-$docker_context\
-$cmd_duration\
-$jobs"""
+$cmd_duration"""
 
-# directory display: intelligent truncation for deep project structures
-# accessibility: using catppuccin blue for optimal contrast on dark backgrounds
+# OS icon: simple indicator for WSL context
+[os]
+format = "[$symbol]($style) "
+style = "bold blue"
+disabled = false
+
+[os.symbols]
+Windows = ""
+Linux = ""
+
+# directory display: clean path with intelligent truncation
 [directory]
-truncate_to_repo = true
-format = "[$path]($style)[$read_only]($read_only_style) "
-style = "#89b4fa"  # catppuccin blue - 6.8:1 contrast ratio on mocha base
-read_only = " 🔒"
-read_only_style = "#f38ba8"  # catppuccin red - 7.2:1 contrast ratio for critical info
-truncation_length = 4  # reasonable depth for complex projects
+format = "[$path]($style) "
+style = "bold blue"
+truncation_length = 3
 truncation_symbol = "…/"
+truncate_to_repo = true
+read_only = " 🔒"
+read_only_style = "red"
 
-# git branch display: catppuccin mauve for optimal accessibility
+# git branch: simple branch name with icon
 [git_branch]
-symbol = " "
 format = "[$symbol$branch]($style) "
-style = "#cba6f7"  # catppuccin mauve - 7.9:1 contrast ratio, colorblind-friendly
-truncation_length = 25  # slightly longer for complex branch names
+symbol = " "
+style = "bold mauve"
+truncation_length = 20
 truncation_symbol = "…"
 
-# git status indicators: catppuccin red for critical git information
+# git status: essential status indicators only
 [git_status]
-format = '([\[$all_status$ahead_behind\]]($style) )'
-style = "#f38ba8"  # catppuccin red - 7.2:1 contrast ratio for critical status
+format = '([$all_status$ahead_behind]($style) )'
+style = "bold red"
 ahead = "⇡${count}"
 behind = "⇣${count}"
 diverged = "⇕⇡${ahead_count}⇣${behind_count}"
@@ -91,220 +87,102 @@ modified = "~${count}"
 staged = "+${count}"
 untracked = "?${count}"
 stashed = "📦"
-# removed windows_starship line - not relevant for WSL/Linux environment
 
-# command execution time: show for long-running commands
-[cmd_duration]
-min_time = 2_000  # show duration for commands taking >2 seconds
-format = "took [$duration]($style) "
-style = "#f9e2af"  # catppuccin yellow - 9.3:1 contrast ratio for excellent visibility
+# nix shell indicator: critical for nix development
+[nix_shell]
+format = '[$symbol$state( \($name\))]($style) '
+symbol = " "
+style = "bold blue"
+impure_msg = '[impure]'
+pure_msg = '[pure]'
+unknown_msg = '[nix]'
 
-# character prompt: indicates success/failure with maximum contrast
+# character prompt: success/failure indicator
 [character]
-success_symbol = "[❯](#a6e3a1)"  # catppuccin green - 8.1:1 contrast ratio
-error_symbol = "[❯](#f38ba8)"    # catppuccin red - 7.2:1 contrast ratio
-vimcmd_symbol = "[❮](#a6e3a1)"   # consistent with success symbol
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold green)"
 
-# language version displays: moved to right prompt for better hierarchy
-# accessibility: using official catppuccin mocha colors with verified contrast ratios
+# command duration: show for long-running commands
+[cmd_duration]
+min_time = 2_000
+format = "[$duration]($style) "
+style = "bold yellow"
+
+# language version displays: right-side, context-aware
 
 # node.js: show when package.json present
 [nodejs]
-format = "[$symbol($version )]($style)"
-symbol = " "
-style = "#a6e3a1"  # catppuccin green - 8.1:1 contrast ratio, colorblind-friendly
+format = "[ $version]($style)"
+style = "bold green"
 detect_extensions = ["js", "mjs", "cjs", "ts", "tsx", "jsx"]
-detect_files = ["package.json", ".nvmrc", "pnpm-lock.yaml", "yarn.lock"]
+detect_files = ["package.json", ".nvmrc"]
 detect_folders = ["node_modules"]
 
 # python: show when in Python project
 [python]
-format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
-symbol = " "
-style = "#f9e2af"  # catppuccin yellow - 9.3:1 contrast ratio for excellent visibility
-detect_extensions = ["py", "pyi", "pyc", "pyo", "pyw", "pyz"]
-detect_files = [
-    "requirements.txt",
-    "pyproject.toml",
-    "Pipfile",
-    "tox.ini",
-    "setup.py",
-    "__init__.py",
-    "poetry.lock"
-]
-detect_folders = [".venv", "venv", "env", ".conda"]
+format = "[ $version]($style)"
+style = "bold yellow"
+detect_extensions = ["py"]
+detect_files = ["requirements.txt", "pyproject.toml", "Pipfile", "__init__.py"]
+detect_folders = [".venv", "venv", "env"]
 
 # rust: show when Cargo.toml present
 [rust]
-format = "[$symbol($version )]($style)"
-symbol = " "
-style = "#f38ba8"  # catppuccin red - 7.2:1 contrast ratio, accessible
+format = "[ $version]($style)"
+style = "bold red"
 detect_extensions = ["rs"]
-detect_files = ["Cargo.toml", "Cargo.lock"]
+detect_files = ["Cargo.toml"]
 
 # go: show when go.mod present
 [golang]
-format = "[$symbol($version )]($style)"
-symbol = " "
-style = "#89dceb"  # catppuccin sky - 8.2:1 contrast ratio, distinct from blue
+format = "[ $version]($style)"
+style = "bold sky"
 detect_extensions = ["go"]
-detect_files = ["go.mod", "go.sum", "go.work", "glide.yaml", "Gopkg.yml", "Gopkg.lock"]
-detect_folders = ["Godeps"]
+detect_files = ["go.mod"]
 
-# java: show when Maven/Gradle files present
-[java]
-format = "[$symbol($version )]($style)"
-symbol = " "
-style = "#f5c2e7"  # catppuccin pink - 8.5:1 contrast ratio, distinct from rust
-detect_extensions = ["java", "class", "jar", "gradle", "clj", "cljc"]
-detect_files = ["pom.xml", "build.gradle.kts", "build.gradle", "build.sbt", ".java-version"]
-
-# docker context: show when docker is active
-[docker_context]
-format = "[$symbol$context]($style) "
-symbol = " "
-style = "#89b4fa"  # catppuccin blue - 6.8:1 contrast ratio for container context
-only_with_files = true
-detect_files = ["docker-compose.yml", "docker-compose.yaml", "Dockerfile", ".dockerignore"]
-detect_folders = [".devcontainer"]  # include devcontainer detection
-
-# nix shell indicator: critical for nix development workflow
-[nix_shell]
-format = '[$symbol$state( \($name\))]($style) '
-symbol = " "
-style = "#89b4fa"  # catppuccin blue - 6.8:1 contrast ratio, consistent with docker
-impure_msg = '[impure shell](#f38ba8)'    # catppuccin red - 7.2:1 contrast for warnings
-pure_msg = '[pure shell](#a6e3a1)'        # catppuccin green - 8.1:1 contrast for success
-unknown_msg = '[unknown shell](#f9e2af)'  # catppuccin yellow - 9.3:1 contrast for caution
-
-# additional useful modules for development
-
-# package version: show when in package directory
+# disabled modules for performance and cleanliness
 [package]
-format = "[$symbol$version]($style) "
-symbol = "📦 "
-style = "#f9e2af"  # catppuccin yellow - 9.3:1 contrast ratio for package info
-display_private = false
-disabled = false
-
-# memory usage: disabled for WSL performance
-[memory_usage]
 disabled = true
 
-# battery: disabled (not relevant for WSL)
-[battery]
+[docker_context]
 disabled = true
 
-# hostname: disabled (WSL context is clear)
+[kubernetes]
+disabled = true
+
+[aws]
+disabled = true
+
+[gcloud]
+disabled = true
+
 [hostname]
 disabled = true
 
-# username: disabled for cleaner prompt
 [username]
 disabled = true
 
-# time: disabled for cleaner prompt (can be enabled if needed)
 [time]
 disabled = true
 
-# status: show exit codes for failed commands - moved to left prompt for visibility
-[status]
-format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
-symbol = "✗"
-style = "#f38ba8"  # catppuccin red - 7.2:1 contrast ratio for critical error information
-disabled = false
+[battery]
+disabled = true
 
-# jobs: show background job count - moved to right prompt
+[memory_usage]
+disabled = true
+
 [jobs]
-format = "[$symbol$number]($style) "
-symbol = "✦"
-style = "#89b4fa"  # catppuccin blue - 6.8:1 contrast ratio, accessible
-number_threshold = 1
-symbol_threshold = 1
+disabled = true
 
-# line break: clean separation
-[line_break]
-disabled = false
+[status]
+disabled = true
 
-# additional language support for common development scenarios
-# accessibility: using official catppuccin mocha colors with verified contrast ratios
-
-# C/C++: show when CMake or Makefile present
-[c]
-format = "[$symbol($version(-$name) )]($style)"
-symbol = " "
-style = "#94e2d5"  # catppuccin teal - 8.7:1 contrast ratio for C/C++
-detect_extensions = ["c", "cpp", "cc", "cxx", "c++", "h", "hpp", "hh", "hxx", "h++"]
-detect_files = ["CMakeLists.txt", "CMakeCache.txt", "Makefile", "configure.ac", "meson.build"]
-
-# PHP: show when composer.json present
-[php]
-format = "[$symbol($version )]($style)"
-symbol = " "
-style = "#cba6f7"  # catppuccin mauve - 7.9:1 contrast ratio for PHP
-detect_extensions = ["php", "phtml", "php3", "php4", "php5", "phps"]
-detect_files = ["composer.json", ".php-version", "composer.lock"]
-
-# Ruby: show when Gemfile present
-[ruby]
-format = "[$symbol($version )]($style)"
-symbol = " "
-style = "#eba0ac"  # catppuccin maroon - 7.6:1 contrast ratio for Ruby
-detect_extensions = ["rb", "ruby", "rake", "ru", "gemspec"]
-detect_files = ["Gemfile", ".ruby-version", ".rvmrc", "rakefile", "Rakefile", "Gemfile.lock"]
-detect_folders = [".rvm", ".rbenv"]
-
-# Terraform: show when .tf files present
-[terraform]
-format = "[$symbol$workspace]($style) "
-symbol = "💠 "
-style = "#74c7ec"  # catppuccin sapphire - 7.4:1 contrast ratio for Terraform
-detect_extensions = ["tf", "tfplan", "tfstate"]
-detect_folders = [".terraform"]
-
-# Kubernetes: show when kubectl context is set
-[kubernetes]
-format = '[$symbol$context( \($namespace\))]($style) '
-symbol = "☸ "
-style = "#89b4fa"  # catppuccin blue - 6.8:1 contrast ratio for k8s context
-disabled = true  # disabled by default, enable if using k8s
-
-# AWS: show when AWS profile is set
-[aws]
-format = '[$symbol($profile )(\($region\) )(\[$duration\] )]($style)'
-symbol = "☁️ "
-style = "#f9e2af"  # catppuccin yellow - 9.3:1 contrast ratio for cloud context
-disabled = true  # disabled by default, enable if using AWS
-
-# environment variables: essential for development workflow
-[env_var.VIRTUAL_ENV]
-format = "(venv:[$env_value]($style) )"
-style = "#f9e2af"  # catppuccin yellow - 9.3:1 contrast ratio for virtual environment
-
-# devenv integration: critical for nix-config-wsl workflow
+# environment variables: minimal, essential only
 [env_var.DEVENV_PROFILE]
 format = "(devenv:[$env_value]($style) )"
-style = "#89b4fa"  # catppuccin blue - 6.8:1 contrast ratio, consistent with nix_shell
+style = "bold blue"
 
-# direnv integration: show when direnv is active
-[env_var.DIRENV_DIR]
-format = "(direnv:[$env_value]($style) )"
-style = "#a6e3a1"  # catppuccin green - 8.1:1 contrast ratio for direnv status
-variable = "DIRENV_DIR"
-default = ""
-
-# custom WSL-specific optimizations
-[custom.wsl_distro]
-command = "echo $WSL_DISTRO_NAME"
-when = '[ -n "$WSL_DISTRO_NAME" ]'
-format = "[$output]($style) "
-style = "#cdd6f4"  # catppuccin text - 11.2:1 contrast ratio for WSL distro
-disabled = true  # disabled by default, enable if you want to show WSL distro name
-
-# custom direnv status: better integration than env_var approach
-[custom.direnv_status]
-command = "direnv status --json 2>/dev/null | jq -r '.state.foundRC.allowed // empty' 2>/dev/null || echo ''"
-when = 'command -v direnv >/dev/null && command -v jq >/dev/null'
-format = "(direnv:[$output]($style) )"
-style = "#a6e3a1"  # catppuccin green - 8.1:1 contrast ratio for direnv
-disabled = false  # enable for better direnv integration
+# custom modules disabled for performance
+[custom]
+disabled = true
