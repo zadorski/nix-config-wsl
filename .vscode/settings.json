@@ -1,0 +1,10 @@
+{
+  "remote.containers.buildAndRunTimeout": 300,
+  "remote.containers.defaultExtensions": [
+    "ms-azuretools.vscode-docker"
+  ],
+  "remote.containers.dockerPath": "docker",
+  "remote.containers.dockerComposePath": "docker-compose",
+  "remote.containers.forceRefreshEnvironmentVariables": true,
+  "remote.containers.removeExistingContainer": true
+}

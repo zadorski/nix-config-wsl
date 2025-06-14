@@ -107,9 +107,9 @@ tramp
 *.rel
 
 # vscode
-.vscode/
 *.code-workspace
 .history/
+#.vscode/ # TODO: consider workflow
 
 # jetbrains IDEs
 .idea/

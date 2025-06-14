@@ -21,11 +21,11 @@ check_system() {
 check_nix() {
     # check if Nix is installed
     [ -f /home/vscode/.nix-profile/etc/profile.d/nix.sh ] || return 1
-    
+
     # source Nix environment and test
-    source /home/vscode/.nix-profile/etc/profile.d/nix.sh
+    . /home/vscode/.nix-profile/etc/profile.d/nix.sh 2>/dev/null || return 1
     command -v nix >/dev/null 2>&1 || return 1
-    
+
     return 0
 }
 

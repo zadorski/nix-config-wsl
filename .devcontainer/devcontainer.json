@@ -2,46 +2,23 @@
     "name": "nix-wsl-dev-fallback",
     "build": {
         "dockerfile": "Dockerfile",
-        "context": "."
+        "context": ".",
+        "args": {},
+        "cacheFrom": "ubuntu:24.04"
     },
     "runArgs": [
         "--memory=4g",
         "--cpus=2",
+        "--init",
         "--security-opt=seccomp=unconfined"
     ],
+    "forwardPorts": [],
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
-    // SSH agent forwarding with fallback support
-    "mounts": [
-        "type=bind,source=${env:SSH_AUTH_SOCK},target=/ssh-agent,consistency=cached"
-    ],
-
-    // comprehensive environment variable setup
+    // minimal environment setup for initial testing
     "containerEnv": {
-        "SSH_AUTH_SOCK": "/ssh-agent",
         "GIT_USER_NAME": "${localEnv:GIT_USER_NAME:zadorski}",
-        "GIT_USER_EMAIL": "${localEnv:GIT_USER_EMAIL:678169+zadorski@users.noreply.github.com}",
-
-        // certificate environment variables for corporate environments
-        "SSL_CERT_FILE": "/etc/ssl/certs/ca-certificates.crt",
-        "NIX_SSL_CERT_FILE": "/etc/ssl/certs/ca-certificates.crt",
-        "CURL_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt",
-        "REQUESTS_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt",
-        "NODE_EXTRA_CA_CERTS": "/etc/ssl/certs/ca-certificates.crt",
-        "PIP_CERT": "/etc/ssl/certs/ca-certificates.crt",
-        "CARGO_HTTP_CAINFO": "/etc/ssl/certs/ca-certificates.crt",
-        "GIT_SSL_CAINFO": "/etc/ssl/certs/ca-certificates.crt",
-
-        // development environment
-        "EDITOR": "code",
-        "VISUAL": "code",
-        "PAGER": "less",
-        "TERM": "xterm-256color",
-        "COLORTERM": "truecolor",
-
-        // nix configuration
-        "NIXPKGS_ALLOW_UNFREE": "1",
-        "NIX_CONFIG": "experimental-features = nix-command flakes"
+        "GIT_USER_EMAIL": "${localEnv:GIT_USER_EMAIL:678169+zadorski@users.noreply.github.com}"
     },
 
     // use devcontainer features for reliable base setup
@@ -55,59 +32,6 @@
         }
     },
 
-    "remoteUser": "vscode",
-
-    // lifecycle commands for robust setup
-    "onCreateCommand": [
-        "bash", "-c",
-        "echo '🚀 Setting up Nix development environment...' && ./.devcontainer/scripts/setup-environment.sh"
-    ],
-
-    "postCreateCommand": [
-        "bash", "-c",
-        "echo '✅ Running post-setup validation...' && ./.devcontainer/scripts/validate-environment.sh"
-    ],
-
-    "postStartCommand": [
-        "bash", "-c",
-        "echo '🔄 Container started, checking environment...' && ./.devcontainer/scripts/check-environment.sh"
-    ],
-
-    // VS Code customizations
-    "customizations": {
-        "vscode": {
-            "settings": {
-                "terminal.integrated.defaultProfile.linux": "fish",
-                "terminal.integrated.profiles.linux": {
-                    "fish": {
-                        "path": "/home/vscode/.nix-profile/bin/fish",
-                        "args": ["-l"]
-                    },
-                    "bash": {
-                        "path": "/bin/bash",
-                        "args": ["-l"]
-                    }
-                },
-                "files.watcherExclude": {
-                    "**/node_modules/**": true,
-                    "**/.git/objects/**": true,
-                    "**/.git/subtree-cache/**": true,
-                    "**/nix/store/**": true,
-                    "**/.devenv/**": true,
-                    "**/.direnv/**": true
-                },
-                "remote.WSL.useShellEnvironment": true,
-                "remote.WSL.fileWatcher.polling": false,
-                "nix.enableLanguageServer": true,
-                "nix.serverPath": "nil",
-                "nix.formatterPath": "nixfmt"
-            },
-            "extensions": [
-                "jnoortheen.nix-ide",
-                "ms-vscode.vscode-json",
-                "redhat.vscode-yaml",
-                "ms-vscode.remote-containers"
-            ]
-        }
-    }
+    // minimal setup - lifecycle commands disabled for testing
+    "remoteUser": "vscode"
 }
