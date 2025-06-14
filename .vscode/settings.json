@@ -1,10 +1,109 @@
 {
+  // === WORKSPACE-SPECIFIC VSCODE SETTINGS ===
+  // optimized for nix-config-wsl development environment
+  // complements the declarative settings in home/windows/vscode.nix
+  
+  // === DEVCONTAINER CONFIGURATION ===
   "remote.containers.buildAndRunTimeout": 300,
   "remote.containers.defaultExtensions": [
-    "ms-azuretools.vscode-docker"
+    "ms-azuretools.vscode-docker",
+    "jnoortheen.nix-ide",
+    "ms-vscode.vscode-json",
+    "redhat.vscode-yaml"
   ],
   "remote.containers.dockerPath": "docker",
   "remote.containers.dockerComposePath": "docker-compose",
   "remote.containers.forceRefreshEnvironmentVariables": true,
-  "remote.containers.removeExistingContainer": true
+  "remote.containers.removeExistingContainer": true,
+  
+  // === WSL INTEGRATION ===
+  // terminal configuration for WSL development
+  "terminal.integrated.defaultProfile.linux": "fish",
+  "terminal.integrated.profiles.linux": {
+    "fish": {
+      "path": "fish",
+      "args": ["-l"]
+    },
+    "bash": {
+      "path": "/bin/bash",
+      "args": ["-l"]
+    }
+  },
+  "remote.WSL.useShellEnvironment": true,
+  "remote.WSL.fileWatcher.polling": false,
+  
+  // === PROJECT-SPECIFIC FILE HANDLING ===
+  // file associations for nix configuration development
+  "files.associations": {
+    "*.nix": "nix",
+    "flake.lock": "json",
+    "devenv.lock": "json",
+    "*.toml": "toml",
+    "*.fish": "fish"
+  },
+  
+  // workspace-specific file exclusions
+  "files.exclude": {
+    "**/result": true,
+    "**/result-*": true,
+    "**/.devenv": true,
+    "**/.direnv": true
+  },
+  
+  // enhanced file watching exclusions for this project
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/nix/store/**": true,
+    "**/.devenv/**": true,
+    "**/.direnv/**": true,
+    "**/result": true,
+    "**/result-*": true
+  },
+  
+  // === NIX-SPECIFIC CONFIGURATION ===
+  // nix language server configuration for this workspace
+  "nix.enableLanguageServer": true,
+  "nix.serverPath": "nil",
+  "nix.serverSettings": {
+    "nil": {
+      "diagnostics": {
+        "ignored": ["unused_binding", "unused_with"]
+      },
+      "formatting": {
+        "command": ["nixfmt"]
+      }
+    }
+  },
+  
+  // === DEVELOPMENT WORKFLOW ===
+  // auto-save configuration for seamless development
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  
+  // formatting configuration
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  
+  // === RECOMMENDED EXTENSIONS ===
+  // extensions that enhance the nix development experience
+  "extensions.recommendations": [
+    "jnoortheen.nix-ide",
+    "ms-vscode.vscode-json",
+    "redhat.vscode-yaml",
+    "ms-azuretools.vscode-docker",
+    "eamodio.gitlens",
+    "ms-vscode.remote-wsl",
+    "ms-vscode-remote.remote-containers",
+    "catppuccin.catppuccin-vsc",
+    "catppuccin.catppuccin-vsc-icons"
+  ]
 }

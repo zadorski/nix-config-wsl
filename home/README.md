@@ -174,3 +174,97 @@ All implemented tools maintain:
 - **Color-blind friendly**: Distinct hues for different information types
 - **Dark mode optimized**: Tested on various dark terminal backgrounds
 - **Performance focused**: WSL-specific optimizations maintained
+
+## VSCode Integration
+
+### Comprehensive VSCode Configuration
+
+The `windows/vscode.nix` module provides a **declarative VSCode configuration** optimized for Nix-based WSL development with comprehensive multi-language support.
+
+#### ✅ **Enhanced Features Implemented**
+
+**🎨 Editor Experience**
+- **Catppuccin Mocha theme**: Consistent with terminal tools
+- **Font optimization**: Ligature support and proper sizing
+- **Bracket colorization**: Enhanced code readability
+- **Minimap integration**: Proportional sizing with smart controls
+- **Word wrapping**: Bounded wrapping with rulers at 80/120 characters
+
+**🗂️ File Tree Optimization**
+- **70+ exclusion patterns**: Performance-optimized file watching
+- **File nesting**: Related files grouped (TypeScript, package files, Nix files)
+- **Smart explorer**: Type-based sorting and organization
+- **Project structure**: Clear Nix configuration organization
+
+**🔧 Multi-Language Development**
+- **Nix**: Language server (nil) with formatting and diagnostics
+- **Python**: Black formatter, type checking, auto-imports
+- **TypeScript/JavaScript**: Prettier formatting, ESLint integration
+- **Rust**: rust-analyzer with Clippy, inlay hints
+- **Go**: Language server with goimports and linting
+- **Shell**: Fish and Bash syntax support
+
+**⚡ WSL2 Performance Optimization**
+- **Comprehensive exclusions**: Nix store, build artifacts, caches
+- **Smart file watching**: Reduced polling for better performance
+- **Search optimization**: Intelligent indexing and result limits
+- **Memory management**: Optimized for WSL2 constraints
+
+#### 🏗️ **Dual Configuration Architecture**
+
+**System-Wide Settings** (`windows/vscode.nix`)
+```nix
+# Declarative, reproducible configuration
+vscodeSettings = {
+  "workbench.colorTheme" = "Catppuccin Mocha";
+  "nix.enableLanguageServer" = true;
+  "editor.formatOnSave" = true;
+  # ... 400+ comprehensive settings
+};
+```
+
+**Workspace Settings** (`.vscode/settings.json`)
+```json
+{
+  "nix.serverPath": "nil",
+  "files.associations": { "*.nix": "nix" },
+  "extensions.recommendations": ["jnoortheen.nix-ide"]
+}
+```
+
+#### 🎯 **Key Benefits**
+
+- **✅ Reproducible**: Version-controlled system configuration
+- **✅ Consistent**: Same experience across all projects
+- **✅ Flexible**: Project-specific customizations supported
+- **✅ Performance**: WSL2-optimized with intelligent exclusions
+- **✅ Corporate**: SSL certificate integration for enterprise environments
+
+#### 🚀 **Usage Instructions**
+
+**For Developers**
+1. Settings automatically applied when NixOS rebuilds
+2. Open any project - LSP and formatting work immediately
+3. Consistent Catppuccin theme across all tools
+4. Enhanced productivity with smart file navigation
+
+**For System Administrators**
+1. Modify settings in `windows/vscode.nix`
+2. Rebuild: `sudo nixos-rebuild switch --flake .#nixos`
+3. Verify deployment across user environments
+4. Monitor WSL2 performance optimizations
+
+**For Project Maintainers**
+1. Customize workspace settings per project
+2. Add project-specific extension recommendations
+3. Fine-tune language server configurations
+4. Optimize file exclusions for project structure
+
+#### 🔧 **Integration Points**
+
+- **Certificate Management**: Leverages `system/certificates.nix`
+- **Development Environment**: Seamless `devenv.nix` integration
+- **Container Support**: Enhanced devcontainer configurations
+- **Tool Consistency**: Unified theming with CLI tools
+
+The VSCode integration provides a comprehensive, performance-optimized development environment that maintains consistency with the broader Catppuccin Mocha theme while delivering enterprise-grade functionality for Nix-based development workflows.
