@@ -63,7 +63,8 @@ in
 
     # development tools certificate configuration
     GIT_SSL_CAINFO = systemCertBundle;              # Git operations
-    DOCKER_CERT_PATH = systemCertBundle;            # Docker operations
+    # DOCKER_CERT_PATH removed - should point to directory, not file
+    # Docker will use SSL_CERT_FILE and CURL_CA_BUNDLE for certificate validation
     DOCKER_TLS_VERIFY = "1";                        # enable Docker TLS verification
 
     # additional certificate variables for development environments
@@ -104,7 +105,7 @@ in
 
     Development tools:
     - Git: GIT_SSL_CAINFO
-    - Docker: DOCKER_CERT_PATH, DOCKER_TLS_VERIFY
+    - Docker: DOCKER_TLS_VERIFY (uses SSL_CERT_FILE and CURL_CA_BUNDLE)
     - Modern tools: DENO_CERT, BUN_CA_BUNDLE_PATH, PNPM_CA_FILE
 
     Total SSL variables configured: 20+
