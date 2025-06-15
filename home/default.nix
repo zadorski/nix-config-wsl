@@ -3,7 +3,7 @@
 {
   # import user-level configuration modules
   imports = [
-    ./xdg-base-directories.nix  # XDG Base Directory Specification compliance
+    ./xdg.nix                   # XDG Base Directory Specification compliance
     ./shells.nix                # bash and fish shell configuration
     ./devenv.nix                # development environment and tooling
     ./development.nix           # toolchain

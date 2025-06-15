@@ -1,7 +1,7 @@
 # XDG Base Directory Specification Revision - Deliverables Summary
 
-**Date**: 2025-06-14  
-**Status**: Completed  
+**Date**: 2025-06-14
+**Status**: Completed
 **Objective**: Comprehensive revision of XDG implementation using NixOS best practices
 
 ## Deliverables Completed
@@ -17,7 +17,7 @@
 
 ### 2. Revised XDG Implementation ✅
 
-**Enhanced XDG Base Directories Module** (`home/xdg-base-directories.nix`)
+**Enhanced XDG Base Directories Module** (`home/xdg.nix`)
 - **NixOS Best Practices**: Uses `xdg.enable = true` and home-manager's built-in XDG support
 - **Configuration Management**: Leverages `xdg.configFile` for proper file management
 - **Path Consistency**: Uses `config.xdg.*` paths throughout configuration

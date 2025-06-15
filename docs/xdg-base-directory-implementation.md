@@ -34,7 +34,7 @@ The XDG Base Directory Specification defines standard locations for application 
 ### Core Module Structure (Revised)
 
 ```nix
-# home/xdg-base-directories.nix - NixOS Best Practices
+# home/xdg.nix - NixOS Best Practices
 {
   # Enable home-manager's built-in XDG support
   xdg = {
