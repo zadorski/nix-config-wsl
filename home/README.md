@@ -1,6 +1,58 @@
 # Home Configuration
 
-User-level configuration managed by Home Manager for the WSL development environment with comprehensive XDG Base Directory Specification compliance and dark mode optimization.
+User-level configuration managed by Home Manager for the WSL development environment with comprehensive XDG Base Directory Specification compliance, dark mode optimization, and conflict-free configuration architecture.
+
+## Configuration Architecture & Conflict Prevention
+
+This configuration follows a **layered architecture** with **single source of truth** principles to prevent conflicts and ensure maintainable, predictable behavior.
+
+### Configuration Layering
+
+```
+System Layer (system/*.nix)
+├── Shell availability (bash, fish)
+├── WSL compatibility (/bin/bash symlink)
+└── System-wide packages
+
+User Layer (home/*.nix) ← THIS DIRECTORY
+├── Shell initialization and environment
+├── Development tools and aliases
+├── XDG directory structure
+└── Application configurations
+
+Development Layer (devenv integration)
+├── Project-specific environments
+├── Tool completions
+└── Development workflows
+```
+
+### Module Responsibilities
+
+**`shells.nix`** - **SINGLE SOURCE OF TRUTH** for shell configuration
+- All shell initialization (`shellInit`, `interactiveShellInit`)
+- Environment variables and PATH management
+- Tool integrations (Starship, fzf, keychain, devenv)
+- Session management and SSH key loading
+
+**`development.nix`** - Development tools and enhanced configurations
+- Shell aliases and shortcuts (`shellAliases`)
+- Tool-specific configurations (git, bat, btop, lazygit, fzf)
+- Development workflow optimizations
+
+**`devenv.nix`** - Development environment packages only
+- Package definitions for development tools
+- Direnv configuration for project environments
+- **NO shell configuration** (moved to `shells.nix` to prevent conflicts)
+
+### Conflict Prevention Rules
+
+1. **Shell Initialization**: Only in `shells.nix`
+2. **Environment Variables**: Only in `shells.nix`
+3. **Shell Aliases**: Only in `development.nix`
+4. **Tool Integration**: Consolidated in `shells.nix`
+5. **Package Definitions**: Distributed by purpose (dev tools, system tools, etc.)
+
+This architecture prevents the configuration conflicts that previously caused Starship warnings and shell initialization issues.
 
 ## XDG Base Directory Specification Compliance
 

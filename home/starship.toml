@@ -6,27 +6,13 @@
 "$schema" = "https://starship.rs/config-schema.json"
 
 # catppuccin mocha color palette for dark mode compatibility
-palette = "catppuccin_mocha"
-
-# official catppuccin mocha color definitions
-[palettes.catppuccin_mocha]
-# accent colors for high contrast on dark backgrounds
-red = "#f38ba8"         # errors, critical status
-green = "#a6e3a1"       # success, clean status
-yellow = "#f9e2af"      # warnings, duration
-blue = "#89b4fa"        # directories, nix shell
-pink = "#f5c2e7"        # special contexts
-mauve = "#cba6f7"       # git branches
-teal = "#94e2d5"        # secondary info
-sky = "#89dceb"         # language versions
-peach = "#fab387"       # package info
-text = "#cdd6f4"        # primary text
-subtext1 = "#bac2de"    # secondary text
+# palette definition temporarily removed to resolve configuration conflicts
+# using standard color names instead of custom palette references
 
 # core prompt behavior: optimized for WSL performance
-command_timeout = 500   # 500ms timeout for fast response
-add_newline = false     # single-line prompt for efficiency
-scan_timeout = 30       # quick directory scanning
+command_timeout = 500      # 500ms timeout for fast response
+add_newline = false        # single-line prompt for efficiency
+scan_timeout = 30          # quick directory scanning
 
 # prompt format: clean left-side layout with essential information
 format = """
@@ -69,7 +55,7 @@ read_only_style = "red"
 [git_branch]
 format = "[$symbol$branch]($style) "
 symbol = " "
-style = "bold mauve"
+style = "bold purple"
 truncation_length = 20
 truncation_symbol = "…"
 
@@ -137,7 +123,7 @@ detect_files = ["Cargo.toml"]
 # go: show when go.mod present
 [golang]
 format = "[ $version]($style)"
-style = "bold sky"
+style = "bold cyan"
 detect_extensions = ["go"]
 detect_files = ["go.mod"]
 
@@ -184,5 +170,5 @@ format = "(devenv:[$env_value]($style) )"
 style = "bold blue"
 
 # custom modules disabled for performance
-[custom]
-disabled = true
+# note: [custom] section removed as it expects specific custom command configurations
+# individual custom commands can be disabled by not defining them

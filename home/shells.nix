@@ -14,6 +14,14 @@
       # ensure XDG state directory exists for bash history
       mkdir -p "$(dirname "$HISTFILE")"
 
+      # devenv integration for bash compatibility (before switching to fish)
+      if command -v devenv >/dev/null 2>&1; then
+        # source devenv completions if available
+        if [ -f ~/.local/share/devenv/completions/devenv.bash ]; then
+          source ~/.local/share/devenv/completions/devenv.bash
+        fi
+      fi
+
       if [[ $- == *i* ]]; then
         exec ${pkgs.fish}/bin/fish
       fi
@@ -129,6 +137,14 @@
 
       # nix development optimizations
       set -gx NIX_AUTO_RUN 1  # enable automatic nix-shell execution
+
+      # devenv integration - automatically load project environments
+      if command -v devenv >/dev/null 2>&1
+        # add devenv completions if available
+        if test -f ~/.local/share/devenv/completions/devenv.fish
+          source ~/.local/share/devenv/completions/devenv.fish
+        end
+      end
     '';
   };
 }
