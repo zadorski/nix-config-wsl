@@ -31,7 +31,7 @@ Keychain integration provides seamless SSH authentication without repeated passp
 
 **Supported Keys:**
 - `~/.ssh/id_maco` - GitHub authentication
-- `~/.ssh/id_rsa` - Azure DevOps authentication  
+- `~/.ssh/id_rsa` - Azure DevOps authentication
 - `~/.ssh/id_ed25519` - Modern Ed25519 keys
 
 ### Enhanced Directory Listing (Eza)
@@ -77,15 +77,53 @@ Curated environment variables enhance productivity without bloating the shell:
 - **System Default**: Bash (for scripts and system operations)
 - **User Default**: Fish (for interactive sessions)
 - **Integration**: System-level fish enablement ensures proper PATH and nix integration
+- **WSL Compatibility**: `/bin/bash` symlink automatically maintained for WSL terminal
 
 ### Shell Behavior
 ```bash
 echo $SHELL          # Shows fish path for interactive users
 /bin/bash script.sh  # Scripts can still use bash explicitly
 fish                 # Fish available with full nix integration
+ls -la /bin/bash     # WSL-compatible bash symlink exists
 ```
 
+### WSL Terminal Compatibility
+
+The system automatically ensures WSL terminal compatibility by:
+- Creating and maintaining `/bin/bash` symlink to the Nix store bash executable
+- Using `environment.binsh` to set the system shell path
+- Running activation scripts to ensure symlink exists after system updates
+
+This prevents the WSL terminal error: "The terminal process failed to launch: Path to shell executable '/bin/bash' does not exist."
+
 ## Troubleshooting
+
+### WSL Terminal Issues
+
+**Problem:** WSL terminal fails to launch with "/bin/bash does not exist" error
+```bash
+# Check if /bin/bash symlink exists
+ls -la /bin/bash
+
+# If missing, rebuild the system configuration
+sudo nixos-rebuild switch --flake .
+
+# Verify the symlink was created
+ls -la /bin/bash
+# Should show: /bin/bash -> /nix/store/.../bash
+```
+
+**Problem:** WSL terminal works but shows wrong shell
+```bash
+# Check current shell
+echo $SHELL
+
+# Check available shells
+cat /etc/shells
+
+# Switch to fish for interactive use
+chsh -s $(which fish)
+```
 
 ### Session Management Issues
 

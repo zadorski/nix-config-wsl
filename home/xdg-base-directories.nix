@@ -78,8 +78,9 @@
     SSH_CONFIG_DIR = "${config.xdg.configHome}/ssh";
 
     # WSL2 development optimizations
-    # cache directories for better performance on WSL2 filesystem
-    TMPDIR = "${config.xdg.cacheHome}/tmp";
+    # use system tmp directory to avoid race conditions with home-manager activation
+    # the cache/tmp directory is created by activation script but may not exist during early boot
+    TMPDIR = "/tmp";
 
     # container runtime optimizations
     BUILDKIT_CACHE_MOUNT_NS = "${config.xdg.cacheHome}/buildkit";
@@ -160,8 +161,9 @@
 
   # WSL2-specific XDG optimizations and directory creation
   # ensure essential directories exist for development workflows
-  home.activation.createXdgDevelopmentDirs = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    # create development-specific XDG subdirectories
+  # run early in activation to prevent race conditions with other services
+  home.activation.createXdgDevelopmentDirs = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+    # create development-specific XDG subdirectories early to prevent race conditions
     $DRY_RUN_CMD mkdir -p "${config.xdg.cacheHome}"/{devenv,python,npm,go,docker,buildkit,tmp}
     $DRY_RUN_CMD mkdir -p "${config.xdg.configHome}"/{npm,docker,readline,wget,curl,ssh,devcontainer}
     $DRY_RUN_CMD mkdir -p "${config.xdg.dataHome}"/{cargo,go,gnupg,applications,fonts}
@@ -179,7 +181,7 @@
       # note: in production WSL2, this should be handled by systemd
     fi
 
-    # create temporary directory with proper permissions
+    # create temporary directory with proper permissions (for development tools)
     $DRY_RUN_CMD mkdir -p "${config.xdg.cacheHome}/tmp"
     $DRY_RUN_CMD chmod 755 "${config.xdg.cacheHome}/tmp"
   '';
